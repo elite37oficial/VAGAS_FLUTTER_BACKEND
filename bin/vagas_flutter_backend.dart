@@ -1,5 +1,10 @@
-import 'package:vagas_flutter_backend/vagas_flutter_backend.dart' as vagas_flutter_backend;
+import 'custom_server.dart';
+import 'package:shelf/shelf.dart';
 
-void main(List<String> arguments) {
-  print('Hello world: ${vagas_flutter_backend.calculate()}!');
+void main() async {
+  await CustomServer().initilize(
+    handler: (request) => Response.ok('hello world'),
+    address: 'localhost',
+    port: 8080,
+  );
 }
