@@ -7,7 +7,7 @@ void main() async {
 
   await CustomServer().initilize(
     handler: (request) => Response.ok('hello world'),
-    address: env['address'] ?? '',
+    address: env['address'] ?? 'localhost',
     port: int.parse(env['port'].toString()),
   );
 }
