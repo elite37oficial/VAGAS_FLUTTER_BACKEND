@@ -1,3 +1,4 @@
+<div align="center">
 <center>
 
 <img src="https://avatars.githubusercontent.com/u/100527785?s=200&v=4">
@@ -8,8 +9,6 @@
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/flutter/flutter/badge)](https://deps.dev/project/github/flutter%2Fflutter)
 
 </center>
-
-<div align="center">
 
 # :computer:  Equipe de DESENVOLVEDORES
 
