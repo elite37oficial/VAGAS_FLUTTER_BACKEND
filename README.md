@@ -1,12 +1,14 @@
 <center>
+
 <img src="https://avatars.githubusercontent.com/u/100527785?s=200&v=4">
-<h1><img src="https://camo.githubusercontent.com/d54cb8a71c6e700018b4d1390e6178d544f5713b618cb11e3d9513640a82d0c9/68747470733a2f2f7777772e766563746f726c6f676f2e7a6f6e652f6c6f676f732f646172746c616e672f646172746c616e672d69636f6e2e737667" alt="dart" width="40" height="40" data-canonical-src="https://www.vectorlogo.zone/logos/dartlang/dartlang-icon.svg" style="max-width: 100%;"> Backend - Projeto Vagas
+<h1> <img src="https://camo.githubusercontent.com/d54cb8a71c6e700018b4d1390e6178d544f5713b618cb11e3d9513640a82d0c9/68747470733a2f2f7777772e766563746f726c6f676f2e7a6f6e652f6c6f676f732f646172746c616e672f646172746c616e672d69636f6e2e737667" alt="dart" width="40" height="40" data-canonical-src="https://www.vectorlogo.zone/logos/dartlang/dartlang-icon.svg" style="max-width: 100%;"> Backend - Projeto Vagas
 
 [![codecov](https://codecov.io/gh/flutter/flutter/branch/master/graph/badge.svg?token=11yDrJU2M2)](https://codecov.io/gh/flutter/flutter)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/5631/badge)](https://bestpractices.coreinfrastructure.org/projects/5631)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/flutter/flutter/badge)](https://deps.dev/project/github/flutter%2Fflutter)
 
 </center>
+
 <div align="center">
 
 # :computer:  Equipe de DESENVOLVEDORES
