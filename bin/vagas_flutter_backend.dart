@@ -1,4 +1,4 @@
-import 'controllers/jobs/jobs_controller.dart';
+import 'controllers/jobs_controller.dart';
 import 'controllers/login_controller.dart';
 import 'custom_server.dart';
 import 'package:shelf/shelf.dart';
