@@ -86,4 +86,64 @@ void main() async {
 }
 ```
 
-- **Cada desenvolvedor terá um arquivo `.env` com as variáveis no ambiente de desenvolvimento local**.
+- **Cada desenvolvedor terá um arquivo `.env` com as variáveis no ambiente de desenvolvimento local**. 
+
+# Ata de Reunião 06 de março de 2023 - 20h-21h30
+
+## Presentes
+
+- [x] Luan Fonseca
+- [x] Raquel
+- [x] Leonardo
+- [ ] Pedro
+
+## Informes
+
+- Foi orientada a criação do arquivo `.env` com as variáveis de ambiente compartilahdas entre os desenvolvedores
+  
+```address=localhost
+port=8080
+db_host=191.252.185.206
+db_port=3306
+db_user=comunidade
+db_pass=Elite37
+db_schema=dev_vagas
+```
+
+**Inicio dos reportes à partir da 2° Sprint (13/03)**
+
+### Atividades
+
+- Foi implementada a construção de duas rotas diretamente na função `main()`
+- [x] **POST** /login
+- [ ] **GET** /jobs
+- Foi criada `Pipeline` para adição do midlleware `logRequests`
+
+```dart
+void main() async {
+  var env = DotEnv(includePlatformEnvironment: true)..load();
+
+  final router = Router();
+  router.post('/login', (Request request) async {
+    final body = await request.readAsString();
+    return Response.ok(body, headers: {'content-type': 'application/json'});
+  });
+
+  router.get('/jobs', (Request request) async {
+    return Response.ok('Lista de vagas');
+  });
+
+  final pipeline = Pipeline().addMiddleware(logRequests()).addHandler(router);
+
+  await CustomServer().initilize(
+    handler: pipeline,
+    address: env['address'] ?? 'localhost',
+    port: int.parse(env['port'].toString()),
+  );
+}
+```
+
+### Para Quarta-feira 08/03
+
+- [ ] Criação dos *Controllers* - Remoção das rotas instanciadas diretamente no método `main()`
+- [ ] Criação de middleware global - Mime Type `content-type: application/json`
