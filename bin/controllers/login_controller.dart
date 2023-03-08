@@ -7,7 +7,7 @@ class LoginController {
 
     router.post('/login', (Request request) async {
       final body = await request.readAsString();
-      return Response.ok(body, headers: {'content-type': 'application/json'});
+      return Response.ok(body);
     });
 
     return router;
