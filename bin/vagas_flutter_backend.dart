@@ -1,5 +1,6 @@
 import 'controllers/jobs_controller.dart';
 import 'controllers/login_controller.dart';
+import 'core/middlewares/middleware_interception.dart';
 import 'custom_server.dart';
 import 'package:shelf/shelf.dart';
 import 'package:dotenv/dotenv.dart';
@@ -12,7 +13,10 @@ void main() async {
       .add(JobsController().handler)
       .handler;
 
-  final pipeline = Pipeline().addMiddleware(logRequests()).addHandler(cascade);
+  final pipeline = Pipeline()
+      .addMiddleware(logRequests())
+      .addMiddleware(MiddlewareInterception().appJson)
+      .addHandler(cascade);
 
   await CustomServer().initilize(
     handler: pipeline,
