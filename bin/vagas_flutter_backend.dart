@@ -1,7 +1,7 @@
 import 'controllers/jobs_controller.dart';
 import 'controllers/login_controller.dart';
 import 'core/middlewares/middleware_interception.dart';
-import 'custom_server.dart';
+import 'core/custom_server.dart';
 import 'package:shelf/shelf.dart';
 import 'package:dotenv/dotenv.dart';
 
