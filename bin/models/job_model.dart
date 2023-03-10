@@ -1,5 +1,5 @@
 class JobModel {
-  final int id;
+  final int? id;
   final int companyId;
   final String title;
   final String description;
@@ -16,7 +16,7 @@ class JobModel {
   final DateTime changedDate;
 
   JobModel({
-    required this.id,
+    this.id,
     required this.companyId,
     required this.title,
     required this.description,
