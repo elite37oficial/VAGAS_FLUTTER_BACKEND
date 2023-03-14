@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
-import 'package:uuid/uuid.dart';
 
 import '../database/mysql_db_configuration.dart';
 import '../models/job_model.dart';
@@ -11,7 +8,6 @@ import '../services/generic_service.dart';
 class JobsController {
   final GenericService<JobModel> _service;
   final MySqlDbConfiguration _mySqlDbConfiguration = MySqlDbConfiguration();
-  final uuid = Uuid();
 
   JobsController(this._service);
   Handler get handler {
