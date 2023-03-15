@@ -1,5 +1,28 @@
-import 'package:vagas_flutter_backend/vagas_flutter_backend.dart' as vagas_flutter_backend;
+import 'controllers/jobs_controller.dart';
+import 'controllers/login_controller.dart';
+import 'core/middlewares/middleware_interception.dart';
+import 'core/custom_server.dart';
+import 'package:shelf/shelf.dart';
+import 'package:dotenv/dotenv.dart';
 
-void main(List<String> arguments) {
-  print('Hello world: ${vagas_flutter_backend.calculate()}!');
+import 'services/jobs_service.dart';
+
+void main() async {
+  var env = DotEnv(includePlatformEnvironment: true)..load();
+
+  final cascade = Cascade()
+      .add(LoginController().handler)
+      .add(JobsController(JobsService()).handler)
+      .handler;
+
+  final pipeline = Pipeline()
+      .addMiddleware(logRequests())
+      .addMiddleware(MiddlewareInterception().appJson)
+      .addHandler(cascade);
+
+  await CustomServer().initilize(
+    handler: pipeline,
+    address: env['address'] ?? 'localhost',
+    port: int.parse(env['port'].toString()),
+  );
 }
