@@ -1,6 +1,6 @@
 class JobModel {
-  final int? id;
-  final int companyId;
+  final String? id;
+  final String companyId;
   final String title;
   final String description;
   final double salary;
@@ -40,18 +40,16 @@ class JobModel {
       title: map['title'],
       description: map['description'],
       salary: map['salary'],
-      local: map['local'],
+      local: map['location'],
       seniority: map['seniority'],
       regime: map['regime'],
       link: map['link'],
-      whatsappNumber: map['whatsappNumber'],
+      whatsappNumber: map['whatsapp'],
       email: map['email'],
       createdBy: map['createdBy'],
-      createdDate: DateTime.fromMillisecondsSinceEpoch(map['createdDate']),
-      changedBy: map['changedBy'],
-      changedDate: map['changedDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['changedDate'])
-          : null,
+      createdDate: map['createdDate'],
+      changedBy: map['updatedBy'] ?? '',
+      changedDate: map['updatedDate'] ?? DateTime.now(),
     );
   }
 
