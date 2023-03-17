@@ -1,5 +1,6 @@
 import 'controllers/jobs_controller.dart';
 import 'controllers/login_controller.dart';
+import 'controllers/ping_controller.dart';
 import 'core/middlewares/middleware_interception.dart';
 import 'core/custom_server.dart';
 import 'package:shelf/shelf.dart';
@@ -12,6 +13,7 @@ void main() async {
 
   final cascade = Cascade()
       .add(LoginController().handler)
+      .add(PingController().handler)
       .add(JobsController(JobsService()).handler)
       .handler;
 
