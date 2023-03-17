@@ -35,7 +35,7 @@ class JobModel {
 
   factory JobModel.fromJson(Map map) {
     return JobModel(
-      id: map['id'] ?? '',
+      id: map['id'],
       companyId: map['companyId'],
       title: map['title'],
       description: map['description'],

@@ -17,9 +17,10 @@ void main() async {
       .add(LoginController().handler)
       .add(PingController().handler)
       .add(JobsController(
-        JobsService(),
-        JobDAO(
-          MySqlDbConfiguration(),
+        JobsService(
+          JobDAO(
+            MySqlDbConfiguration(),
+          ),
         ),
       ).handler)
       .handler;
