@@ -47,9 +47,19 @@ class JobModel {
       whatsappNumber: map['whatsapp'],
       email: map['email'],
       createdBy: map['createdBy'],
-      createdDate: map['createdDate'],
+      createdDate: map['createdDate'] == null
+          ? DateTime.now().toUtc()
+          : map['createdDate'] is DateTime
+              ? map['createdDate']
+              : DateTime.fromMillisecondsSinceEpoch(map['createdDate'],
+                  isUtc: true),
       changedBy: map['updatedBy'] ?? '',
-      changedDate: map['updatedDate'] ?? DateTime.now(),
+      changedDate: map['updatedDate'] == null
+          ? DateTime.now().toUtc()
+          : map['updatedDate'] is DateTime
+              ? map['updatedDate']
+              : DateTime.fromMillisecondsSinceEpoch(map['updatedDate'],
+                  isUtc: true),
     );
   }
 
