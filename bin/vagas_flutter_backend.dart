@@ -6,6 +6,8 @@ import 'core/custom_server.dart';
 import 'package:shelf/shelf.dart';
 import 'package:dotenv/dotenv.dart';
 
+import 'dao/jobs_dao.dart';
+import 'database/mysql_db_configuration.dart';
 import 'services/jobs_service.dart';
 
 void main() async {
@@ -14,7 +16,12 @@ void main() async {
   final cascade = Cascade()
       .add(LoginController().handler)
       .add(PingController().handler)
-      .add(JobsController(JobsService()).handler)
+      .add(JobsController(
+        JobsService(),
+        JobDAO(
+          MySqlDbConfiguration(),
+        ),
+      ).handler)
       .handler;
 
   final pipeline = Pipeline()
