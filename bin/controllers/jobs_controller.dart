@@ -40,14 +40,6 @@ class JobsController {
       JobModel jobmodel = JobModel.fromJson(jsonDecode(body));
       var result = await _dao.create(jobmodel);
       return result ? Response(201) : Response(404);
-      //   var result = await _mySqlDbConfiguration.execQuery(
-      //     // 'INSERT into companies (id,name,location,createdDate,createdBy) value (?,?,?,?,?)',
-      //     // ['UUID()', 'Ifood', 'SP', 'NOW()', 'UUID()']);
-      //     // "INSERT INTO companies (id, NAME, location, createdBy, createdDate) VALUES(UUID(), 'Ifood', 'Ruak', 'raquelvalgas', NOW())",
-      //   // );
-      //   // _service.save(JobModel.fromJson(jsonDecode(body)));
-      //   return Response(201);
-      // );
     });
 
     return router;
