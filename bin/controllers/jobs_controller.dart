@@ -14,8 +14,33 @@ class JobsController {
     var router = Router();
 
     router.get('/jobs', (Request request) async {
-      var result = await _service.findAll();
+      final bool hasQuery = request.url.hasQuery;
+      if (hasQuery) {
+        final queryParams = _validateQueryParams(request.url.queryParameters);
+        if (queryParams == null) {
+          return Response.badRequest();
+        }
+        var result = await _service.findJobSimple(queryParam: queryParams);
+        return Response.ok(jsonEncode(result));
+      }
+      var result = await _service.findJobSimple();
       return Response.ok(jsonEncode(result));
+    });
+
+    router.get('/jobs/<id>', (Request request, String id) async {
+      if (id.isEmpty) {
+        return Response.badRequest();
+      }
+      RegExp uuidRegex = RegExp(
+          '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-1[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\$');
+
+      if (uuidRegex.hasMatch(id)) {
+        var result = await _service.findOne(id);
+        return result != null
+            ? Response.ok(jsonEncode(result))
+            : Response.notFound('Vaga não encontrada na base de dados.');
+      }
+      return Response.badRequest();
     });
 
     router.delete('/jobs', (Request request) async {
@@ -41,5 +66,24 @@ class JobsController {
     });
 
     return router;
+  }
+
+  Map<String, String>? _validateQueryParams(Map<String, String> queryParams) {
+    Map<String, String> result = {};
+    switch (queryParams.keys.first) {
+      case 'id':
+        return queryParams;
+      case 'cidade':
+        result.addAll({'city': queryParams['cidade']!});
+        return result;
+      case 'modalidade':
+        result.addAll({'location': queryParams['modalidade']!});
+        return result;
+      case 'titulo':
+        result.addAll({'title': queryParams['titulo']!});
+        return result;
+      default:
+        return null;
+    }
   }
 }
