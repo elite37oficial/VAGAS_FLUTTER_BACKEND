@@ -1,35 +1,37 @@
 class JobModel {
   final String? id;
-  final String companyId;
-  final String title;
-  final String description;
-  final double salary;
-  final String local;
-  final String seniority;
-  final String regime;
-  final String link;
-  final String whatsappNumber;
-  final String email;
-  final String createdBy;
-  final DateTime createdDate;
-  final String changedBy;
+  final String? companyId;
+  final String? title;
+  final String? description;
+  final double? salary;
+  final String? local;
+  final String? seniority;
+  final String? city;
+  final String? regime;
+  final String? link;
+  final String? whatsappNumber;
+  final String? email;
+  final String? createdBy;
+  final DateTime? createdDate;
+  final String? changedBy;
   final DateTime? changedDate;
 
   JobModel({
     this.id,
-    required this.companyId,
-    required this.title,
-    required this.description,
-    required this.salary,
-    required this.local,
-    required this.seniority,
-    required this.regime,
-    required this.link,
-    required this.whatsappNumber,
-    required this.email,
-    required this.createdBy,
-    required this.createdDate,
-    required this.changedBy,
+    this.companyId,
+    this.title,
+    this.description,
+    this.salary,
+    this.local,
+    this.seniority,
+    this.city,
+    this.regime,
+    this.link,
+    this.whatsappNumber,
+    this.email,
+    this.createdBy,
+    this.createdDate,
+    this.changedBy,
     this.changedDate,
   });
 
@@ -42,6 +44,7 @@ class JobModel {
       salary: map['salary'],
       local: map['location'],
       seniority: map['seniority'],
+      city: map['city'],
       regime: map['regime'],
       link: map['link'],
       whatsappNumber: map['whatsapp'],
@@ -72,19 +75,22 @@ class JobModel {
       'salary': salary,
       'local': local,
       'seniority': seniority,
+      'city': city,
       'regime': regime,
       'link': link,
       'whatsappNumber': whatsappNumber,
       'email': email,
-      'createdBy': createdBy,
-      'createdDate': createdDate.millisecondsSinceEpoch,
-      'changedBy': changedBy,
-      'changedDate': changedDate?.millisecondsSinceEpoch,
+      if (createdBy != null) 'createdBy': createdBy,
+      if (createdDate != null)
+        'createdDate': createdDate?.millisecondsSinceEpoch,
+      if (changedBy != null) 'changedBy': changedBy,
+      if (changedDate != null)
+        'changedDate': changedDate?.millisecondsSinceEpoch,
     };
   }
 
   @override
   String toString() {
-    return 'JobModel(id: $id, companyId: $companyId, title: $title, description: $description, salary: $salary, local: $local, seniority: $seniority, regime: $regime, link: $link, whatsappNumber: $whatsappNumber, email: $email, createdBy: $createdBy, createdDate: $createdDate, changedBy: $changedBy, changedDate: $changedDate)';
+    return 'JobModel(id: $id, companyId: $companyId, title: $title, description: $description, salary: $salary, local: $local, seniority: $seniority, city: $city, regime: $regime, link: $link, whatsappNumber: $whatsappNumber, email: $email, createdBy: $createdBy, createdDate: $createdDate, changedBy: $changedBy, changedDate: $changedDate)';
   }
 }
