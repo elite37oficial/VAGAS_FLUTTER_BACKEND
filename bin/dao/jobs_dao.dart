@@ -22,7 +22,7 @@ class JobDAO implements DAO<JobModel> {
           value.title,
           value.description,
           value.salary,
-          value.local,
+          value.modality,
           value.seniority,
           value.regime,
           value.link,
@@ -52,9 +52,13 @@ class JobDAO implements DAO<JobModel> {
 
   @override
   Future<JobModel?> findOne(String id) async {
+    // var result = await _dbConfiguration.execQuery(
+    //     'SELECT id, companyId, title, description, salary, location, seniority,city,regime,link, whatsapp, email  from jobs where id = ?;',
+    //     [id]);
     var result = await _dbConfiguration.execQuery(
-        'SELECT id, companyId, title, description, salary, location, seniority,city,regime,link, whatsapp, email  from jobs where id = ?;',
+        'SELECT t1.id, t1.title, t1.city, t1.regime, t1.modality, t1.description, t1.whatsapp, t1.salary, t1.email, t1.link, t2.description AS descriptionCompany, t2.photoUrl, t2.name as nameCompany FROM jobs AS t1 INNER JOIN companies AS t2 ON t2.id = t1.companyId where t1.id = ?;',
         [id]);
+
     return result.isEmpty ? null : JobDetails.fromJson(result.first.fields);
   }
 
@@ -68,7 +72,7 @@ class JobDAO implements DAO<JobModel> {
           value.title,
           value.description,
           value.salary,
-          value.local,
+          value.modality,
           value.regime,
           value.link,
           value.whatsappNumber,
@@ -86,15 +90,15 @@ class JobDAO implements DAO<JobModel> {
   Future<List<JobModel?>> findJobSimple({Map? queryParam}) async {
     if (queryParam?.keys.isNotEmpty ?? false) {
       var result = await _dbConfiguration.execQuery(
-          "Select id, location, title, link, city from jobs where ${queryParam!.keys.first} = '${queryParam.values.first}';");
+          "Select t1.id, t1.title, t2.photoUrl, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.companyId where t1.${queryParam!.keys.first} = '${queryParam.values.first}';");
       return result
           .map((r) => JobSimple.fromJson(r.fields))
           .toList()
           .cast<JobSimple>();
     }
 
-    var result = await _dbConfiguration
-        .execQuery('Select id, location, title, link, city from jobs;');
+    var result = await _dbConfiguration.execQuery(
+        'Select t1.id, t1.title, t2.photoUrl, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.companyId;');
     return result
         .map((r) => JobSimple.fromJson(r.fields))
         .toList()
