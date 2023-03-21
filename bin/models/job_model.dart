@@ -4,7 +4,7 @@ class JobModel {
   final String? title;
   final String? description;
   final double? salary;
-  final String? local;
+  final String? modality;
   final String? seniority;
   final String? city;
   final String? regime;
@@ -22,7 +22,7 @@ class JobModel {
     this.title,
     this.description,
     this.salary,
-    this.local,
+    this.modality,
     this.seniority,
     this.city,
     this.regime,
@@ -42,7 +42,7 @@ class JobModel {
       title: map['title'],
       description: map['description'],
       salary: map['salary'],
-      local: map['location'],
+      modality: map['location'],
       seniority: map['seniority'],
       city: map['city'],
       regime: map['regime'],
@@ -73,7 +73,7 @@ class JobModel {
       'title': title,
       'description': description,
       'salary': salary,
-      'local': local,
+      'modality': modality,
       'seniority': seniority,
       'city': city,
       'regime': regime,
@@ -91,6 +91,6 @@ class JobModel {
 
   @override
   String toString() {
-    return 'JobModel(id: $id, companyId: $companyId, title: $title, description: $description, salary: $salary, local: $local, seniority: $seniority, city: $city, regime: $regime, link: $link, whatsappNumber: $whatsappNumber, email: $email, createdBy: $createdBy, createdDate: $createdDate, changedBy: $changedBy, changedDate: $changedDate)';
+    return 'JobModel(id: $id, companyId: $companyId, title: $title, description: $description, salary: $salary, modality: $modality, seniority: $seniority, city: $city, regime: $regime, link: $link, whatsappNumber: $whatsappNumber, email: $email, createdBy: $createdBy, createdDate: $createdDate, changedBy: $changedBy, changedDate: $changedDate)';
   }
 }

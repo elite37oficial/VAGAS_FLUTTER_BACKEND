@@ -2,26 +2,30 @@ import 'job_model.dart';
 
 class JobDetails extends JobModel {
   final String? id;
-  final String? empresa_Id;
+  final String? nomeEmpresa;
   final String? titulo;
   final String? descricao;
   final double? salario;
   final String? modalidade;
   final String? cidade;
-  final String? link_vaga;
+  final String? linkVaga;
   final String? whatsapp;
   final String? email;
+  final String fotoUrl;
+  final String descricaoEmpresa;
 
   factory JobDetails.fromJson(Map map) {
     return JobDetails(
       id: map['id'],
-      empresa_Id: map['companyId'],
+      nomeEmpresa: map['nameCompany'],
       titulo: map['title'],
       descricao: map['description'],
       salario: map['salary'],
-      modalidade: map['location'],
+      fotoUrl: map['photoUrl'],
+      descricaoEmpresa: map['descriptionCompany'],
+      modalidade: map['modality'],
       cidade: map['city'],
-      link_vaga: map['link'],
+      linkVaga: map['link'],
       whatsapp: map['whatsapp'],
       email: map['email'],
     );
@@ -31,13 +35,15 @@ class JobDetails extends JobModel {
   Map toJson() {
     return {
       'id': id,
-      'empresa_id': empresa_Id,
+      'nome_empresa': nomeEmpresa,
       'titulo': titulo,
       'descricao': descricao,
+      'foto_url': fotoUrl,
+      'descricao_empresa': descricaoEmpresa,
       'salario': salario,
       'modalidade': modalidade,
       'cidade': cidade,
-      'link_vaga': link_vaga,
+      'link_vaga': linkVaga,
       'whatsapp': whatsapp,
       'email': email
     };
@@ -45,13 +51,15 @@ class JobDetails extends JobModel {
 
   JobDetails({
     required this.id,
-    required this.empresa_Id,
+    required this.nomeEmpresa,
     required this.titulo,
     required this.descricao,
     required this.salario,
     required this.modalidade,
+    required this.fotoUrl,
+    required this.descricaoEmpresa,
     required this.cidade,
-    required this.link_vaga,
+    required this.linkVaga,
     required this.whatsapp,
     required this.email,
   });

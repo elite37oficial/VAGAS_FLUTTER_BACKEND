@@ -33,9 +33,9 @@ class JobSimple extends JobModel {
     return JobSimple(
       id: map['id'] ?? '',
       titulo: map['title'] ?? '',
-      urlFoto: map['link'] ?? '',
+      urlFoto: map['photoUrl'] ?? '',
       cidade: map['city'] ?? '',
-      modalidade: map['location'] ?? '',
+      modalidade: map['modality'] ?? '',
     );
   }
 
