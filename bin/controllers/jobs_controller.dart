@@ -77,7 +77,7 @@ class JobsController {
         result.addAll({'city': queryParams['cidade']!});
         return result;
       case 'modalidade':
-        result.addAll({'location': queryParams['modalidade']!});
+        result.addAll({'modality': queryParams['modalidade']!});
         return result;
       case 'titulo':
         result.addAll({'title': queryParams['titulo']!});
