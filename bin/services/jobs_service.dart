@@ -1,4 +1,5 @@
 import '../dao/dao.dart';
+import '../models/job_details.dart';
 import '../models/job_model.dart';
 import 'generic_service.dart';
 
@@ -16,6 +17,11 @@ class JobsService implements GenericService<JobModel> {
   @override
   Future<List<JobModel>> findAll() async {
     return await _dao.findAll();
+  }
+
+  @override
+  Future<List<JobModel?>> findJobSimple({Map? queryParam}) async {
+    return await _dao.findJobSimple(queryParam: queryParam);
   }
 
   @override

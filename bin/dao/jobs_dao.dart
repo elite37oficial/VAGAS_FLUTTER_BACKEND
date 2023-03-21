@@ -1,7 +1,9 @@
 import 'package:uuid/uuid.dart';
 
 import '../database/db_configuration.dart';
+import '../models/job_details.dart';
 import '../models/job_model.dart';
+import '../models/job_simple.dart';
 import 'dao.dart';
 
 class JobDAO implements DAO<JobModel> {
@@ -50,9 +52,10 @@ class JobDAO implements DAO<JobModel> {
 
   @override
   Future<JobModel?> findOne(String id) async {
-    var result = await _dbConfiguration
-        .execQuery('SELECT * from jobs where id = ?;', [id]);
-    return result.isEmpty ? null : JobModel.fromJson(result.first.fields);
+    var result = await _dbConfiguration.execQuery(
+        'SELECT id, companyId, title, description, salary, location, seniority,city,regime,link, whatsapp, email  from jobs where id = ?;',
+        [id]);
+    return result.isEmpty ? null : JobDetails.fromJson(result.first.fields);
   }
 
   @override
@@ -77,5 +80,24 @@ class JobDAO implements DAO<JobModel> {
         ]);
 
     return result.affectedRows > 0;
+  }
+
+  @override
+  Future<List<JobModel?>> findJobSimple({Map? queryParam}) async {
+    if (queryParam?.keys.isNotEmpty ?? false) {
+      var result = await _dbConfiguration.execQuery(
+          "Select id, location, title, link, city from jobs where ${queryParam!.keys.first} = '${queryParam.values.first}';");
+      return result
+          .map((r) => JobSimple.fromJson(r.fields))
+          .toList()
+          .cast<JobSimple>();
+    }
+
+    var result = await _dbConfiguration
+        .execQuery('Select id, location, title, link, city from jobs;');
+    return result
+        .map((r) => JobSimple.fromJson(r.fields))
+        .toList()
+        .cast<JobSimple>();
   }
 }

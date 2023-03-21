@@ -6,7 +6,7 @@ class PingController {
     var router = Router();
 
     router.get('/ping', (Request request) async {
-      final body = await request.readAsString();
+      // final body = await request.readAsString();
       return Response.ok('OK 3');
     });
 
