@@ -2,47 +2,57 @@ import 'job_model.dart';
 
 class JobDetails extends JobModel {
   final String? id;
-  final String? companyId;
-  final String? title;
-  final String? description;
-  final double? salary;
-  final String? local;
-  final String? seniority;
-  final String? city;
-  final String? regime;
-  final String? link;
-  final String? whatsappNumber;
+  final String? empresa_Id;
+  final String? titulo;
+  final String? descricao;
+  final double? salario;
+  final String? modalidade;
+  final String? cidade;
+  final String? link_vaga;
+  final String? whatsapp;
   final String? email;
 
   factory JobDetails.fromJson(Map map) {
     return JobDetails(
       id: map['id'],
-      companyId: map['companyId'],
-      title: map['title'],
-      description: map['description'],
-      salary: map['salary'],
-      local: map['location'],
-      city: map['city'],
-      seniority: map['seniority'],
-      regime: map['regime'],
-      link: map['link'],
-      whatsappNumber: map['whatsapp'],
+      empresa_Id: map['companyId'],
+      titulo: map['title'],
+      descricao: map['description'],
+      salario: map['salary'],
+      modalidade: map['location'],
+      cidade: map['city'],
+      link_vaga: map['link'],
+      whatsapp: map['whatsapp'],
       email: map['email'],
     );
   }
 
+  @override
+  Map toJson() {
+    return {
+      'id': id,
+      'empresa_id': empresa_Id,
+      'titulo': titulo,
+      'descricao': descricao,
+      'salario': salario,
+      'modalidade': modalidade,
+      'cidade': cidade,
+      'link_vaga': link_vaga,
+      'whatsapp': whatsapp,
+      'email': email
+    };
+  }
+
   JobDetails({
     required this.id,
-    required this.companyId,
-    required this.title,
-    required this.description,
-    required this.salary,
-    required this.local,
-    required this.seniority,
-    required this.city,
-    required this.regime,
-    required this.link,
-    required this.whatsappNumber,
+    required this.empresa_Id,
+    required this.titulo,
+    required this.descricao,
+    required this.salario,
+    required this.modalidade,
+    required this.cidade,
+    required this.link_vaga,
+    required this.whatsapp,
     required this.email,
   });
 }
