@@ -38,30 +38,30 @@ class JobModel {
   factory JobModel.fromJson(Map map) {
     return JobModel(
       id: map['id'],
-      companyId: map['companyId'],
+      companyId: map['company_id'],
       title: map['title'],
       description: map['description'],
       salary: map['salary'],
-      modality: map['location'],
+      modality: map['modality'],
       seniority: map['seniority'],
       city: map['city'],
       regime: map['regime'],
       link: map['link'],
       whatsappNumber: map['whatsapp'],
       email: map['email'],
-      createdBy: map['createdBy'],
-      createdDate: map['createdDate'] == null
+      createdBy: map['created_by'],
+      createdDate: map['created_date'] == null
           ? DateTime.now().toUtc()
-          : map['createdDate'] is DateTime
-              ? map['createdDate']
-              : DateTime.fromMillisecondsSinceEpoch(map['createdDate'],
+          : map['created_date'] is DateTime
+              ? map['created_date']
+              : DateTime.fromMillisecondsSinceEpoch(map['created_date'],
                   isUtc: true),
-      changedBy: map['updatedBy'] ?? '',
-      changedDate: map['updatedDate'] == null
+      changedBy: map['updated_by'] ?? '',
+      changedDate: map['updated_date'] == null
           ? DateTime.now().toUtc()
-          : map['updatedDate'] is DateTime
-              ? map['updatedDate']
-              : DateTime.fromMillisecondsSinceEpoch(map['updatedDate'],
+          : map['updated_date'] is DateTime
+              ? map['updated_date']
+              : DateTime.fromMillisecondsSinceEpoch(map['updated_date'],
                   isUtc: true),
     );
   }

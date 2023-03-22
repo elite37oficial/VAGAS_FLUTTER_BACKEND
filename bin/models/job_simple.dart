@@ -3,17 +3,17 @@ import 'job_model.dart';
 class JobSimple extends JobModel {
   @override
   final String id;
-  final String titulo;
-  final String urlFoto;
-  final String cidade;
-  final String modalidade;
+  final String title;
+  final String photoUrl;
+  final String city;
+  final String modality;
 
   JobSimple({
     required this.id,
-    required this.titulo,
-    required this.urlFoto,
-    required this.cidade,
-    required this.modalidade,
+    required this.title,
+    required this.photoUrl,
+    required this.city,
+    required this.modality,
   });
 
   @override
@@ -21,10 +21,10 @@ class JobSimple extends JobModel {
     final result = <String, dynamic>{};
 
     result.addAll({'id': id});
-    result.addAll({'titulo': titulo});
-    result.addAll({'url_foto': urlFoto});
-    result.addAll({'cidade': cidade});
-    result.addAll({'modalidade': modalidade});
+    result.addAll({'title': title});
+    result.addAll({'photoUrl': photoUrl});
+    result.addAll({'city': city});
+    result.addAll({'modality': modality});
 
     return result;
   }
@@ -32,15 +32,15 @@ class JobSimple extends JobModel {
   factory JobSimple.fromJson(Map<String, dynamic> map) {
     return JobSimple(
       id: map['id'] ?? '',
-      titulo: map['title'] ?? '',
-      urlFoto: map['photoUrl'] ?? '',
-      cidade: map['city'] ?? '',
-      modalidade: map['modality'] ?? '',
+      title: map['title'] ?? '',
+      photoUrl: map['photo_url'] ?? '',
+      city: map['city'] ?? '',
+      modality: map['modality'] ?? '',
     );
   }
 
   @override
   String toString() {
-    return 'JobSimple(id: $id, titulo: $titulo, url_foto: $urlFoto, cidade: $cidade, modalidade: $modalidade)';
+    return 'JobSimple(id: $id, title: $title, photoUrl: $photoUrl, city: $city, modality: $modality)';
   }
 }
