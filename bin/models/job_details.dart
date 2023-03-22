@@ -2,30 +2,30 @@ import 'job_model.dart';
 
 class JobDetails extends JobModel {
   final String? id;
-  final String? nomeEmpresa;
-  final String? titulo;
-  final String? descricao;
-  final double? salario;
-  final String? modalidade;
-  final String? cidade;
-  final String? linkVaga;
+  final String? nameCompany;
+  final String? title;
+  final String? description;
+  final double? salary;
+  final String? modality;
+  final String? city;
+  final String? link;
   final String? whatsapp;
   final String? email;
-  final String fotoUrl;
-  final String descricaoEmpresa;
+  final String photoUrl;
+  final String descriptionEmpresa;
 
   factory JobDetails.fromJson(Map map) {
     return JobDetails(
       id: map['id'],
-      nomeEmpresa: map['nameCompany'],
-      titulo: map['title'],
-      descricao: map['description'],
-      salario: map['salary'],
-      fotoUrl: map['photoUrl'],
-      descricaoEmpresa: map['descriptionCompany'],
-      modalidade: map['modality'],
-      cidade: map['city'],
-      linkVaga: map['link'],
+      nameCompany: map['name_company'],
+      title: map['title'],
+      description: map['description'],
+      salary: map['salary'],
+      photoUrl: map['photo_url'],
+      descriptionEmpresa: map['description_company'],
+      modality: map['modality'],
+      city: map['city'],
+      link: map['link'],
       whatsapp: map['whatsapp'],
       email: map['email'],
     );
@@ -35,15 +35,15 @@ class JobDetails extends JobModel {
   Map toJson() {
     return {
       'id': id,
-      'nome_empresa': nomeEmpresa,
-      'titulo': titulo,
-      'descricao': descricao,
-      'foto_url': fotoUrl,
-      'descricao_empresa': descricaoEmpresa,
-      'salario': salario,
-      'modalidade': modalidade,
-      'cidade': cidade,
-      'link_vaga': linkVaga,
+      'nome_empresa': nameCompany,
+      'title': title,
+      'description': description,
+      'foto_url': photoUrl,
+      'description_empresa': descriptionEmpresa,
+      'salary': salary,
+      'modality': modality,
+      'city': city,
+      'link_vaga': link,
       'whatsapp': whatsapp,
       'email': email
     };
@@ -51,15 +51,15 @@ class JobDetails extends JobModel {
 
   JobDetails({
     required this.id,
-    required this.nomeEmpresa,
-    required this.titulo,
-    required this.descricao,
-    required this.salario,
-    required this.modalidade,
-    required this.fotoUrl,
-    required this.descricaoEmpresa,
-    required this.cidade,
-    required this.linkVaga,
+    required this.nameCompany,
+    required this.title,
+    required this.description,
+    required this.salary,
+    required this.modality,
+    required this.photoUrl,
+    required this.descriptionEmpresa,
+    required this.city,
+    required this.link,
     required this.whatsapp,
     required this.email,
   });

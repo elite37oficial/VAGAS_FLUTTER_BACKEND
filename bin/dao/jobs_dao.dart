@@ -15,7 +15,7 @@ class JobDAO implements DAO<JobModel> {
   @override
   Future<bool> create(JobModel value) async {
     var result = await _dbConfiguration.execQuery(
-        'INSERT INTO jobs (id, companyId, title, description, salary, location,seniority, regime, link, whatsapp, email, createdBy, createdDate) values (?,?,?,?,?,?,?,?,?,?,?,?,?); ',
+        'INSERT INTO jobs (id, company_id, title, description, salary, modality, seniority, regime, link, whatsapp, email, city, created_by, created_date) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?); ',
         [
           uuid.v1(),
           value.companyId,
@@ -28,6 +28,7 @@ class JobDAO implements DAO<JobModel> {
           value.link,
           value.whatsappNumber,
           value.email,
+          value.city,
           value.createdBy,
           value.createdDate
         ]);
@@ -56,7 +57,7 @@ class JobDAO implements DAO<JobModel> {
     //     'SELECT id, companyId, title, description, salary, location, seniority,city,regime,link, whatsapp, email  from jobs where id = ?;',
     //     [id]);
     var result = await _dbConfiguration.execQuery(
-        'SELECT t1.id, t1.title, t1.city, t1.regime, t1.modality, t1.description, t1.whatsapp, t1.salary, t1.email, t1.link, t2.description AS descriptionCompany, t2.photoUrl, t2.name as nameCompany FROM jobs AS t1 INNER JOIN companies AS t2 ON t2.id = t1.companyId where t1.id = ?;',
+        'SELECT t1.id, t1.title, t1.city, t1.regime, t1.modality, t1.description, t1.whatsapp, t1.salary, t1.email, t1.link, t2.description AS description_company, t2.photo_url, t2.name as name_company FROM jobs AS t1 INNER JOIN companies AS t2 ON t2.id = t1.company_id where t1.id = ?;',
         [id]);
 
     return result.isEmpty ? null : JobDetails.fromJson(result.first.fields);
@@ -66,7 +67,7 @@ class JobDAO implements DAO<JobModel> {
   Future<bool> update(JobModel value) async {
     final DateTime today = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
-        'UPDATE jobs set companyId = ?, title = ?, description = ?, salary = ?, local = ?,seniority = ?, regime = ?, link = ?, whatsappNumber = ?, email = ?, createdBy = ?, createdDate = ?, changedBy = ?, changedDate = ?, where id = ?; ',
+        'UPDATE jobs set company_id = ?, title = ?, description = ?, salary = ?, modality = ?,seniority = ?, regime = ?, link = ?, whatsappNumber = ?, email = ?, createdBy = ?, createdDate = ?, changedBy = ?, changedDate = ?, where id = ?; ',
         [
           value.companyId,
           value.title,
@@ -90,7 +91,7 @@ class JobDAO implements DAO<JobModel> {
   Future<List<JobModel?>> findJobSimple({Map? queryParam}) async {
     if (queryParam?.keys.isNotEmpty ?? false) {
       var result = await _dbConfiguration.execQuery(
-          "Select t1.id, t1.title, t2.photoUrl, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.companyId where t1.${queryParam!.keys.first} = '${queryParam.values.first}';");
+          "Select t1.id, t1.title, t2.photo_url, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where t1.${queryParam!.keys.first} = '${queryParam.values.first}';");
       return result
           .map((r) => JobSimple.fromJson(r.fields))
           .toList()
@@ -98,7 +99,7 @@ class JobDAO implements DAO<JobModel> {
     }
 
     var result = await _dbConfiguration.execQuery(
-        'Select t1.id, t1.title, t2.photoUrl, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.companyId;');
+        'Select t1.id, t1.title, t2.photo_url, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.company_id;');
     return result
         .map((r) => JobSimple.fromJson(r.fields))
         .toList()
