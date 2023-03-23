@@ -18,7 +18,8 @@ class Injects {
 
     di.register<SecurityService>(() => SecurityServiceImp());
 
-    di.register<LoginController>(() => LoginController());
+    di.register<LoginController>(
+        () => LoginController(di.get<SecurityService>()));
     di.register<PingController>(() => PingController());
     di.register<MySqlDbConfiguration>(() => MySqlDbConfiguration());
     di.register(() => JobDAO(di.get<MySqlDbConfiguration>()));
