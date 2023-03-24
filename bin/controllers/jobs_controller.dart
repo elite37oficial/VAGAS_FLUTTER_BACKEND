@@ -52,7 +52,7 @@ class JobsController extends Controller {
       middlewares: middlewares,
     );
   }
-  
+
   String? _validateQueryParams(Map<String, String> queryParams) {
     String? where;
     queryParams.forEach((key, value) {
@@ -62,8 +62,8 @@ class JobsController extends Controller {
         case "regime":
           if (queryParams.keys.first != key) where = "$where and ";
           where = where == null
-              ? "t1.$key = '$value'"
-              : "$where t1.$key = '$value'";
+              ? "t1.$key like '$value%'"
+              : "$where t1.$key like '$value%'";
           break;
 
         default:
