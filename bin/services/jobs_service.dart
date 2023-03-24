@@ -20,7 +20,7 @@ class JobsService implements GenericService<JobModel> {
   }
 
   @override
-  Future<List<JobModel?>> findJobSimple({Map? queryParam}) async {
+  Future<List<JobModel?>> findJobSimple({String? queryParam}) async {
     return await _dao.findJobSimple(queryParam: queryParam);
   }
 

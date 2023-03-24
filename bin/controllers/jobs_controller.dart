@@ -68,22 +68,24 @@ class JobsController {
     return router;
   }
 
-  Map<String, String>? _validateQueryParams(Map<String, String> queryParams) {
-    Map<String, String> result = {};
-    switch (queryParams.keys.first) {
-      case 'id':
-        return queryParams;
-      case 'cidade':
-        result.addAll({'city': queryParams['cidade']!});
-        return result;
-      case 'modalidade':
-        result.addAll({'modality': queryParams['modalidade']!});
-        return result;
-      case 'titulo':
-        result.addAll({'title': queryParams['titulo']!});
-        return result;
-      default:
-        return null;
-    }
+  String? _validateQueryParams(Map<String, String> queryParams) {
+    String? where;
+    queryParams.forEach((key, value) {
+      switch (key) {
+        case "city":
+        case "modality":
+        case "regime":
+          if (queryParams.keys.first != key) where = "$where and ";
+          where = where == null
+              ? "t1.$key = '$value'"
+              : "$where t1.$key = '$value'";
+          break;
+
+        default:
+          where = null;
+          break;
+      }
+    });
+    return where;
   }
 }
