@@ -5,12 +5,15 @@ import 'package:shelf_router/shelf_router.dart';
 
 import '../models/job_model.dart';
 import '../services/generic_service.dart';
+import 'controller.dart';
 
-class JobsController {
+class JobsController extends Controller {
   final GenericService<JobModel> _service;
 
   JobsController(this._service);
-  Handler get handler {
+
+  @override
+  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
     var router = Router();
 
     router.get('/jobs', (Request request) async {
@@ -27,7 +30,7 @@ class JobsController {
       return Response.ok(jsonEncode(result));
     });
 
-    router.get('/jobs/<id>', (Request request, String id) async {
+    router.get('/jobs/id/<id>', (Request request, String id) async {
       if (id.isEmpty) {
         return Response.badRequest();
       }
@@ -43,29 +46,11 @@ class JobsController {
       return Response.badRequest();
     });
 
-    router.delete('/jobs', (Request request) async {
-      final String? id = request.url.queryParameters['id'];
-      if (id == null) {
-        return Response(400);
-      }
-      var result = await _service.delete(id);
-      return result ? Response(200) : Response.internalServerError();
-    });
-
-    router.put('/jobs', (Request request) async {
-      final String body = await request.readAsString();
-      var result = await _service.save(JobModel.fromJson(jsonDecode(body)));
-      return result ? Response(500) : Response(500);
-    });
-
-    router.post('/jobs', (Request request) async {
-      var body = await request.readAsString();
-      JobModel jobmodel = JobModel.fromJson(jsonDecode(body));
-      var result = await _service.save(jobmodel);
-      return result ? Response(201) : Response(404);
-    });
-
-    return router;
+    return createHandler(
+      router: router,
+      isSecurity: isSecurity,
+      middlewares: middlewares,
+    );
   }
 
   Map<String, String>? _validateQueryParams(Map<String, String> queryParams) {
@@ -73,14 +58,14 @@ class JobsController {
     switch (queryParams.keys.first) {
       case 'id':
         return queryParams;
-      case 'cidade':
-        result.addAll({'city': queryParams['cidade']!});
+      case 'city':
+        result.addAll({'city': queryParams['city']!});
         return result;
-      case 'modalidade':
-        result.addAll({'modality': queryParams['modalidade']!});
+      case 'modality':
+        result.addAll({'modality': queryParams['modality']!});
         return result;
-      case 'titulo':
-        result.addAll({'title': queryParams['titulo']!});
+      case 'title':
+        result.addAll({'title': queryParams['title']!});
         return result;
       default:
         return null;
