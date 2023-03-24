@@ -35,15 +35,15 @@ class JobDetails extends JobModel {
   Map toJson() {
     return {
       'id': id,
-      'nome_empresa': nameCompany,
+      'nameCompany': nameCompany,
       'title': title,
       'description': description,
-      'foto_url': photoUrl,
-      'description_empresa': descriptionEmpresa,
+      'photoUrl': photoUrl,
+      'descriptionEmpresa': descriptionEmpresa,
       'salary': salary,
       'modality': modality,
       'city': city,
-      'link_vaga': link,
+      'link': link,
       'whatsapp': whatsapp,
       'email': email
     };

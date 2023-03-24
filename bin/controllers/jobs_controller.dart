@@ -52,23 +52,25 @@ class JobsController extends Controller {
       middlewares: middlewares,
     );
   }
+  
+  String? _validateQueryParams(Map<String, String> queryParams) {
+    String? where;
+    queryParams.forEach((key, value) {
+      switch (key) {
+        case "city":
+        case "modality":
+        case "regime":
+          if (queryParams.keys.first != key) where = "$where and ";
+          where = where == null
+              ? "t1.$key = '$value'"
+              : "$where t1.$key = '$value'";
+          break;
 
-  Map<String, String>? _validateQueryParams(Map<String, String> queryParams) {
-    Map<String, String> result = {};
-    switch (queryParams.keys.first) {
-      case 'id':
-        return queryParams;
-      case 'city':
-        result.addAll({'city': queryParams['city']!});
-        return result;
-      case 'modality':
-        result.addAll({'modality': queryParams['modality']!});
-        return result;
-      case 'title':
-        result.addAll({'title': queryParams['title']!});
-        return result;
-      default:
-        return null;
-    }
+        default:
+          where = null;
+          break;
+      }
+    });
+    return where;
   }
 }

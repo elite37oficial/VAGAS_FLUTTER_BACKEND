@@ -88,10 +88,10 @@ class JobDAO implements DAO<JobModel> {
   }
 
   @override
-  Future<List<JobModel?>> findJobSimple({Map? queryParam}) async {
-    if (queryParam?.keys.isNotEmpty ?? false) {
+  Future<List<JobModel?>> findJobSimple({String? queryParam}) async {
+    if (queryParam?.isNotEmpty ?? false) {
       var result = await _dbConfiguration.execQuery(
-          "Select t1.id, t1.title, t2.photo_url, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where t1.${queryParam!.keys.first} = '${queryParam.values.first}';");
+          "Select t1.id, t1.title, t2.photo_url, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where $queryParam ;");
       return result
           .map((r) => JobSimple.fromJson(r.fields))
           .toList()
