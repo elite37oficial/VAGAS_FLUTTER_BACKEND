@@ -27,7 +27,7 @@ class JobsController {
       return Response.ok(jsonEncode(result));
     });
 
-    router.get('/jobs/<id>', (Request request, String id) async {
+    router.get('/jobs/id/<id>', (Request request, String id) async {
       if (id.isEmpty) {
         return Response.badRequest();
       }
