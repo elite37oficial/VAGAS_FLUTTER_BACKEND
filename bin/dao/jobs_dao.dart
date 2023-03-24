@@ -8,12 +8,13 @@ import 'dao.dart';
 
 class JobDAO implements DAO<JobModel> {
   final DBConfiguration _dbConfiguration;
-  final uuid = Uuid();
+  final Uuid uuid;
 
-  JobDAO(this._dbConfiguration);
+  JobDAO(this._dbConfiguration, this.uuid);
 
   @override
   Future<bool> create(JobModel value) async {
+    final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
         'INSERT INTO jobs (id, company_id, title, description, salary, modality, seniority, regime, link, whatsapp, email, city, created_by, created_date) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?); ',
         [
@@ -30,7 +31,7 @@ class JobDAO implements DAO<JobModel> {
           value.email,
           value.city,
           value.createdBy,
-          value.createdDate
+          now
         ]);
     return result.affectedRows > 0;
   }
@@ -53,9 +54,6 @@ class JobDAO implements DAO<JobModel> {
 
   @override
   Future<JobModel?> findOne(String id) async {
-    // var result = await _dbConfiguration.execQuery(
-    //     'SELECT id, companyId, title, description, salary, location, seniority,city,regime,link, whatsapp, email  from jobs where id = ?;',
-    //     [id]);
     var result = await _dbConfiguration.execQuery(
         'SELECT t1.id, t1.title, t1.city, t1.regime, t1.modality, t1.description, t1.whatsapp, t1.salary, t1.email, t1.link, t2.description AS description_company, t2.photo_url, t2.name as name_company FROM jobs AS t1 INNER JOIN companies AS t2 ON t2.id = t1.company_id where t1.id = ?;',
         [id]);
@@ -65,24 +63,26 @@ class JobDAO implements DAO<JobModel> {
 
   @override
   Future<bool> update(JobModel value) async {
-    final DateTime today = DateTime.now().toUtc();
+    final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
-        'UPDATE jobs set company_id = ?, title = ?, description = ?, salary = ?, modality = ?,seniority = ?, regime = ?, link = ?, whatsappNumber = ?, email = ?, createdBy = ?, createdDate = ?, changedBy = ?, changedDate = ?, where id = ?; ',
-        [
-          value.companyId,
-          value.title,
-          value.description,
-          value.salary,
-          value.modality,
-          value.regime,
-          value.link,
-          value.whatsappNumber,
-          value.email,
-          value.createdBy,
-          value.createdDate,
-          value.changedBy,
-          today
-        ]);
+      'UPDATE jobs set company_id = ?, title = ?, description = ?, salary = ?, modality = ?,seniority = ?, regime = ?, link = ?, whatsapp = ?, email = ?, city = ?, updated_by = ?, updated_date = ? where id = ?',
+      [
+        value.companyId,
+        value.title,
+        value.description,
+        value.salary,
+        value.modality,
+        value.seniority,
+        value.regime,
+        value.link,
+        value.whatsappNumber,
+        value.email,
+        value.city,
+        value.changedBy,
+        now,
+        value.id
+      ],
+    );
 
     return result.affectedRows > 0;
   }

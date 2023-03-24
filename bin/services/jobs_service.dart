@@ -1,5 +1,4 @@
 import '../dao/dao.dart';
-import '../models/job_details.dart';
 import '../models/job_model.dart';
 import 'generic_service.dart';
 
