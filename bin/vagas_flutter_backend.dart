@@ -1,4 +1,5 @@
 import 'controllers/jobs_controller.dart';
+import 'controllers/jobs_user_controller.dart';
 import 'controllers/login_controller.dart';
 import 'controllers/ping_controller.dart';
 import 'core/dependency_injector/injects.dart';
@@ -10,12 +11,13 @@ import 'package:dotenv/dotenv.dart';
 void main() async {
   var env = DotEnv(includePlatformEnvironment: true)..load();
 
-  final _di = Injects.initialize();
+  final di = Injects.initialize();
 
   final cascade = Cascade()
-      .add(_di.get<LoginController>().handler)
-      .add(_di.get<PingController>().handler)
-      .add(_di.get<JobsController>().handler)
+      .add(di.get<LoginController>().getHandler())
+      .add(di.get<PingController>().handler)
+      .add(di.get<JobsController>().getHandler())
+      .add(di.get<JobsUserController>().getHandler(isSecurity: true))
       .handler;
 
   final pipeline = Pipeline()
