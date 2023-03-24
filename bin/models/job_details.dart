@@ -12,7 +12,7 @@ class JobDetails extends JobModel {
   final String? whatsapp;
   final String? email;
   final String photoUrl;
-  final String descriptionEmpresa;
+  final String descriptionCompany;
 
   factory JobDetails.fromJson(Map map) {
     return JobDetails(
@@ -22,7 +22,7 @@ class JobDetails extends JobModel {
       description: map['description'],
       salary: map['salary'],
       photoUrl: map['photo_url'],
-      descriptionEmpresa: map['description_company'],
+      descriptionCompany: map['description_company'],
       modality: map['modality'],
       city: map['city'],
       link: map['link'],
@@ -39,7 +39,7 @@ class JobDetails extends JobModel {
       'title': title,
       'description': description,
       'photoUrl': photoUrl,
-      'descriptionEmpresa': descriptionEmpresa,
+      'descriptionCompany': descriptionCompany,
       'salary': salary,
       'modality': modality,
       'city': city,
@@ -57,7 +57,7 @@ class JobDetails extends JobModel {
     required this.salary,
     required this.modality,
     required this.photoUrl,
-    required this.descriptionEmpresa,
+    required this.descriptionCompany,
     required this.city,
     required this.link,
     required this.whatsapp,
