@@ -241,6 +241,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  password_dart:
+    dependency: "direct main"
+    description:
+      name: password_dart
+      sha256: ca7de1298164ff2681a32dc2512177667d3ffd2c125075f371dd3dee813f11d4
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   path:
     dependency: transitive
     description:
