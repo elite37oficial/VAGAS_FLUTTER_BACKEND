@@ -1,14 +1,14 @@
 class UserModel {
-  final String? id;
-  final String? profileId;
-  final String? name;
-  final String? phone;
-  final String? email;
-  final String? password;
-  final String? createdBy;
+  String? id;
+  String? profileId;
+  String? name;
+  String? phone;
+  String? email;
+  String? password;
+  String? createdBy;
   late DateTime? createdDate;
-  final String? changedBy;
-  final DateTime? changedDate;
+  String? changedBy;
+  DateTime? changedDate;
 
   UserModel(
       {this.id,
@@ -22,6 +22,13 @@ class UserModel {
       this.changedBy,
       this.changedDate}) {
     createdDate = DateTime.now();
+  }
+
+  factory UserModel.fromRequest(Map map) {
+    return UserModel()
+      ..id = map['id']
+      ..password = map['password']
+      ..profileId = map['profile_id'];
   }
 
   factory UserModel.fromJson(Map map) {
