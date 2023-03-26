@@ -11,7 +11,7 @@ class JobModel {
   final String? link;
   final String? whatsappNumber;
   final String? email;
-  final String? createdBy;
+  String? createdBy;
   final DateTime? createdDate;
   final String? changedBy;
   final DateTime? changedDate;
