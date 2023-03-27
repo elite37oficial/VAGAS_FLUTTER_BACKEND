@@ -1,15 +1,31 @@
+import 'package:uuid/uuid.dart';
+
 import '../database/db_configuration.dart';
 import '../models/user_model.dart';
 import 'dao.dart';
 
 class UserDAO implements DAO<UserModel> {
   final DBConfiguration _dbConfiguration;
-  UserDAO(this._dbConfiguration);
+  final Uuid uuid;
+
+  UserDAO(this._dbConfiguration, this.uuid);
 
   @override
-  Future<bool> create(UserModel value) {
-    // TODO: implement create
-    throw UnimplementedError();
+  Future<bool> create(UserModel value) async {
+    final DateTime now = DateTime.now().toUtc();
+    var result = await _dbConfiguration.execQuery(
+        'INSERT INTO users (id, profile_id, name, phone, email, password, created_by, created_date) values(?,?,?,?,?,?,?,?);',
+        [
+          uuid.v1(),
+          value.profileId,
+          value.name,
+          value.phone,
+          value.email,
+          value.password,
+          value.createdBy,
+          now
+        ]);
+    return result.affectedRows > 0;
   }
 
   @override
