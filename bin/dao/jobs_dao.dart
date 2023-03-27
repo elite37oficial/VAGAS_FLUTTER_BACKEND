@@ -57,6 +57,7 @@ class JobDAO implements DAO<JobModel> {
   Future<JobModel?> findOne(String id) async {
     var result = await _dbConfiguration.execQuery(
         'SELECT t1.id, t1.title, t1.city, t1.state, t1.regime, t1.modality, t1.description, t1.whatsapp, t1.salary, t1.email, t1.link, t2.description AS description_company, t2.photo_url, t2.name as name_company FROM jobs AS t1 INNER JOIN companies AS t2 ON t2.id = t1.company_id where t1.id = ?;',
+
         [id]);
 
     return result.isEmpty ? null : JobDetails.fromJson(result.first.fields);

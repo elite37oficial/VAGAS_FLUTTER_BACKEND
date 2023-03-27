@@ -13,7 +13,8 @@ class JobDetails extends JobModel {
   final String? whatsapp;
   final String? email;
   final String photoUrl;
-  final String descriptionEmpresa;
+  final String descriptionCompany;
+  final String createdBy;
 
   factory JobDetails.fromJson(Map map) {
     return JobDetails(
@@ -23,13 +24,14 @@ class JobDetails extends JobModel {
       description: map['description'],
       salary: map['salary'],
       photoUrl: map['photo_url'],
-      descriptionEmpresa: map['description_company'],
+      descriptionCompany: map['description_company'],
       modality: map['modality'],
       city: map['city'],
       state: map['state'],
       link: map['link'],
       whatsapp: map['whatsapp'],
       email: map['email'],
+      createdBy: map['created_by'],
     );
   }
 
@@ -41,14 +43,15 @@ class JobDetails extends JobModel {
       'title': title,
       'description': description,
       'photoUrl': photoUrl,
-      'descriptionEmpresa': descriptionEmpresa,
+      'descriptionCompany': descriptionCompany,
       'salary': salary,
       'modality': modality,
       'city': city,
       'state': state,
       'link': link,
       'whatsapp': whatsapp,
-      'email': email
+      'email': email,
+      'createdBy': createdBy
     };
   }
 
@@ -60,11 +63,12 @@ class JobDetails extends JobModel {
     required this.salary,
     required this.modality,
     required this.photoUrl,
-    required this.descriptionEmpresa,
+    required this.descriptionCompany,
     required this.city,
     required this.state,
     required this.link,
     required this.whatsapp,
     required this.email,
+    required this.createdBy,
   });
 }

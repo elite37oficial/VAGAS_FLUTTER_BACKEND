@@ -1,5 +1,5 @@
 import 'controllers/jobs_controller.dart';
-import 'controllers/jobs_user_controller.dart';
+import 'controllers/jobs_security_controller.dart';
 import 'controllers/login_controller.dart';
 import 'controllers/ping_controller.dart';
 import 'core/dependency_injector/injects.dart';
@@ -17,7 +17,7 @@ void main() async {
       .add(di.get<LoginController>().getHandler())
       .add(di.get<PingController>().handler)
       .add(di.get<JobsController>().getHandler())
-      .add(di.get<JobsUserController>().getHandler(isSecurity: true))
+      .add(di.get<JobsSecurityController>().getHandler(isSecurity: true))
       .handler;
 
   final pipeline = Pipeline()

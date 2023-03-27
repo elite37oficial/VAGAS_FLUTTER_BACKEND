@@ -13,6 +13,7 @@ class JobModel {
   final String? email;
   final String? state;
   final String? createdBy;
+
   final DateTime? createdDate;
   final String? changedBy;
   final DateTime? changedDate;
