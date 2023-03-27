@@ -13,6 +13,7 @@ class JobDetails extends JobModel {
   final String? email;
   final String photoUrl;
   final String descriptionCompany;
+  final String createdBy;
 
   factory JobDetails.fromJson(Map map) {
     return JobDetails(
@@ -28,6 +29,7 @@ class JobDetails extends JobModel {
       link: map['link'],
       whatsapp: map['whatsapp'],
       email: map['email'],
+      createdBy: map['created_by'],
     );
   }
 
@@ -45,7 +47,8 @@ class JobDetails extends JobModel {
       'city': city,
       'link': link,
       'whatsapp': whatsapp,
-      'email': email
+      'email': email,
+      'createdBy': createdBy
     };
   }
 
@@ -62,5 +65,6 @@ class JobDetails extends JobModel {
     required this.link,
     required this.whatsapp,
     required this.email,
+    required this.createdBy,
   });
 }

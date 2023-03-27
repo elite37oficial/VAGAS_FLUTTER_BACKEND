@@ -9,12 +9,12 @@ class SecurityServiceImp implements SecurityService<JWT> {
   DependencyInjector di = DependencyInjector();
 
   @override
-  Future<String> generateJWT(String userID) async {
+  Future<String> generateJWT(String userID, String profileID) async {
     DotEnv dotEnv = di.get<DotEnv>();
     var jwt = JWT({
       'iat': DateTime.now().millisecondsSinceEpoch,
       'userID': userID,
-      'roles': ['Admin', 'User'],
+      'roles': profileID,
     });
 
     String? key = dotEnv['jwt_key'];
