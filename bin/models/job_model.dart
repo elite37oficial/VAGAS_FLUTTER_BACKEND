@@ -12,7 +12,7 @@ class JobModel {
   final String? whatsappNumber;
   final String? email;
   final String? state;
-  final String? createdBy;
+  String? createdBy;
 
   final DateTime? createdDate;
   final String? changedBy;
