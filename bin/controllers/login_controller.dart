@@ -20,8 +20,6 @@ class LoginController extends Controller {
     router.post('/login', (Request request) async {
       final body = await request.readAsString();
       final AuthTO authTO = AuthTO.fromRequest(body);
-
-      //lógica para validar email e senha com o banco
       final UserModel? userModel = await _authService.authenticate(authTO);
       if (userModel != null) {
         final String userID = userModel.id!;
