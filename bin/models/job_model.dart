@@ -11,7 +11,9 @@ class JobModel {
   final String? link;
   final String? whatsappNumber;
   final String? email;
-  String? createdBy;
+  final String? state;
+  final String? createdBy;
+
   final DateTime? createdDate;
   final String? changedBy;
   final DateTime? changedDate;
@@ -29,6 +31,7 @@ class JobModel {
     this.link,
     this.whatsappNumber,
     this.email,
+    this.state,
     this.createdBy,
     this.createdDate,
     this.changedBy,
@@ -49,6 +52,7 @@ class JobModel {
       link: map['link'],
       whatsappNumber: map['whatsapp'],
       email: map['email'],
+      state: map['state'],
       createdBy: map['created_by'],
       createdDate: map['created_date'] == null
           ? DateTime.now().toUtc()
@@ -80,6 +84,7 @@ class JobModel {
       'link': link,
       'whatsappNumber': whatsappNumber,
       'email': email,
+      'state': state,
       if (createdBy != null) 'createdBy': createdBy,
       if (createdDate != null)
         'createdDate': createdDate?.millisecondsSinceEpoch,
@@ -91,6 +96,6 @@ class JobModel {
 
   @override
   String toString() {
-    return 'JobModel(id: $id, companyId: $companyId, title: $title, description: $description, salary: $salary, modality: $modality, seniority: $seniority, city: $city, regime: $regime, link: $link, whatsappNumber: $whatsappNumber, email: $email, createdBy: $createdBy, createdDate: $createdDate, changedBy: $changedBy, changedDate: $changedDate)';
+    return 'JobModel(id: $id, companyId: $companyId, title: $title, description: $description, salary: $salary, modality: $modality, seniority: $seniority, city: $city, regime: $regime, link: $link, whatsappNumber: $whatsappNumber, email: $email, state? $state, createdBy: $createdBy, createdDate: $createdDate, changedBy: $changedBy, changedDate: $changedDate)';
   }
 }
