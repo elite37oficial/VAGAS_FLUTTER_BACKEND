@@ -19,7 +19,7 @@ class UsersController extends Controller {
       var body = await request.readAsString();
       UserModel userModel = UserModel.fromJson(jsonDecode(body));
       var result = await _usersService.save(userModel);
-      return result ? Response(201) : Response(204);
+      return result ? Response(201) : Response.badRequest();
     });
 
     return createHandler(

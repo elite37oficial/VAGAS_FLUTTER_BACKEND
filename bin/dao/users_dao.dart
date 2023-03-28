@@ -14,22 +14,26 @@ class UserDAO implements DAO<UserModel> {
   @override
   Future<bool> create(UserModel value) async {
     final DateTime now = DateTime.now().toUtc();
-    final String password = value.password ?? "";
-    final String pass = Password.hash(password, PBKDF2());
-    final String id = uuid.v1();
-    var result = await _dbConfiguration.execQuery(
-        'INSERT INTO users (id, profile_id, name, phone, email, password, created_by, created_date) values(?,?,?,?,?,?,?,?);',
-        [
-          id,
-          value.profileId,
-          value.name,
-          value.phone,
-          value.email,
-          pass,
-          id,
-          now
-        ]);
-    return result.affectedRows > 0;
+    if (value.password != null) {
+      final String password = value.password!;
+      final String pass = Password.hash(password, PBKDF2());
+      final String id = uuid.v1();
+      var result = await _dbConfiguration.execQuery(
+          'INSERT INTO users (id, profile_id, name, phone, email, password, created_by, created_date) values(?,?,?,?,?,?,?,?);',
+          [
+            id,
+            value.profileId,
+            value.name,
+            value.phone,
+            value.email,
+            pass,
+            id,
+            now
+          ]);
+      return result.affectedRows > 0;
+    } else {
+      return false;
+    }
   }
 
   @override
