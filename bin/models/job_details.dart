@@ -12,9 +12,9 @@ class JobDetails extends JobModel {
   final String? link;
   final String? whatsapp;
   final String? email;
-  final String photoUrl;
-  final String descriptionCompany;
-  final String createdBy;
+  final String? photoUrl;
+  final String? descriptionCompany;
+  final String? createdBy;
 
   factory JobDetails.fromJson(Map map) {
     return JobDetails(
