@@ -1,3 +1,4 @@
+import 'controllers/companies_security_controller.dart';
 import 'controllers/jobs_controller.dart';
 import 'controllers/jobs_security_controller.dart';
 import 'controllers/login_controller.dart';
@@ -18,6 +19,7 @@ void main() async {
       .add(di.get<PingController>().handler)
       .add(di.get<JobsController>().getHandler())
       .add(di.get<JobsSecurityController>().getHandler(isSecurity: true))
+      .add(di.get<CompaniesSecurityController>().getHandler(isSecurity: true))
       .handler;
 
   final pipeline = Pipeline()
