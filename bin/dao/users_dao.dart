@@ -61,9 +61,24 @@ class UserDAO implements DAO<UserModel> {
   }
 
   @override
-  Future<bool> update(UserModel value) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<bool> update(UserModel value) async {
+    final DateTime now = DateTime.now().toUtc();
+    final String password = value.password ?? "";
+    final String pass = Password.hash(password, PBKDF2());
+    var result = await _dbConfiguration.execQuery(
+        'UPDATE users set profile_id = ?, name = ?, phone = ?, email = ?, password = ?, updated_by = ?, updated_date = ? where id = ?',
+        [
+          value.profileId,
+          value.name,
+          value.phone,
+          value.email,
+          pass,
+          value.changedBy,
+          now,
+          value.id
+        ]);
+
+    return result.affectedRows > 0;
   }
 
   Future<UserModel?> findByEmail(String email) async {

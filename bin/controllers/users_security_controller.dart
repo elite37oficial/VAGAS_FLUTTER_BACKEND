@@ -4,6 +4,7 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import '../models/user_model.dart';
 import '../services/users_service.dart';
 import 'controller.dart';
 
@@ -44,6 +45,28 @@ class UsersSecurityController extends Controller {
         }
       }
       return Response.badRequest();
+    });
+
+    router.put('/users', (Request request) async {
+      final String body = await request.readAsString();
+      final UserModel userModel = UserModel.fromJson(jsonDecode(body));
+      if (userModel.id == null) {
+        return Response.badRequest();
+      }
+
+      UserModel? user = await _usersService.findOne(userModel.id!);
+      if (user == null) {
+        return Response.badRequest();
+      }
+
+      final bool isValid = await _validateAuth(request);
+
+      if (!isValid) {
+        return Response.forbidden('Not Authorized');
+      }
+
+      var result = await _usersService.save(userModel);
+      return result ? Response(201) : Response(500);
     });
 
     return createHandler(
