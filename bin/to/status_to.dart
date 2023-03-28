@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class StatusTO {
   final String id;
-  final String status;
+  final int status;
 
   StatusTO({required this.id, required this.status});
 

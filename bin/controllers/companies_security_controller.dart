@@ -70,8 +70,8 @@ class CompaniesSecurityController extends Controller {
       }
 
       switch (companyModel.status) {
-        case "active":
-        case "inactive":
+        case 0:
+        case 1:
           break;
         default:
           return Response.badRequest();

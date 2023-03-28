@@ -12,7 +12,7 @@ class JobDetails extends JobModel {
   final String? link;
   final String? whatsapp;
   final String? email;
-  final String? status;
+  final int? status;
   final String? photoUrl;
   final String? descriptionCompany;
   final String? createdBy;

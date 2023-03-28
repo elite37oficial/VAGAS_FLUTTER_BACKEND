@@ -4,7 +4,7 @@ class CompanyModel {
   String? location;
   String? photoUrl;
   String? description;
-  String? status;
+  int? status;
   String? createdBy;
   DateTime? createdDate;
   String? updatedBy;
