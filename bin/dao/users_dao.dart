@@ -16,16 +16,17 @@ class UserDAO implements DAO<UserModel> {
     final DateTime now = DateTime.now().toUtc();
     final String password = value.password ?? "";
     final String pass = Password.hash(password, PBKDF2());
+    final String id = uuid.v1();
     var result = await _dbConfiguration.execQuery(
         'INSERT INTO users (id, profile_id, name, phone, email, password, created_by, created_date) values(?,?,?,?,?,?,?,?);',
         [
-          uuid.v1(),
+          id,
           value.profileId,
           value.name,
           value.phone,
           value.email,
           pass,
-          value.createdBy,
+          id,
           now
         ]);
     return result.affectedRows > 0;
