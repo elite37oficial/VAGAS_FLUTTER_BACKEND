@@ -39,9 +39,12 @@ class UserDAO implements DAO<UserModel> {
   }
 
   @override
-  Future<List<UserModel>> findAll() {
-    // TODO: implement findAll
-    throw UnimplementedError();
+  Future<List<UserModel>> findAll() async {
+    var result = await _dbConfiguration.execQuery('SELECT * FROM users');
+    return result
+        .map((r) => UserModel.fromJson(r.fields))
+        .toList()
+        .cast<UserModel>();
   }
 
   @override
@@ -51,9 +54,10 @@ class UserDAO implements DAO<UserModel> {
   }
 
   @override
-  Future<UserModel?> findOne(String id) {
-    // TODO: implement findOne
-    throw UnimplementedError();
+  Future<UserModel?> findOne(String id) async {
+    var result = await _dbConfiguration
+        .execQuery('SELECT * FROM users WHERE id = ?;', [id]);
+    return result.isEmpty ? null : UserModel.fromJson(result.first.fields);
   }
 
   @override

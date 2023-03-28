@@ -25,6 +25,27 @@ class UsersSecurityController extends Controller {
       }
     });
 
+    router.get('/users/id/<id>', (Request request, String id) async {
+      if (id.isEmpty) {
+        return Response.badRequest();
+      }
+      RegExp uuidRegex = RegExp(
+          '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-1[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\$');
+
+      if (uuidRegex.hasMatch(id)) {
+        final bool isValid = await _validateAuth(request);
+        if (isValid) {
+          var result = await _usersService.findOne(id);
+          return result != null
+              ? Response.ok(jsonEncode(result))
+              : Response.notFound('Vaga não encontrada na base de dados.');
+        } else {
+          return Response.unauthorized('Not Authorized.');
+        }
+      }
+      return Response.badRequest();
+    });
+
     return createHandler(
         router: router, isSecurity: isSecurity, middlewares: middlewares);
   }
