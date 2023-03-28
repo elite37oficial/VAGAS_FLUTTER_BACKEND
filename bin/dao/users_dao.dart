@@ -49,7 +49,7 @@ class UserDAO implements DAO<UserModel> {
   }
 
   @override
-  Future<List<UserModel?>> findJobSimple({String? queryParam}) async {
+  Future<List<UserModel?>> findByQuery({String? queryParam}) async {
     // TODO: implement findOne
     throw UnimplementedError();
   }
@@ -73,5 +73,11 @@ class UserDAO implements DAO<UserModel> {
     return result.affectedRows == 0
         ? null
         : UserModel.fromRequest(result.first.fields);
+  }
+
+  @override
+  Future<bool> updateStatus(UserModel value) {
+    // TODO: implement updateStatus
+    throw UnimplementedError();
   }
 }

@@ -37,12 +37,12 @@ class JobDAO implements DAO<JobModel> {
     return result.affectedRows > 0;
   }
 
-  @override
-  Future<bool> delete(String id) async {
-    var result = await _dbConfiguration
-        .execQuery('DELETE from jobs where id = ?;', [id]);
-    return result.affectedRows > 0;
-  }
+  // @override
+  // Future<bool> delete(String id) async {
+  //   var result = await _dbConfiguration
+  //       .execQuery('DELETE from jobs where id = ?;', [id]);
+  //   return result.affectedRows > 0;
+  // }
 
   @override
   Future<List<JobModel>> findAll() async {
@@ -90,7 +90,18 @@ class JobDAO implements DAO<JobModel> {
   }
 
   @override
-  Future<List<JobModel?>> findJobSimple({String? queryParam}) async {
+  Future<bool> updateStatus(JobModel value) async {
+    final DateTime now = DateTime.now().toUtc();
+    var result = await _dbConfiguration.execQuery(
+      'UPDATE jobs set status = ?, updated_by = ?, updated_date = ? where id = ?',
+      [value.status, value.id, now, value.id],
+    );
+
+    return result.affectedRows > 0;
+  }
+
+  @override
+  Future<List<JobModel?>> findByQuery({String? queryParam}) async {
     if (queryParam?.isNotEmpty ?? false) {
       var result = await _dbConfiguration.execQuery(
           "Select t1.id, t1.title, t2.photo_url, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where $queryParam ;");
@@ -99,9 +110,8 @@ class JobDAO implements DAO<JobModel> {
           .toList()
           .cast<JobSimple>();
     }
-
     var result = await _dbConfiguration.execQuery(
-        'Select t1.id, t1.title, t2.photo_url, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.company_id;');
+        "Select t1.id, t1.title, t2.photo_url, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where t1.status = 'active';");
     return result
         .map((r) => JobSimple.fromJson(r.fields))
         .toList()

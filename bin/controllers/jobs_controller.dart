@@ -23,10 +23,10 @@ class JobsController extends Controller {
         if (queryParams == null) {
           return Response.badRequest();
         }
-        var result = await _service.findJobSimple(queryParam: queryParams);
+        var result = await _service.findByQuery(queryParam: queryParams);
         return Response.ok(jsonEncode(result));
       }
-      var result = await _service.findJobSimple();
+      var result = await _service.findByQuery();
       return Response.ok(jsonEncode(result));
     });
 

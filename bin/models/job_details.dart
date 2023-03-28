@@ -12,6 +12,7 @@ class JobDetails extends JobModel {
   final String? link;
   final String? whatsapp;
   final String? email;
+  final String? status;
   final String? photoUrl;
   final String? descriptionCompany;
   final String? createdBy;
@@ -20,6 +21,7 @@ class JobDetails extends JobModel {
     return JobDetails(
       id: map['id'],
       nameCompany: map['name_company'],
+      status: map['status'],
       title: map['title'],
       description: map['description'],
       salary: map['salary'],
@@ -40,6 +42,7 @@ class JobDetails extends JobModel {
     return {
       'id': id,
       'nameCompany': nameCompany,
+      'status': status,
       'title': title,
       'description': description,
       'photoUrl': photoUrl,
@@ -58,6 +61,7 @@ class JobDetails extends JobModel {
   JobDetails({
     required this.id,
     required this.nameCompany,
+    this.status,
     required this.title,
     required this.description,
     required this.salary,

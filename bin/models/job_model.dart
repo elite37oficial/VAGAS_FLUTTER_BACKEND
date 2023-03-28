@@ -1,5 +1,5 @@
 class JobModel {
-  final String? id;
+  String? id;
   final String? companyId;
   final String? title;
   final String? description;
@@ -11,6 +11,7 @@ class JobModel {
   final String? link;
   final String? whatsappNumber;
   final String? email;
+  String? status;
   final String? state;
   String? createdBy;
 
@@ -31,6 +32,7 @@ class JobModel {
     this.link,
     this.whatsappNumber,
     this.email,
+    this.status,
     this.state,
     this.createdBy,
     this.createdDate,

@@ -7,11 +7,11 @@ class JobsService implements GenericService<JobModel> {
 
   JobsService(this._dao);
 
-  @override
-  Future<bool> delete(String id) async {
-    var result = await _dao.delete(id);
-    return result;
-  }
+  // @override
+  // Future<bool> delete(String id) async {
+  //   var result = await _dao.delete(id);
+  //   return result;
+  // }
 
   @override
   Future<List<JobModel>> findAll() async {
@@ -19,8 +19,8 @@ class JobsService implements GenericService<JobModel> {
   }
 
   @override
-  Future<List<JobModel?>> findJobSimple({String? queryParam}) async {
-    return await _dao.findJobSimple(queryParam: queryParam);
+  Future<List<JobModel?>> findByQuery({String? queryParam}) async {
+    return await _dao.findByQuery(queryParam: queryParam);
   }
 
   @override
@@ -33,5 +33,10 @@ class JobsService implements GenericService<JobModel> {
     return value.id != null
         ? await _dao.update(value)
         : await _dao.create(value);
+  }
+
+  @override
+  Future<bool> updateStatus(JobModel value) async {
+    return await _dao.updateStatus(value);
   }
 }
