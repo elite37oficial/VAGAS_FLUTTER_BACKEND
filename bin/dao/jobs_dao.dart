@@ -16,7 +16,7 @@ class JobDAO implements DAO<JobModel> {
   Future<bool> create(JobModel value) async {
     final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
-        'INSERT INTO jobs (id, company_id, title, description, salary, modality, seniority, regime, link, whatsapp, email, city, created_by, created_date) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?); ',
+        'INSERT INTO jobs (id, company_id, title, description, salary, modality, seniority, regime, link, whatsapp, email, city, state, created_by, created_date) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?); ',
         [
           uuid.v1(),
           value.companyId,
@@ -30,6 +30,7 @@ class JobDAO implements DAO<JobModel> {
           value.whatsappNumber,
           value.email,
           value.city,
+          value.state,
           value.createdBy,
           now
         ]);
@@ -55,7 +56,7 @@ class JobDAO implements DAO<JobModel> {
   @override
   Future<JobModel?> findOne(String id) async {
     var result = await _dbConfiguration.execQuery(
-        'SELECT t1.id, t1.title, t1.city, t1.regime, t1.modality, t1.description, t1.whatsapp, t1.salary, t1.email, t1.link, t1.created_by, t2.description AS description_company, t2.photo_url, t2.name as name_company FROM jobs AS t1 INNER JOIN companies AS t2 ON t2.id = t1.company_id where t1.id = ?;',
+        'SELECT t1.id, t1.title, t1.city, t1.state, t1.regime, t1.modality, t1.description, t1.whatsapp, t1.salary, t1.email, t1.link, t1.created_by, t2.description AS description_company, t2.photo_url, t2.name as name_company FROM jobs AS t1 INNER JOIN companies AS t2 ON t2.id = t1.company_id where t1.id = ?;',
         [id]);
 
     return result.isEmpty ? null : JobDetails.fromJson(result.first.fields);
@@ -65,7 +66,7 @@ class JobDAO implements DAO<JobModel> {
   Future<bool> update(JobModel value) async {
     final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
-      'UPDATE jobs set company_id = ?, title = ?, description = ?, salary = ?, modality = ?,seniority = ?, regime = ?, link = ?, whatsapp = ?, email = ?, city = ?, updated_by = ?, updated_date = ? where id = ?',
+      'UPDATE jobs set company_id = ?, title = ?, description = ?, salary = ?, modality = ?,seniority = ?, regime = ?, link = ?, whatsapp = ?, email = ?, city = ?, state = ?,1 updated_by = ?, updated_date = ? where id = ?',
       [
         value.companyId,
         value.title,
@@ -78,6 +79,7 @@ class JobDAO implements DAO<JobModel> {
         value.whatsappNumber,
         value.email,
         value.city,
+        value.state,
         value.changedBy,
         now,
         value.id

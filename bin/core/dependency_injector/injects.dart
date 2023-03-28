@@ -7,6 +7,7 @@ import '../../controllers/jobs_security_controller.dart';
 import '../../controllers/login_controller.dart';
 import '../../controllers/ping_controller.dart';
 import '../../dao/companies_dao.dart';
+import '../../controllers/users_controller.dart';
 import '../../dao/jobs_dao.dart';
 import '../../dao/users_dao.dart';
 import '../../database/mysql_db_configuration.dart';
@@ -29,10 +30,12 @@ class Injects {
     di.register<MySqlDbConfiguration>(() => MySqlDbConfiguration());
     di.register<CompaniesDAO>(
         () => CompaniesDAO(di.get<MySqlDbConfiguration>(), di.get()));
-    di.register<UserDAO>(() => UserDAO(di.get<MySqlDbConfiguration>()));
     di.register<CompaniesService>(
         () => CompaniesService(di.get<CompaniesDAO>()));
+    di.register<UserDAO>(
+        () => UserDAO(di.get<MySqlDbConfiguration>(), di.get<Uuid>()));
     di.register<UsersService>(() => UsersService(di.get<UserDAO>()));
+    di.register(() => UsersController(di.get<UsersService>()));
     di.register<AuthService>(() => AuthService(di.get<UsersService>()));
     di.register<CompaniesSecurityController>(
         () => CompaniesSecurityController(di.get()));
