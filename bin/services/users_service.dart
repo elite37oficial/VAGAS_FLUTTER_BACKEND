@@ -10,4 +10,10 @@ class UsersService {
     final result = await userDAO.findByEmail(email);
     return result;
   }
+
+  Future<bool> save(UserModel value) async {
+    return value.id != null
+        ? await userDAO.update(value)
+        : await userDAO.create(value);
+  }
 }

@@ -1,15 +1,35 @@
+import 'package:password_dart/password_dart.dart';
+import 'package:uuid/uuid.dart';
+
 import '../database/db_configuration.dart';
 import '../models/user_model.dart';
 import 'dao.dart';
 
 class UserDAO implements DAO<UserModel> {
   final DBConfiguration _dbConfiguration;
-  UserDAO(this._dbConfiguration);
+  final Uuid uuid;
+
+  UserDAO(this._dbConfiguration, this.uuid);
 
   @override
-  Future<bool> create(UserModel value) {
-    // TODO: implement create
-    throw UnimplementedError();
+  Future<bool> create(UserModel value) async {
+    final DateTime now = DateTime.now().toUtc();
+    final String password = value.password ?? "";
+    final String pass = Password.hash(password, PBKDF2());
+    final String id = uuid.v1();
+    var result = await _dbConfiguration.execQuery(
+        'INSERT INTO users (id, profile_id, name, phone, email, password, created_by, created_date) values(?,?,?,?,?,?,?,?);',
+        [
+          id,
+          value.profileId,
+          value.name,
+          value.phone,
+          value.email,
+          pass,
+          id,
+          now
+        ]);
+    return result.affectedRows > 0;
   }
 
   @override
