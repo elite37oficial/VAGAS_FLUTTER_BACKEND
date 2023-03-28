@@ -6,6 +6,7 @@ import 'package:shelf_router/shelf_router.dart';
 
 import '../models/job_model.dart';
 import '../services/jobs_service.dart';
+import '../to/status_to.dart';
 import 'controller.dart';
 
 class JobsSecurityController extends Controller {
@@ -16,41 +17,16 @@ class JobsSecurityController extends Controller {
   Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
     Router router = Router();
 
-    router.delete('/jobs/id/<id>', (Request request, String id) async {
-      if (id.isEmpty) {
-        return Response(400);
-      }
-
-      JobModel? job = await _jobsService.findOne(id);
-
-      if (job == null) {
-        return Response(400);
-      }
-      final bool isValid = await _validateAuth(job, request);
-
-      if (!isValid) {
-        return Response.forbidden('Not Authorized.');
-      }
-
-      // final String createdBy = job.createdBy!;
-      // JWT jwt = request.context['jwt'] as JWT;
-      // final String userIdFromJWT = jwt.payload['userID'];
-      // if (userIdFromJWT != createdBy) {
-      //   return Response.forbidden('Not Authorized.');
-      // }
-
-      var result = await _jobsService.delete(id);
-      return result ? Response(200) : Response.internalServerError();
-    });
-
     router.put('/jobs', (Request request) async {
       final String body = await request.readAsString();
       final JobModel jobModel = JobModel.fromJson(jsonDecode(body));
+
       if (jobModel.id == null) {
         return Response.badRequest();
       }
 
       JobModel? job = await _jobsService.findOne(jobModel.id!);
+
       if (job == null) {
         return Response(400);
       }
@@ -61,7 +37,33 @@ class JobsSecurityController extends Controller {
         return Response.forbidden('Not Authorized.');
       }
 
-      var result = await _jobsService.save(jobModel);
+      final bool result = await _jobsService.save(jobModel);
+      return result ? Response(201) : Response(500);
+    });
+
+    router.put('/jobs-status', (Request request) async {
+      final String body = await request.readAsString();
+      final StatusTO statusTO = StatusTO.fromRequest(body);
+      JobModel jobModel = JobModel();
+      jobModel.status = statusTO.status;
+      jobModel.id = statusTO.id;
+
+      if (jobModel.id == null || jobModel.status == null) {
+        return Response.badRequest();
+      }
+
+      switch (jobModel.status) {
+        case "active":
+        case "inactive":
+          break;
+        default:
+          return Response.badRequest();
+      }
+
+      //validar se usuario possui autorização para pausar a vaga
+
+      bool result = await _jobsService.updateStatus(jobModel);
+
       return result ? Response(201) : Response(500);
     });
 
@@ -82,6 +84,7 @@ class JobsSecurityController extends Controller {
     final String createdBy = job.createdBy!;
     JWT jwt = request.context['jwt'] as JWT;
     final String userIdFromJWT = jwt.payload['userID'];
+
     if (userIdFromJWT != createdBy) {
       return false;
     }
