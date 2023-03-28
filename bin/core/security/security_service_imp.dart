@@ -14,7 +14,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
     var jwt = JWT({
       'iat': DateTime.now().millisecondsSinceEpoch,
       'userID': userID,
-      'roles': profileID,
+      'roles': 'admin',
     });
 
     String? key = dotEnv['jwt_key'];
