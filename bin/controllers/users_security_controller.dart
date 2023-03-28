@@ -6,6 +6,7 @@ import 'package:shelf_router/shelf_router.dart';
 
 import '../models/user_model.dart';
 import '../services/users_service.dart';
+import '../to/status_to.dart';
 import 'controller.dart';
 
 class UsersSecurityController extends Controller {
@@ -66,6 +67,30 @@ class UsersSecurityController extends Controller {
       }
 
       var result = await _usersService.save(userModel);
+      return result ? Response(201) : Response(500);
+    });
+
+    router.put('/users-status', (Request request) async {
+      final String body = await request.readAsString();
+      final StatusTO statusTO = StatusTO.fromRequest(body);
+      UserModel userModel = UserModel();
+      userModel.status = statusTO.status;
+      userModel.id = statusTO.id;
+
+      if (userModel.id == null || userModel.status == null) {
+        return Response.badRequest();
+      }
+
+      switch (userModel.status) {
+        case 0:
+        case 1:
+          break;
+        default:
+          return Response.badRequest();
+      }
+
+      bool result = await _usersService.updateStatus(userModel);
+
       return result ? Response(201) : Response(500);
     });
 

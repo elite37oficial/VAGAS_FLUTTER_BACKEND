@@ -24,4 +24,8 @@ class UsersService {
   Future<UserModel?> findOne(String id) async {
     return await userDAO.findOne(id);
   }
+
+  Future<bool> updateStatus(UserModel value) async {
+    return await userDAO.updateStatus(value);
+  }
 }
