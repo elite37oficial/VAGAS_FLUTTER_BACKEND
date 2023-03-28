@@ -95,8 +95,11 @@ class UserDAO implements DAO<UserModel> {
   }
 
   @override
-  Future<bool> updateStatus(UserModel value) {
-    // TODO: implement updateStatus
-    throw UnimplementedError();
+  Future<bool> updateStatus(UserModel value) async {
+    final DateTime now = DateTime.now().toUtc();
+    var result = await _dbConfiguration.execQuery(
+        'UPDATE users set status = ?, updated_by = ?, updated_date = ? where id = ? ',
+        [value.status, value.id, now, value.id]);
+    return result.affectedRows > 0;
   }
 }
