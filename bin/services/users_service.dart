@@ -16,4 +16,12 @@ class UsersService {
         ? await userDAO.update(value)
         : await userDAO.create(value);
   }
+
+  Future<List<UserModel>> findAll() async {
+    return await userDAO.findAll();
+  }
+
+  Future<UserModel?> findOne(String id) async {
+    return await userDAO.findOne(id);
+  }
 }

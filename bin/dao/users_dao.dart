@@ -43,9 +43,12 @@ class UserDAO implements DAO<UserModel> {
   }
 
   @override
-  Future<List<UserModel>> findAll() {
-    // TODO: implement findAll
-    throw UnimplementedError();
+  Future<List<UserModel>> findAll() async {
+    var result = await _dbConfiguration.execQuery('SELECT * FROM users');
+    return result
+        .map((r) => UserModel.fromJson(r.fields))
+        .toList()
+        .cast<UserModel>();
   }
 
   @override
@@ -55,15 +58,31 @@ class UserDAO implements DAO<UserModel> {
   }
 
   @override
-  Future<UserModel?> findOne(String id) {
-    // TODO: implement findOne
-    throw UnimplementedError();
+  Future<UserModel?> findOne(String id) async {
+    var result = await _dbConfiguration
+        .execQuery('SELECT * FROM users WHERE id = ?;', [id]);
+    return result.isEmpty ? null : UserModel.fromJson(result.first.fields);
   }
 
   @override
-  Future<bool> update(UserModel value) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<bool> update(UserModel value) async {
+    final DateTime now = DateTime.now().toUtc();
+    final String password = value.password ?? "";
+    final String pass = Password.hash(password, PBKDF2());
+    var result = await _dbConfiguration.execQuery(
+        'UPDATE users set profile_id = ?, name = ?, phone = ?, email = ?, password = ?, updated_by = ?, updated_date = ? where id = ?',
+        [
+          value.profileId,
+          value.name,
+          value.phone,
+          value.email,
+          pass,
+          value.changedBy,
+          now,
+          value.id
+        ]);
+
+    return result.affectedRows > 0;
   }
 
   Future<UserModel?> findByEmail(String email) async {
