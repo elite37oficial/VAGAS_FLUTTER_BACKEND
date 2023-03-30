@@ -5,10 +5,12 @@ class JobSimple extends JobModel {
   final String id;
   final String title;
   final String photoUrl;
+  final String companyName;
   final String city;
   final String modality;
 
   JobSimple({
+    required this.companyName,
     required this.id,
     required this.title,
     required this.photoUrl,
@@ -22,6 +24,7 @@ class JobSimple extends JobModel {
 
     result.addAll({'id': id});
     result.addAll({'title': title});
+    result.addAll({'companyName': companyName});
     result.addAll({'photoUrl': photoUrl});
     result.addAll({'city': city});
     result.addAll({'modality': modality});
@@ -33,6 +36,7 @@ class JobSimple extends JobModel {
     return JobSimple(
       id: map['id'] ?? '',
       title: map['title'] ?? '',
+      companyName: map['name_company'] ?? '',
       photoUrl: map['photo_url'] ?? '',
       city: map['city'] ?? '',
       modality: map['modality'] ?? '',
@@ -41,6 +45,6 @@ class JobSimple extends JobModel {
 
   @override
   String toString() {
-    return 'JobSimple(id: $id, title: $title, photoUrl: $photoUrl, city: $city, modality: $modality)';
+    return 'JobSimple(id: $id, title: $title,companyName: $companyName, photoUrl: $photoUrl, city: $city, modality: $modality)';
   }
 }

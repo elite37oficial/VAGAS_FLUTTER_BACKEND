@@ -66,7 +66,7 @@ class JobDAO implements DAO<JobModel> {
   Future<bool> update(JobModel value) async {
     final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
-      'UPDATE jobs set company_id = ?, title = ?, description = ?, salary = ?, modality = ?,seniority = ?, regime = ?, link = ?, whatsapp = ?, email = ?, city = ?, state = ?,1 updated_by = ?, updated_date = ? where id = ?',
+      'UPDATE jobs set company_id = ?, title = ?, description = ?, salary = ?, modality = ?,seniority = ?, regime = ?, link = ?, whatsapp = ?, email = ?, city = ?, state = ?, updated_by = ?, updated_date = ? where id = ?',
       [
         value.companyId,
         value.title,
@@ -111,7 +111,7 @@ class JobDAO implements DAO<JobModel> {
           .cast<JobSimple>();
     }
     var result = await _dbConfiguration.execQuery(
-        "Select t1.id, t1.title, t2.photo_url, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where t1.status = 'active';");
+        "Select t1.id, t1.title, t2.photo_url, t1.city, t1.modality, t2.name as name_company from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where t1.status = 'active';");
     return result
         .map((r) => JobSimple.fromJson(r.fields))
         .toList()
