@@ -9,6 +9,7 @@ class UserModel {
   late DateTime? createdDate;
   String? changedBy;
   DateTime? changedDate;
+  String? status;
 
   UserModel(
       {this.id,
@@ -17,6 +18,7 @@ class UserModel {
       this.phone,
       this.email,
       this.password,
+      this.status,
       this.createdBy,
       this.createdDate,
       this.changedBy,
@@ -39,6 +41,7 @@ class UserModel {
       phone: map['phone'],
       email: map['email'],
       password: map['password'],
+      status: map['status'],
       createdBy: map['created_by'],
       createdDate: map['created_date'] == null
           ? DateTime.now().toUtc()
@@ -64,6 +67,7 @@ class UserModel {
       'phone': phone,
       'email': email,
       'password': password,
+      'status': status,
       if (createdBy != null) 'createdBy': createdBy,
       if (createdDate != null)
         'createdDate': createdDate?.millisecondsSinceEpoch,
@@ -75,6 +79,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, profileId: $profileId, name: $name, phone: $phone, email: $email, password: $password, createdBy: $createdBy, createdDate: $createdDate, changedBy: $changedBy, changedDate: $changedDate)';
+    return 'UserModel(id: $id, profileId: $profileId, name: $name, phone: $phone, email: $email, password: $password, status: $status, createdBy: $createdBy, createdDate: $createdDate, changedBy: $changedBy, changedDate: $changedDate)';
   }
 }
