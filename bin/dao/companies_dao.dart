@@ -45,6 +45,7 @@ class CompaniesDAO implements DAO<CompanyModel> {
           .toList()
           .cast<CompanyModel>();
     }
+
     var result = await _dbConfiguration.execQuery(
         "Select t1.id, t1.name, t1.photo_url, t1.location, t1.description from companies as t1 where t1.status = 'active';");
     return result
@@ -86,9 +87,21 @@ class CompaniesDAO implements DAO<CompanyModel> {
     final DateTime today = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
       'UPDATE companies set status = ?, updated_by = ?, updated_date = ? where id = ?',
-      [value.status, value.id, today, value.id],
+      [value.status, value.updatedBy, today, value.id],
     );
 
     return result.affectedRows > 0;
+  }
+
+  @override
+  Future<List<String>> getStatus() async {
+    final result =
+        await _dbConfiguration.execQuery('Select name from companies_status;');
+    final List<String> statusList = result
+        .map((r) => (r.fields['name']).toString().toLowerCase())
+        .toList()
+        .cast<String>();
+
+    return statusList;
   }
 }

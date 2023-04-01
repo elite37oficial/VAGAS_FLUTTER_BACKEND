@@ -6,11 +6,6 @@ class CompaniesService implements GenericService<CompanyModel> {
   final CompaniesDAO _companiesDAO;
   CompaniesService(this._companiesDAO);
 
-  // @override
-  // Future<bool> delete(String id) async {
-  //   return await _companiesDAO.delete(id);
-  // }
-
   @override
   Future<List<CompanyModel>> findAll() async {
     return await _companiesDAO.findAll();
@@ -36,5 +31,10 @@ class CompaniesService implements GenericService<CompanyModel> {
   @override
   Future<bool> updateStatus(CompanyModel value) async {
     return await _companiesDAO.updateStatus(value);
+  }
+
+  @override
+  Future<List<String>> getStatus() async {
+    return await _companiesDAO.getStatus();
   }
 }
