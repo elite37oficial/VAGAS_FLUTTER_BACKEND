@@ -12,11 +12,11 @@ class JobModel {
   final String? whatsappNumber;
   final String? email;
   String? status;
-  final String? state;
+  String? state;
   String? createdBy;
 
   final DateTime? createdDate;
-  final String? changedBy;
+  String? changedBy;
   final DateTime? changedDate;
 
   JobModel({
@@ -50,6 +50,7 @@ class JobModel {
       modality: map['modality'],
       seniority: map['seniority'],
       city: map['city'],
+      status: map['status'],
       regime: map['regime'],
       link: map['link'],
       whatsappNumber: map['whatsapp'],
@@ -83,6 +84,7 @@ class JobModel {
       'seniority': seniority,
       'city': city,
       'regime': regime,
+      'status': status,
       'link': link,
       'whatsappNumber': whatsappNumber,
       'email': email,
@@ -98,6 +100,6 @@ class JobModel {
 
   @override
   String toString() {
-    return 'JobModel(id: $id, companyId: $companyId, title: $title, description: $description, salary: $salary, modality: $modality, seniority: $seniority, city: $city, regime: $regime, link: $link, whatsappNumber: $whatsappNumber, email: $email, state? $state, createdBy: $createdBy, createdDate: $createdDate, changedBy: $changedBy, changedDate: $changedDate)';
+    return 'JobModel(id: $id, companyId: $companyId,status: $status, title: $title, description: $description, salary: $salary, modality: $modality, seniority: $seniority, city: $city, regime: $regime, link: $link, whatsappNumber: $whatsappNumber, email: $email, state? $state, createdBy: $createdBy, createdDate: $createdDate, changedBy: $changedBy, changedDate: $changedDate)';
   }
 }
