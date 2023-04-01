@@ -24,4 +24,9 @@ class UsersService {
   Future<UserModel?> findOne(String id) async {
     return await userDAO.findOne(id);
   }
+
+  Future<List<String>> getPermissions(String profileId) async {
+    final result = await userDAO.getPermissions(profileId);
+    return result;
+  }
 }
