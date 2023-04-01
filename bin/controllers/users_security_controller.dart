@@ -74,13 +74,18 @@ class UsersSecurityController extends Controller {
   }
 
   Future<bool> _validateAuth(Request request) async {
-    JWT jwt = request.context['jwt'] as JWT;
-    final String userIdFromJWT = jwt.payload['userID'];
+    final String userIdFromJWT = _getUserIdFromJWT(request);
     var result = await _usersService.findOne(userIdFromJWT);
     var idUser = result?.id;
     if (userIdFromJWT != idUser) {
       return false;
     }
     return true;
+  }
+
+  String _getUserIdFromJWT(Request request) {
+    final JWT jwt = request.context['jwt'] as JWT;
+    final userID = jwt.payload['userID'];
+    return userID;
   }
 }
