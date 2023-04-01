@@ -15,6 +15,7 @@ import '../../database/mysql_db_configuration.dart';
 import '../../services/auth_service.dart';
 import '../../services/companies_service.dart';
 import '../../services/jobs_service.dart';
+import '../../services/permissions_service.dart';
 import '../../services/users_service.dart';
 import '../security/security_service.dart';
 import '../security/security_service_imp.dart';
@@ -26,7 +27,6 @@ class Injects {
 
     di.register<DotEnv>(() => DotEnv(includePlatformEnvironment: true)..load());
     di.register<Uuid>(() => Uuid());
-    di.register<SecurityService>(() => SecurityServiceImp());
 
     di.register<MySqlDbConfiguration>(() => MySqlDbConfiguration());
     di.register<CompaniesDAO>(
@@ -35,19 +35,25 @@ class Injects {
         () => CompaniesService(di.get<CompaniesDAO>()));
     di.register<UserDAO>(
         () => UserDAO(di.get<MySqlDbConfiguration>(), di.get<Uuid>()));
+    di.register<PermissionService>(() => PermissionService(di.get<UserDAO>()));
+    di.register<SecurityService>(
+        () => SecurityServiceImp(di.get<PermissionService>()));
     di.register<UsersService>(() => UsersService(di.get<UserDAO>()));
-    di.register(() => UsersController(di.get<UsersService>()));
-    di.register(() => UsersSecurityController(di.get<UsersService>()));
-    di.register<AuthService>(() => AuthService(di.get<UsersService>()));
+    di.register<UsersController>(() => UsersController(di.get<UsersService>()));
+    di.register<UsersSecurityController>(
+        () => UsersSecurityController(di.get<UsersService>()));
     di.register<CompaniesSecurityController>(
         () => CompaniesSecurityController(di.get()));
+    di.register<AuthService>(() => AuthService(di.get<UsersService>()));
     di.register<LoginController>(() =>
         LoginController(di.get<AuthService>(), di.get<SecurityService>()));
     di.register<PingController>(() => PingController());
-    di.register(() => JobDAO(di.get<MySqlDbConfiguration>(), di.get<Uuid>()));
-    di.register(() => JobsService(di.get<JobDAO>()));
-    di.register(() => JobsController(di.get<JobsService>()));
-    di.register(() => JobsSecurityController(di.get<JobsService>()));
+    di.register<JobDAO>(
+        () => JobDAO(di.get<MySqlDbConfiguration>(), di.get<Uuid>()));
+    di.register<JobsService>(() => JobsService(di.get<JobDAO>()));
+    di.register<JobsController>(() => JobsController(di.get<JobsService>()));
+    di.register<JobsSecurityController>(
+        () => JobsSecurityController(di.get<JobsService>()));
 
     return di;
   }

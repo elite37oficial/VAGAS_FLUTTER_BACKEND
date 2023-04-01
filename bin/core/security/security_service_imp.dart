@@ -2,11 +2,15 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dotenv/dotenv.dart';
 import 'package:shelf/shelf.dart';
 
+import '../../services/permissions_service.dart';
 import '../dependency_injector/dependency_injector.dart';
 import 'security_service.dart';
 
 class SecurityServiceImp implements SecurityService<JWT> {
   DependencyInjector di = DependencyInjector();
+
+  final PermissionService _permissionService;
+  SecurityServiceImp(this._permissionService);
 
   @override
   Future<String> generateJWT(String userID, String profileID) async {
@@ -14,7 +18,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
     var jwt = JWT({
       'iat': DateTime.now().millisecondsSinceEpoch,
       'userID': userID,
-      'roles': 'admin',
+      'roles': profileID,
     });
 
     String? key = dotEnv['jwt_key'];
@@ -71,11 +75,28 @@ class SecurityServiceImp implements SecurityService<JWT> {
   @override
   Middleware get verifyJwt {
     return createMiddleware(
-      requestHandler: (request) {
+      requestHandler: (request) async {
         if (request.context['jwt'] == null) {
           return Response.forbidden('Not Authorized');
         }
-        return null;
+
+        JWT? jwt = request.context['jwt'] as JWT;
+        var profileId = jwt.payload['roles'];
+
+        var method = request.method;
+
+        var requestedUri = request.requestedUri;
+
+        var pathSegments = requestedUri.pathSegments;
+
+        final String permissionByRoute =
+            '${method.toLowerCase()}-${pathSegments.first}';
+
+        final List<String> permissions =
+            await _permissionService.getPermissions(profileId);
+
+        final bool resultPermission = permissions.contains(permissionByRoute);
+        return resultPermission ? null : Response.forbidden('Not Authorized.');
       },
     );
   }

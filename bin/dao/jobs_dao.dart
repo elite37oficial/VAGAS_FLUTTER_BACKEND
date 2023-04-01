@@ -16,11 +16,12 @@ class JobDAO implements DAO<JobModel> {
   Future<bool> create(JobModel value) async {
     final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
-        'INSERT INTO jobs (id, company_id, title, description, salary, modality, seniority, regime, link, whatsapp, email, city, state, created_by, created_date) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?); ',
+        'INSERT INTO jobs (id, company_id, title, status, description, salary, modality, seniority, regime, link, whatsapp, email, city, state, created_by, created_date) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?); ',
         [
           uuid.v1(),
           value.companyId,
           value.title,
+          value.status,
           value.description,
           value.salary,
           value.modality,
@@ -36,13 +37,6 @@ class JobDAO implements DAO<JobModel> {
         ]);
     return result.affectedRows > 0;
   }
-
-  // @override
-  // Future<bool> delete(String id) async {
-  //   var result = await _dbConfiguration
-  //       .execQuery('DELETE from jobs where id = ?;', [id]);
-  //   return result.affectedRows > 0;
-  // }
 
   @override
   Future<List<JobModel>> findAll() async {
@@ -104,7 +98,7 @@ class JobDAO implements DAO<JobModel> {
   Future<List<JobModel?>> findByQuery({String? queryParam}) async {
     if (queryParam?.isNotEmpty ?? false) {
       var result = await _dbConfiguration.execQuery(
-          "Select t1.id, t1.title, t2.photo_url, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where $queryParam ;");
+          "Select t1.id, t1.title, t2.photo_url, t1.city, t1.modality from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where $queryParam and t1.status = 'active';");
       return result
           .map((r) => JobSimple.fromJson(r.fields))
           .toList()
@@ -116,5 +110,17 @@ class JobDAO implements DAO<JobModel> {
         .map((r) => JobSimple.fromJson(r.fields))
         .toList()
         .cast<JobSimple>();
+  }
+
+  @override
+  Future<List<String>> getStatus() async {
+    final result =
+        await _dbConfiguration.execQuery('Select name from jobs_status;');
+    final List<String> statusList = result
+        .map((r) => (r.fields['name']).toString().toLowerCase())
+        .toList()
+        .cast<String>();
+
+    return statusList;
   }
 }

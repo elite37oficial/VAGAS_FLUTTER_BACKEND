@@ -36,6 +36,8 @@ class JobsSecurityController extends Controller {
       if (!isValid) {
         return Response.forbidden('Not Authorized.');
       }
+      final userID = _getUserIdFromJWT(request);
+      jobModel.changedBy = userID;
 
       final bool result = await _jobsService.save(jobModel);
       return result ? Response(201) : Response(500);
@@ -52,15 +54,26 @@ class JobsSecurityController extends Controller {
         return Response.badRequest();
       }
 
-      switch (jobModel.status) {
-        case "active":
-        case "inactive":
-          break;
-        default:
-          return Response.badRequest();
+      final List<String> listOfStatus = await _jobsService.getStatus();
+
+      if (!listOfStatus.contains(jobModel.status?.toLowerCase())) {
+        return Response.badRequest();
       }
 
-      //validar se usuario possui autorização para pausar a vaga
+      final JobModel? jobFromDB = await _jobsService.findOne(jobModel.id!);
+
+      if (jobFromDB == null) {
+        return Response.notFound('Not Found.');
+      }
+
+      jobModel.createdBy = jobFromDB.createdBy;
+
+      final bool valid = await _validateAuth(jobModel, request);
+      if (!valid) {
+        return Response.forbidden('Not Authorized.');
+      }
+      final userID = _getUserIdFromJWT(request);
+      jobModel.changedBy = userID;
 
       bool result = await _jobsService.updateStatus(jobModel);
 
@@ -70,9 +83,9 @@ class JobsSecurityController extends Controller {
     router.post('/jobs', (Request request) async {
       var body = await request.readAsString();
       JobModel jobmodel = JobModel.fromJson(jsonDecode(body));
-      JWT jwt = request.context['jwt'] as JWT;
-      final String userIdFromJWT = jwt.payload['userID'];
+      final String userIdFromJWT = _getUserIdFromJWT(request);
       jobmodel.createdBy = userIdFromJWT;
+      jobmodel.status = 'active';
       var result = await _jobsService.save(jobmodel);
       return result ? Response(201) : Response(404);
     });
@@ -82,12 +95,17 @@ class JobsSecurityController extends Controller {
 
   Future<bool> _validateAuth(JobModel job, Request request) async {
     final String createdBy = job.createdBy!;
-    JWT jwt = request.context['jwt'] as JWT;
-    final String userIdFromJWT = jwt.payload['userID'];
+    final String userIdFromJWT = _getUserIdFromJWT(request);
 
     if (userIdFromJWT != createdBy) {
       return false;
     }
     return true;
+  }
+
+  String _getUserIdFromJWT(Request request) {
+    final JWT jwt = request.context['jwt'] as JWT;
+    final userID = jwt.payload['userID'];
+    return userID;
   }
 }

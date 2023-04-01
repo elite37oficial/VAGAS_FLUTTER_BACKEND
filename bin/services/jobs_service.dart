@@ -39,4 +39,9 @@ class JobsService implements GenericService<JobModel> {
   Future<bool> updateStatus(JobModel value) async {
     return await _dao.updateStatus(value);
   }
+
+  @override
+  Future<List<String>> getStatus() async {
+    return await _dao.getStatus();
+  }
 }
