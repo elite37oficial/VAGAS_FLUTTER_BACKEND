@@ -19,7 +19,7 @@ class UserDAO implements DAO<UserModel> {
       final String pass = Password.hash(password, PBKDF2());
       final String id = uuid.v1();
       var result = await _dbConfiguration.execQuery(
-          'INSERT INTO users (id, profile_id, name, phone, email, password, created_by, created_date) values(?,?,?,?,?,?,?,?);',
+          'INSERT INTO users (id, profile_id, name, phone, email, password, status, created_by, created_date) values(?,?,?,?,?,?,?,?,?);',
           [
             id,
             value.profileId,
@@ -27,6 +27,7 @@ class UserDAO implements DAO<UserModel> {
             value.phone,
             value.email,
             pass,
+            value.status,
             id,
             now
           ]);
@@ -98,5 +99,31 @@ class UserDAO implements DAO<UserModel> {
   Future<bool> updateStatus(UserModel value) {
     // TODO: implement updateStatus
     throw UnimplementedError();
+  }
+
+  Future<List<String>> getPermissions(String profileId) async {
+    final result = await _dbConfiguration.execQuery(
+      'Select role_id from profile_roles where profile_id = ?;',
+      [profileId],
+    );
+
+    final List<String> permissions = result
+        .map((r) => r.fields['role_id'].toString())
+        .toList()
+        .cast<String>();
+
+    return permissions;
+  }
+
+  @override
+  Future<List<String>> getStatus() async {
+    final result =
+        await _dbConfiguration.execQuery('Select name from users_status;');
+    final List<String> statusList = result
+        .map((r) => (r.fields['name']).toString().toLowerCase())
+        .toList()
+        .cast<String>();
+
+    return statusList;
   }
 }
