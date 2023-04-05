@@ -12,13 +12,14 @@ class PingController {
       final now = DateTime.now();
       String result = '';
 
-      if (!Platform.isWindows) {
+      if (Platform.isLinux) {
         //CPU
-        var cpuUsage = CpuInfo.getCpuUsagePercentage();
+        var cpuUsage = CpuInfo.getCpuUsagePercentage().toString();
         //MEMORY
-        var totalMem = MemInfo().mem_free_mb;
+        var totalMem = MemInfo().mem_total_mb;
+        var freeMem = MemInfo().mem_free_mb;
 
-        result = '$now CPU Usage:$cpuUsage Memory Free:$totalMem';
+        result = '$now CPU Usage:$cpuUsage Memory Free:$freeMem/$totalMem';
       } else {
         result = now.toString();
       }
