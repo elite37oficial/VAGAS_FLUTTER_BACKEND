@@ -14,12 +14,14 @@ class PingController {
 
       if (Platform.isLinux) {
         //CPU
-        double cpuUsage = CpuInfo.getCpuUsagePercentage() as double;
+        Stream<double> cpuUsage = CpuInfo.getCpuUsagePercentage();
+        double cpuUsageMoment = await cpuUsage.first;
         //MEMORY
         var totalMem = MemInfo().mem_total_mb;
         var freeMem = MemInfo().mem_free_mb;
 
-        result = '$now CPU Usage:$cpuUsage Memory Free:$freeMem/$totalMem';
+        result =
+            '$now CPU Usage:$cpuUsageMoment Memory Free:$freeMem/$totalMem';
       } else {
         result = now.toString();
       }
