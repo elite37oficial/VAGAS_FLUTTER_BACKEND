@@ -14,7 +14,7 @@ class PingController {
 
       if (Platform.isLinux) {
         //CPU
-        var cpuUsage = CpuInfo.getCpuUsagePercentage().toString();
+        double cpuUsage = CpuInfo.getCpuUsagePercentage() as double;
         //MEMORY
         var totalMem = MemInfo().mem_total_mb;
         var freeMem = MemInfo().mem_free_mb;
