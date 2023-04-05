@@ -12,7 +12,7 @@ class PingController {
       final now = DateTime.now();
       String result = '';
 
-      if (Platform.isLinux) {
+      if (!Platform.isWindows) {
         //CPU
         var cpuUsage = CpuInfo.getCpuUsagePercentage();
         //MEMORY
