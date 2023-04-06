@@ -74,8 +74,8 @@ class SecurityServiceImp implements SecurityService<JWT> {
 
   @override
   Middleware get verifyJwt {
-    return createMiddleware(
-      requestHandler: (request) async {
+    return (Handler handler) {
+      return (Request request) async {
         if (request.context['jwt'] == null) {
           return Response.forbidden('Not Authorized');
         }
@@ -89,15 +89,27 @@ class SecurityServiceImp implements SecurityService<JWT> {
 
         var pathSegments = requestedUri.pathSegments;
 
-        final String permissionByRoute =
-            '${method.toLowerCase()}-${pathSegments.first}';
+        String pathSegment = '';
+        for (int index = 0; index < pathSegments.length; index++) {
+          if (index == pathSegments.length - 1) {
+            pathSegment += pathSegments[index];
+            break;
+          }
+          pathSegment += '${pathSegments[index]}-';
+        }
+        final String permissionByRoute = '${method.toLowerCase()}-$pathSegment';
+        print('route: $permissionByRoute');
 
         final List<String> permissions =
             await _permissionService.getPermissions(profileId);
-
+        print('permissions');
+        permissions.forEach(print);
         final bool resultPermission = permissions.contains(permissionByRoute);
-        return resultPermission ? null : Response.forbidden('Not Authorized.');
-      },
-    );
+        if (!resultPermission) {
+          return Response.forbidden('Not Authorized.');
+        }
+        return handler(request);
+      };
+    };
   }
 }
