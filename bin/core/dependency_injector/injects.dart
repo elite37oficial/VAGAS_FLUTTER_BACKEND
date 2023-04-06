@@ -1,7 +1,9 @@
 import 'package:dotenv/dotenv.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../controllers/companies_image_controller.dart';
 import '../../controllers/companies_security_controller.dart';
+import '../../controllers/companies_security_image_controller.dart';
 import '../../controllers/jobs_controller.dart';
 import '../../controllers/jobs_security_controller.dart';
 import '../../controllers/login_controller.dart';
@@ -17,6 +19,7 @@ import '../../services/companies_service.dart';
 import '../../services/jobs_service.dart';
 import '../../services/permissions_service.dart';
 import '../../services/users_service.dart';
+import '../middlewares/middleware_interception.dart';
 import '../security/security_service.dart';
 import '../security/security_service_imp.dart';
 import 'dependency_injector.dart';
@@ -27,8 +30,9 @@ class Injects {
 
     di.register<DotEnv>(() => DotEnv(includePlatformEnvironment: true)..load());
     di.register<Uuid>(() => Uuid());
-
+    di.register<MiddlewareInterception>(() => MiddlewareInterception());
     di.register<MySqlDbConfiguration>(() => MySqlDbConfiguration());
+
     di.register<CompaniesDAO>(
         () => CompaniesDAO(di.get<MySqlDbConfiguration>(), di.get()));
     di.register<CompaniesService>(
@@ -54,6 +58,9 @@ class Injects {
     di.register<JobsController>(() => JobsController(di.get<JobsService>()));
     di.register<JobsSecurityController>(
         () => JobsSecurityController(di.get<JobsService>()));
+    di.register<CompaniesImageController>(() => CompaniesImageController());
+    di.register<CompaniesSecurityImageController>(
+        () => CompaniesSecurityImageController());
 
     return di;
   }
