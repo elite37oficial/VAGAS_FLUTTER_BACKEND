@@ -13,7 +13,11 @@ class UsersSecurityController extends Controller {
   UsersSecurityController(this._usersService);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
+  Handler getHandler({
+    List<Middleware>? middlewares,
+    bool isSecurity = false,
+    bool isJsonMimeType = true,
+  }) {
     Router router = Router();
 
     router.get('/users', (Request request) async {
@@ -70,7 +74,11 @@ class UsersSecurityController extends Controller {
     });
 
     return createHandler(
-        router: router, isSecurity: isSecurity, middlewares: middlewares);
+      router: router,
+      isSecurity: isSecurity,
+      middlewares: middlewares,
+      isJsonMimeType: isJsonMimeType,
+    );
   }
 
   Future<bool> _validateAuth(Request request) async {

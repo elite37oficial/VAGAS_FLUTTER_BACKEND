@@ -14,7 +14,10 @@ class LoginController extends Controller {
   LoginController(this._authService, this._securityServiceImp);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
+  Handler getHandler(
+      {List<Middleware>? middlewares,
+      bool isSecurity = false,
+      bool isJsonMimeType = true}) {
     var router = Router();
 
     router.post('/login', (Request request) async {
@@ -24,8 +27,6 @@ class LoginController extends Controller {
       if (userModel != null) {
         final String userID = userModel.id!;
         final String profileID = userModel.profileId!;
-        // final List<String> permissions =
-        //     await _authService.getPermissions(profileID);
         final String token =
             await _securityServiceImp.generateJWT(userID, profileID);
         return Response.ok(jsonEncode({'token': token}));
@@ -38,6 +39,7 @@ class LoginController extends Controller {
       router: router,
       isSecurity: isSecurity,
       middlewares: middlewares,
+      isJsonMimeType: isJsonMimeType,
     );
   }
 }

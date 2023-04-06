@@ -12,7 +12,10 @@ class UsersController extends Controller {
   UsersController(this._usersService);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
+  Handler getHandler(
+      {List<Middleware>? middlewares,
+      bool isSecurity = false,
+      bool isJsonMimeType = true}) {
     Router router = Router();
 
     router.post('/users', (Request request) async {
@@ -23,6 +26,10 @@ class UsersController extends Controller {
     });
 
     return createHandler(
-        router: router, isSecurity: isSecurity, middlewares: middlewares);
+      router: router,
+      isSecurity: isSecurity,
+      middlewares: middlewares,
+      isJsonMimeType: isJsonMimeType,
+    );
   }
 }

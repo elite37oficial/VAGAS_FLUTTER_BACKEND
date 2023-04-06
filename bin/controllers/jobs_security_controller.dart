@@ -14,7 +14,10 @@ class JobsSecurityController extends Controller {
   JobsSecurityController(this._jobsService);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
+  Handler getHandler(
+      {List<Middleware>? middlewares,
+      bool isSecurity = false,
+      bool isJsonMimeType = true}) {
     Router router = Router();
 
     router.put('/jobs', (Request request) async {
@@ -90,7 +93,11 @@ class JobsSecurityController extends Controller {
       return result ? Response(201) : Response(404);
     });
     return createHandler(
-        router: router, isSecurity: isSecurity, middlewares: middlewares);
+      router: router,
+      isSecurity: isSecurity,
+      middlewares: middlewares,
+      isJsonMimeType: isJsonMimeType,
+    );
   }
 
   Future<bool> _validateAuth(JobModel job, Request request) async {
