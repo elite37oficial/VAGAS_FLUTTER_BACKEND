@@ -38,12 +38,6 @@ class UserDAO implements DAO<UserModel> {
   }
 
   @override
-  Future<bool> delete(String id) {
-    // TODO: implement delete
-    throw UnimplementedError();
-  }
-
-  @override
   Future<List<UserModel>> findAll() async {
     var result = await _dbConfiguration.execQuery('SELECT * FROM users');
     return result
