@@ -39,7 +39,7 @@ class CompaniesDAO implements DAO<CompanyModel> {
   Future<List<CompanyModel?>> findByQuery({String? queryParam}) async {
     if (queryParam?.isNotEmpty ?? false) {
       var result = await _dbConfiguration.execQuery(
-          "Select t1.id, t1.name, t1.photo_url, t1.location, t1.description from companies as t1 where $queryParam ;");
+          "Select t1.id, t1.name, t1.photo_url, t1.location, t1.description from companies as t1 where $queryParam;");
       return result
           .map((r) => CompanyModel.fromMap(r.fields))
           .toList()
