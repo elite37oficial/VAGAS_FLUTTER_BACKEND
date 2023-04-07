@@ -13,11 +13,12 @@ class CompaniesDAO implements DAO<CompanyModel> {
   Future<bool> create(CompanyModel value) async {
     final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
-        'INSERT INTO companies (id, name, location, photo_url, description, created_by, created_date) values (?,?,?,?,?,?,?);',
+        'INSERT INTO companies (id, name, location,status, photo_url, description, created_by, created_date) values (?,?,?,?,?,?,?);',
         [
           _uuid.v1(),
           value.name,
           value.location,
+          value.status,
           value.photoUrl,
           value.description,
           value.createdBy,
