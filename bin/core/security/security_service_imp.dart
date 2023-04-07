@@ -103,8 +103,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
         JWT? jwt = request.context['jwt'] as JWT;
         var profileId = jwt.payload['roles'];
 
-        var path = request.handlerPath;
-        print('path: $path');
+        //
         final String permissionByRoute = '${method.toLowerCase()}-$pathFromUrl';
         print(permissionByRoute);
 
