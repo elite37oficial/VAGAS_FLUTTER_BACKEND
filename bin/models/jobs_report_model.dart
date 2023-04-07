@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class JobsReportModel {
   final int? id;
   final String jobId;
@@ -13,8 +11,7 @@ class JobsReportModel {
     required this.createdDate,
   });
 
-  factory JobsReportModel.fromRequest(String body) {
-    final Map map = jsonDecode(body);
+  factory JobsReportModel.fromRequest(Map map) {
     return JobsReportModel(
       jobId: map['jobId'],
       description: map['description'],
