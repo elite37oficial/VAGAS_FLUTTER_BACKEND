@@ -13,7 +13,11 @@ class JobsReportController extends Controller {
   JobsReportController(this._jobsReportService);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
+  Handler getHandler({
+    List<Middleware>? middlewares,
+    bool isSecurity = false,
+    bool isJsonMimeType = true,
+  }) {
     final Router router = Router();
 
     router.post('/jobs-report', (Request request) async {
@@ -34,6 +38,10 @@ class JobsReportController extends Controller {
     });
 
     return createHandler(
-        router: router, isSecurity: isSecurity, middlewares: middlewares);
+      router: router,
+      isSecurity: isSecurity,
+      middlewares: middlewares,
+      isJsonMimeType: isJsonMimeType,
+    );
   }
 }
