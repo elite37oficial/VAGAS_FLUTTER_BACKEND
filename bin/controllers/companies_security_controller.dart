@@ -20,7 +20,7 @@ class CompaniesSecurityController extends Controller {
     router.get('/companies', (Request request) async {
       final userID = _getUserIdFromJWT(request);
       final List<CompanyModel?> result = await _companiesService.findByQuery(
-          queryParam: "t1.created_by = '$userID' and t1.status = 'active';");
+          queryParam: "t1.created_by = '$userID' and t1.status = 'active'");
       return Response.ok(jsonEncode(result));
     });
 

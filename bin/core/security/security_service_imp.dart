@@ -76,6 +76,27 @@ class SecurityServiceImp implements SecurityService<JWT> {
   Middleware get verifyJwt {
     return createMiddleware(
       requestHandler: (request) async {
+        var pathFromUrl = request.url.path;
+        print('pathFromUrl: $pathFromUrl');
+        if (pathFromUrl.contains('jobs/id/')) {
+          pathFromUrl = 'jobs/id';
+        }
+        var method = request.method.toLowerCase();
+        print('method: $method');
+        final String validate = '$method-$pathFromUrl';
+        print('validate: $validate');
+
+        switch (validate) {
+          case 'post-login':
+          case 'get-jobs':
+          case 'get-companies-image':
+          case 'get-jobs/id':
+          case 'post-jobs-report':
+            return null;
+          default:
+            break;
+        }
+
         if (request.context['jwt'] == null) {
           return Response.forbidden('Not Authorized');
         }
@@ -83,18 +104,13 @@ class SecurityServiceImp implements SecurityService<JWT> {
         JWT? jwt = request.context['jwt'] as JWT;
         var profileId = jwt.payload['roles'];
 
-        var method = request.method;
-
-        var requestedUri = request.requestedUri;
-
-        var pathSegments = requestedUri.pathSegments;
-
-        final String permissionByRoute =
-            '${method.toLowerCase()}-${pathSegments.first}';
+        //
+        final String permissionByRoute = '${method.toLowerCase()}-$pathFromUrl';
+        print(permissionByRoute);
 
         final List<String> permissions =
             await _permissionService.getPermissions(profileId);
-
+        permissions.forEach(print);
         final bool resultPermission = permissions.contains(permissionByRoute);
         return resultPermission ? null : Response.forbidden('Not Authorized.');
       },

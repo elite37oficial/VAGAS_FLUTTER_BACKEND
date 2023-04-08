@@ -13,11 +13,12 @@ class CompaniesDAO implements DAO<CompanyModel> {
   Future<bool> create(CompanyModel value) async {
     final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
-        'INSERT INTO companies (id, name, location, photo_url, description, created_by, created_date) values (?,?,?,?,?,?,?);',
+        'INSERT INTO companies (id, name, location,status, photo_url, description, created_by, created_date) values (?,?,?,?,?,?,?);',
         [
           _uuid.v1(),
           value.name,
           value.location,
+          value.status,
           value.photoUrl,
           value.description,
           value.createdBy,
@@ -39,7 +40,7 @@ class CompaniesDAO implements DAO<CompanyModel> {
   Future<List<CompanyModel?>> findByQuery({String? queryParam}) async {
     if (queryParam?.isNotEmpty ?? false) {
       var result = await _dbConfiguration.execQuery(
-          "Select t1.id, t1.name, t1.photo_url, t1.location, t1.description from companies as t1 where $queryParam ;");
+          "Select t1.id, t1.name, t1.photo_url, t1.location, t1.description from companies as t1 where $queryParam;");
       return result
           .map((r) => CompanyModel.fromMap(r.fields))
           .toList()
