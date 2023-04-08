@@ -92,6 +92,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
           case 'get-companies-image':
           case 'get-jobs/id':
           case 'post-jobs-report':
+          case 'get-ping':
             return null;
           default:
             break;
