@@ -81,6 +81,9 @@ class SecurityServiceImp implements SecurityService<JWT> {
         if (pathFromUrl.contains('jobs/id/')) {
           pathFromUrl = 'jobs/id';
         }
+        if (pathFromUrl.contains('companies-image/id/')) {
+          pathFromUrl = 'companies-image';
+        }
         var method = request.method.toLowerCase();
         print('method: $method');
         final String validate = '$method-$pathFromUrl';
@@ -89,9 +92,9 @@ class SecurityServiceImp implements SecurityService<JWT> {
         switch (validate) {
           case 'post-login':
           case 'get-jobs':
-          case 'get-companies-image':
           case 'get-jobs/id':
           case 'post-jobs-report':
+          case 'get-companies-image':
             return null;
           default:
             break;
