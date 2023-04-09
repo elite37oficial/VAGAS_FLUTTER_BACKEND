@@ -61,11 +61,9 @@ class CompaniesImageController extends Controller {
         return Response.badRequest();
       }
 
-      // Obter a lista de arquivos no diretório atual
       Directory diretorioAtual = Directory('uploads');
       List<FileSystemEntity> listaArquivos = diretorioAtual.listSync();
 
-      // Filtrar apenas os arquivos que contêm "meuArquivo" no nome
       List<File> arquivosFiltrados = listaArquivos
           .where((arquivo) {
             return arquivo is File && arquivo.path.contains(companyID);
@@ -73,7 +71,6 @@ class CompaniesImageController extends Controller {
           .map((arquivo) => arquivo as File)
           .toList();
 
-      // Verificar se há algum arquivo na lista filtrada
       if (arquivosFiltrados.isNotEmpty) {
         final fileContents = await arquivosFiltrados.first.readAsBytes();
         final String extension = arquivosFiltrados.first.path.split('.')[1];
