@@ -1,3 +1,4 @@
+import 'controllers/companies_images_controller.dart';
 import 'controllers/companies_security_controller.dart';
 import 'controllers/jobs_controller.dart';
 import 'controllers/jobs_report_controller.dart';
@@ -7,7 +8,7 @@ import 'controllers/ping_controller.dart';
 import 'controllers/users_controller.dart';
 import 'controllers/users_security_controller.dart';
 import 'core/dependency_injector/injects.dart';
-import 'core/middlewares/middleware_interception.dart';
+
 import 'core/custom_server.dart';
 import 'package:shelf/shelf.dart';
 import 'package:dotenv/dotenv.dart';
@@ -27,13 +28,13 @@ void main() async {
       .add(di.get<JobsSecurityController>().getHandler())
       .add(di.get<CompaniesSecurityController>().getHandler())
       .add(di.get<JobsReportController>().getHandler())
+      .add(di.get<CompaniesImageController>().getHandler(isJsonMimeType: false))
       .handler;
 
   final SecurityService securityService = di.get<SecurityService>();
 
   final pipeline = Pipeline()
       .addMiddleware(logRequests())
-      .addMiddleware(MiddlewareInterception().appJson)
       .addMiddleware(securityService.authorization)
       .addMiddleware(securityService.verifyJwt)
       .addHandler(cascade);
