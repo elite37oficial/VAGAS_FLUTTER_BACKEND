@@ -6,7 +6,7 @@ import 'package:shelf_router/shelf_router.dart';
 import 'controller.dart';
 
 class CompaniesImageController extends Controller {
-  CompaniesImageController();
+  final Directory directory = Directory('bin/uploads');
 
   @override
   Handler getHandler({
@@ -30,13 +30,12 @@ class CompaniesImageController extends Controller {
 
       final List<int> bytes = base64.decode(imageCode);
 
-      final directory = Directory('uploads');
       if (!directory.existsSync()) {
         directory.createSync();
       }
 
       try {
-        final file = File('uploads/${map['companyId']}.$extension');
+        final file = File('${directory.path}/${map['companyId']}.$extension');
         if (!file.existsSync()) {
           file.writeAsBytesSync(bytes);
           return Response(201);
@@ -61,8 +60,8 @@ class CompaniesImageController extends Controller {
         return Response.badRequest();
       }
 
-      Directory diretorioAtual = Directory('uploads');
-      List<FileSystemEntity> listaArquivos = diretorioAtual.listSync();
+      // Directory diretorioAtual = Directory('uploads');
+      List<FileSystemEntity> listaArquivos = directory.listSync();
 
       List<File> arquivosFiltrados = listaArquivos
           .where((arquivo) {
