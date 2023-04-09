@@ -14,7 +14,10 @@ class CompaniesSecurityController extends Controller {
   CompaniesSecurityController(this._companiesService);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
+  Handler getHandler(
+      {List<Middleware>? middlewares,
+      bool isSecurity = false,
+      bool isJsonMimeType = true}) {
     Router router = Router();
 
     router.get('/companies', (Request request) async {
@@ -107,7 +110,11 @@ class CompaniesSecurityController extends Controller {
     });
 
     return createHandler(
-        router: router, middlewares: middlewares, isSecurity: isSecurity);
+      router: router,
+      middlewares: middlewares,
+      isSecurity: isSecurity,
+      isJsonMimeType: isJsonMimeType,
+    );
   }
 
   Future<bool> _validateAuth(CompanyModel companyModel, Request request) async {

@@ -13,7 +13,10 @@ class JobsController extends Controller {
   JobsController(this._service);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
+  Handler getHandler(
+      {List<Middleware>? middlewares,
+      bool isSecurity = false,
+      bool isJsonMimeType = true}) {
     var router = Router();
 
     router.get('/jobs', (Request request) async {
@@ -50,6 +53,7 @@ class JobsController extends Controller {
       router: router,
       isSecurity: isSecurity,
       middlewares: middlewares,
+      isJsonMimeType: isJsonMimeType,
     );
   }
 
