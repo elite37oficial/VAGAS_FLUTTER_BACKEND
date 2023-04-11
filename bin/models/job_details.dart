@@ -2,6 +2,7 @@ import 'job_model.dart';
 
 class JobDetails extends JobModel {
   final String? id;
+  final String? companyId;
   final String? nameCompany;
   final String? title;
   final String? description;
@@ -20,6 +21,7 @@ class JobDetails extends JobModel {
   factory JobDetails.fromJson(Map map) {
     return JobDetails(
       id: map['id'],
+      companyId: map['company_id'],
       nameCompany: map['name_company'],
       status: map['status'],
       title: map['title'],
@@ -42,6 +44,7 @@ class JobDetails extends JobModel {
     return {
       'id': id,
       'nameCompany': nameCompany,
+      'companyId': companyId,
       'status': status,
       'title': title,
       'description': description,
@@ -61,6 +64,7 @@ class JobDetails extends JobModel {
   JobDetails({
     required this.id,
     required this.nameCompany,
+    required this.companyId,
     this.status,
     required this.title,
     required this.description,
