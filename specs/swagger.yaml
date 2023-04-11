@@ -544,8 +544,6 @@ components:
           type: string
         description:
           type: string
-        photoUrl:
-          type: string
         companyDescription:
           type: string
         seniority:
@@ -577,8 +575,6 @@ components:
         location:
           type: string
         description:
-          type: string
-        photoUrl:
           type: string
         status:
           type: string
