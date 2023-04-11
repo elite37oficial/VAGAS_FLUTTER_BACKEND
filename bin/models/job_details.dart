@@ -13,7 +13,7 @@ class JobDetails extends JobModel {
   final String? whatsapp;
   final String? email;
   final String? status;
-  final String? photoUrl;
+  // final String? photoUrl;
   final String? descriptionCompany;
   final String? createdBy;
 
@@ -25,7 +25,7 @@ class JobDetails extends JobModel {
       title: map['title'],
       description: map['description'],
       salary: map['salary'],
-      photoUrl: map['photo_url'],
+      // photoUrl: map['photo_url'],
       descriptionCompany: map['description_company'],
       modality: map['modality'],
       city: map['city'],
@@ -45,7 +45,7 @@ class JobDetails extends JobModel {
       'status': status,
       'title': title,
       'description': description,
-      'photoUrl': photoUrl,
+      // 'photoUrl': photoUrl,
       'descriptionCompany': descriptionCompany,
       'salary': salary,
       'modality': modality,
@@ -66,7 +66,7 @@ class JobDetails extends JobModel {
     required this.description,
     required this.salary,
     required this.modality,
-    required this.photoUrl,
+    // required this.photoUrl,
     required this.descriptionCompany,
     required this.city,
     required this.state,
