@@ -250,9 +250,9 @@ paths:
         content: 
           application/json:
             schema:
-              type: object
-              items:
-                $ref: "#/components/schemas/AuthModel"
+           
+             
+              $ref: "#/components/schemas/CompaniesStatusModel"
       responses:
         "200":
           description: "successful operation"
@@ -274,9 +274,8 @@ paths:
         content: 
           application/json:
             schema:
-              type: object
-              items:
-                $ref: "#/components/schemas/CompanyImageModel"
+         
+              $ref: "#/components/schemas/CompanyImageModel"
       responses:
         "201":
           description: "created"
@@ -394,9 +393,9 @@ components:
     CompanyImageModel:
       type: "object"
       properties:
-        email:
+        companyId:
           type: string
-        password:
+        image64:
           type: string
     UserEntity:
       type: "object"
