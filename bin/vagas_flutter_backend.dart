@@ -1,3 +1,5 @@
+import 'package:shelf_swagger_ui/shelf_swagger_ui.dart';
+
 import 'controllers/companies_images_controller.dart';
 import 'controllers/companies_security_controller.dart';
 import 'controllers/jobs_controller.dart';
@@ -13,10 +15,15 @@ import 'core/custom_server.dart';
 import 'package:shelf/shelf.dart';
 import 'package:dotenv/dotenv.dart';
 
+import 'core/middlewares/middleware_interception.dart';
 import 'core/security/security_service.dart';
 
 void main() async {
   var env = DotEnv(includePlatformEnvironment: true)..load();
+
+  final path = './specs/swagger.yaml';
+  final swaggerHandler =
+      SwaggerUI(path, title: 'Documentação Projeto Vagas API', deepLink: true);
 
   final di = Injects.initialize();
   final cascade = Cascade()
@@ -29,6 +36,7 @@ void main() async {
       .add(di.get<CompaniesSecurityController>().getHandler())
       .add(di.get<JobsReportController>().getHandler())
       .add(di.get<CompaniesImageController>().getHandler(isJsonMimeType: false))
+      .add(swaggerHandler)
       .handler;
 
   final SecurityService securityService = di.get<SecurityService>();
@@ -37,6 +45,7 @@ void main() async {
       .addMiddleware(logRequests())
       .addMiddleware(securityService.authorization)
       .addMiddleware(securityService.verifyJwt)
+      .addMiddleware(di.get<MiddlewareInterception>().cors)
       .addHandler(cascade);
 
   await CustomServer().initilize(
