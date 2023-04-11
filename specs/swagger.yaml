@@ -361,8 +361,6 @@ paths:
         content: 
           application/json:
             schema:
-           
-             
               $ref: "#/components/schemas/CompaniesStatusModel"
       responses:
         "200":
@@ -385,7 +383,6 @@ paths:
         content: 
           application/json:
             schema:
-         
               $ref: "#/components/schemas/CompanyImageModel"
       responses:
         "201":
@@ -412,7 +409,7 @@ paths:
         "200":
           description: "successful operation"
           content:
-            image/png:
+            image/*:
               schema:
                 type: string
                 format: binary
