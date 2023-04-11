@@ -13,16 +13,14 @@ tags:
   description: "Access to Jobs"
 - name: "login"
   description: "Get token from Authentication"
-- name: "jobs-status"
-  description: "Access to Jobs"
 - name: "companies"
   description: "Access to Companies"
-- name: "companies-status"
-  description: "Access to Jobs"
-- name: "companies-image"
-  description: "Access to Companies's images"
-# - name: "user"
-#   description: "Access to users"
+# - name: "companies-status"
+#   description: "Access to Jobs"
+# - name: "companies-image"
+#   description: "Access to Companies's images"
+- name: "users"
+  description: "Access to users"
 
 paths:
   /jobs/id/{id}:
@@ -137,15 +135,39 @@ paths:
   /jobs-status:
     put:
       tags:
-      - "jobs-status"
+      - "jobs"
       security:
         - bearerAuth: [bearerAuth]
       summary: "change jobs's status"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JobsStatusModel"  
       responses:
         "200":
           description: "successful operation"
         "400":
           $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalError'
+  /jobs-report:
+    post:
+      tags:
+      - "jobs"
+      summary: "Report a Job"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JobReportModel"  
+      responses:
+        "200":
+          description: "created"
         "404":
           $ref: '#/components/responses/NotFound'
         "500":
@@ -172,6 +194,95 @@ paths:
                   $ref: "#/components/schemas/Tokenization"
         "404":
           $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalError'
+  /users/id/{id}:
+    get:
+      tags:
+      - "users"
+      summary: "Access to Users"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The user ID
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserEntity"
+        "403":
+          $ref: '#/components/responses/Unauthorized'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalError'
+  /users:
+    get:
+      tags:
+      - "users"
+      summary: "Access to Users"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserEntity"
+        "403":
+          $ref: '#/components/responses/Unauthorized'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags:
+      - "users"
+      summary: "register a user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserEntity"
+      responses:
+        "201":
+          description: "created"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserEntity"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalError'
+    put:
+      tags:
+      - "users"
+      summary: "update a user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserEntity"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "403":
+          $ref: '#/components/responses/Unauthorized'
         "500":
           $ref: '#/components/responses/InternalError'
   /companies:
@@ -241,7 +352,7 @@ paths:
   /companies-status:
     put:
       tags:
-      - "companies-status"
+      - "companies"
       security:
         - bearerAuth: [bearerAuth]
       summary: "change companies's status"
@@ -265,7 +376,7 @@ paths:
   /companies-image:
     post:
       tags:
-      - "companies-image"
+      - "companies"
       security:
         - bearerAuth: [bearerAuth]
       summary: "change companies's status"
@@ -288,7 +399,7 @@ paths:
   /companies-image/id/{companyId}:
     get:
       tags:
-      - "companies-image"
+      - "companies"
       summary: "get company's image"
       parameters:
         - in: path
@@ -380,15 +491,20 @@ components:
           type: string
           enum:
           - "active"
-          - "canceled"
-          - "paused"
-          - "closed"
+          - "inactive"
     AuthModel:
       type: "object"
       properties:
         email:
           type: string
         password:
+          type: string
+    JobReportModel:
+      type: "object"
+      properties:
+        jobId:
+          type: string
+        description:
           type: string
     CompanyImageModel:
       type: "object"
