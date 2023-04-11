@@ -200,7 +200,7 @@ paths:
     get:
       tags:
       - "users"
-      summary: "Access to Users"
+      summary: "get User by Id"
       parameters:
         - in: path
           name: id
@@ -225,7 +225,7 @@ paths:
     get:
       tags:
       - "users"
-      summary: "Access to Users"
+      summary: "Access all Users"
       responses:
         "200":
           description: "successful operation"
@@ -377,7 +377,7 @@ paths:
       - "companies"
       security:
         - bearerAuth: [bearerAuth]
-      summary: "change companies's status"
+      summary: "change companies's image"
       requestBody:
         required: true
         content: 
