@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dotenv/dotenv.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import '../core/dependency_injector/dependency_injector.dart';
 import 'controller.dart';
 
 class CompaniesImageController extends Controller {
-  final Directory directory = Directory('bin/uploads');
-
   @override
   Handler getHandler({
     List<Middleware>? middlewares,
@@ -15,6 +15,9 @@ class CompaniesImageController extends Controller {
     bool isJsonMimeType = true,
   }) {
     final Router router = Router();
+    final env = DependencyInjector().get<DotEnv>();
+    final imagePath = env['baseImagePath'];
+    final Directory directory = Directory(imagePath!);
 
     router.post('/companies-image', (Request request) async {
       final String body = await request.readAsString();
@@ -76,7 +79,8 @@ class CompaniesImageController extends Controller {
         return Response.ok(fileContents,
             headers: {'content-type': 'image/$extension'});
       } else {
-        return Response(404);
+        //REVER metodo de retorno
+        return Response.badRequest();
       }
     });
 
