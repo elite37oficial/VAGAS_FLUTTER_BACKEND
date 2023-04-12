@@ -15,10 +15,6 @@ tags:
   description: "Get token from Authentication"
 - name: "companies"
   description: "Access to Companies"
-# - name: "companies-status"
-#   description: "Access to Jobs"
-# - name: "companies-image"
-#   description: "Access to Companies's images"
 - name: "users"
   description: "Access to users"
 
@@ -77,7 +73,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/JobEntity"
+                  $ref: "#/components/schemas/JobSimple"
         "404":
           $ref: '#/components/responses/NotFound'
         "500":
@@ -529,6 +525,21 @@ components:
         password:
           type: string
         status:
+          type: string
+    JobSimple:
+      type: "object"
+      properties:
+        id:
+          type: string
+        companyId:
+          type: string
+        title:
+          type: string
+        companyName:
+          type: string
+        city:
+          type: string
+        modality:
           type: string
     JobEntity:
       type: "object"
