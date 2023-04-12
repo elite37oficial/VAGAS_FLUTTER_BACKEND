@@ -49,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  clock:
+    dependency: transitive
+    description:
+      name: clock
+      sha256: cb6d7f03e1de671e34607e909a7213e31d7752be4fb66a86d29fe1eb14bfb5cf
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   collection:
     dependency: transitive
     description:
@@ -161,6 +169,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: a3715e3bc90294e971cb7dc063fbf3cd9ee0ebf8604ffeafabd9e6f16abbdbe6
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.0"
   io:
     dependency: transitive
     description:
@@ -193,6 +209,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  mailer:
+    dependency: "direct main"
+    description:
+      name: mailer
+      sha256: dae17f4c6a360de380fe6c3981f806fa8df69c94533bd6f347075e4f14417bf2
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
   matcher:
     dependency: transitive
     description:
