@@ -2,6 +2,7 @@ import 'job_model.dart';
 
 class JobDetails extends JobModel {
   final String? id;
+  final String? companyId;
   final String? nameCompany;
   final String? title;
   final String? description;
@@ -13,19 +14,20 @@ class JobDetails extends JobModel {
   final String? whatsapp;
   final String? email;
   final String? status;
-  final String? photoUrl;
+  // final String? photoUrl;
   final String? descriptionCompany;
   final String? createdBy;
 
   factory JobDetails.fromJson(Map map) {
     return JobDetails(
       id: map['id'],
+      companyId: map['company_id'],
       nameCompany: map['name_company'],
       status: map['status'],
       title: map['title'],
       description: map['description'],
       salary: map['salary'],
-      photoUrl: map['photo_url'],
+      // photoUrl: map['photo_url'],
       descriptionCompany: map['description_company'],
       modality: map['modality'],
       city: map['city'],
@@ -42,10 +44,11 @@ class JobDetails extends JobModel {
     return {
       'id': id,
       'nameCompany': nameCompany,
+      'companyId': companyId,
       'status': status,
       'title': title,
       'description': description,
-      'photoUrl': photoUrl,
+      // 'photoUrl': photoUrl,
       'descriptionCompany': descriptionCompany,
       'salary': salary,
       'modality': modality,
@@ -61,12 +64,13 @@ class JobDetails extends JobModel {
   JobDetails({
     required this.id,
     required this.nameCompany,
+    required this.companyId,
     this.status,
     required this.title,
     required this.description,
     required this.salary,
     required this.modality,
-    required this.photoUrl,
+    // required this.photoUrl,
     required this.descriptionCompany,
     required this.city,
     required this.state,
