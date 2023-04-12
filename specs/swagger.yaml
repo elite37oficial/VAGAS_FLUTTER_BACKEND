@@ -55,6 +55,16 @@ paths:
             type: string
             description: The city of a job that contains the value. Ex. São Paulo
         - in: query
+          name: seniority
+          schema:
+            type: string
+            description: The seniority requested by the job. Ex. junior
+        - in: query
+          name: company_id
+          schema:
+            type: string
+            description: The Id of Company that offers the job.
+        - in: query
           name: modality
           schema:
             type: string
