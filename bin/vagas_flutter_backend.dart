@@ -7,6 +7,7 @@ import 'controllers/jobs_report_controller.dart';
 import 'controllers/jobs_security_controller.dart';
 import 'controllers/login_controller.dart';
 import 'controllers/ping_controller.dart';
+import 'controllers/reset_passwords_controller.dart';
 import 'controllers/users_controller.dart';
 import 'controllers/users_security_controller.dart';
 import 'core/dependency_injector/injects.dart';
@@ -31,6 +32,7 @@ void main() async {
       .add(di.get<PingController>().handler)
       .add(di.get<JobsController>().getHandler())
       .add(di.get<UsersController>().getHandler())
+      .add(di.get<ResetPasswordsController>().getHandler())
       .add(di.get<UsersSecurityController>().getHandler())
       .add(di.get<JobsSecurityController>().getHandler())
       .add(di.get<CompaniesSecurityController>().getHandler())

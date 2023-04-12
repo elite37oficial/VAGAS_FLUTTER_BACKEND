@@ -8,11 +8,14 @@ import '../../controllers/jobs_report_controller.dart';
 import '../../controllers/jobs_security_controller.dart';
 import '../../controllers/login_controller.dart';
 import '../../controllers/ping_controller.dart';
+import '../../controllers/reset_passwords_controller.dart';
 import '../../dao/companies_dao.dart';
 import '../../controllers/users_controller.dart';
 import '../../controllers/users_security_controller.dart';
 
 import '../../dao/jobs_dao.dart';
+
+import '../../dao/reset_passwords_dao.dart';
 import '../../dao/jobs_report_dao.dart';
 import '../../dao/users_dao.dart';
 import '../../database/db_configuration.dart';
@@ -23,6 +26,7 @@ import '../../services/companies_service.dart';
 import '../../services/jobs_report_service.dart';
 import '../../services/jobs_service.dart';
 import '../../services/permissions_service.dart';
+import '../../services/reset_passwords_service.dart';
 import '../../services/users_service.dart';
 import '../middlewares/middleware_interception.dart';
 import '../security/security_service.dart';
@@ -66,6 +70,12 @@ class Injects {
     di.register<JobsController>(() => JobsController(di.get<JobsService>()));
     di.register<JobsSecurityController>(
         () => JobsSecurityController(di.get<JobsService>()));
+    di.register<ResetPasswordsDao>(() =>
+        ResetPasswordsDao(di.get<MySqlDbConfiguration>(), di.get<Uuid>()));
+    di.register<ResetPasswordsService>(
+        () => ResetPasswordsService(di.get<ResetPasswordsDao>()));
+    di.register<ResetPasswordsController>(() => ResetPasswordsController(
+        di.get<UsersService>(), di.get<ResetPasswordsService>()));
 
     return di;
   }
