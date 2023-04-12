@@ -30,7 +30,9 @@ class UserModel {
     return UserModel()
       ..id = map['id']
       ..password = map['password']
-      ..profileId = map['profile_id'];
+      ..profileId = map['profile_id']
+      ..email = map['email']
+      ..name = map['name'];
   }
 
   factory UserModel.fromJson(Map map) {
