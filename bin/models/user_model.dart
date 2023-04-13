@@ -42,7 +42,6 @@ class UserModel {
       name: map['name'],
       phone: map['phone'],
       email: map['email'],
-      password: map['password'],
       status: map['status'],
       createdBy: map['created_by'],
       createdDate: map['created_date'] == null
@@ -68,7 +67,6 @@ class UserModel {
       'name': name,
       'phone': phone,
       'email': email,
-      'password': password,
       'status': status,
       if (createdBy != null) 'createdBy': createdBy,
       if (createdDate != null)
