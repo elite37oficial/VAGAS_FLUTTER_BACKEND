@@ -70,8 +70,8 @@ class Injects {
     di.register<JobsController>(() => JobsController(di.get<JobsService>()));
     di.register<JobsSecurityController>(
         () => JobsSecurityController(di.get<JobsService>()));
-    di.register<ResetPasswordsDao>(() =>
-        ResetPasswordsDao(di.get<MySqlDbConfiguration>(), di.get<Uuid>()));
+    di.register<ResetPasswordsDao>(
+        () => ResetPasswordsDao(di.get<DBConfiguration>(), di.get<Uuid>()));
     di.register<ResetPasswordsService>(
         () => ResetPasswordsService(di.get<ResetPasswordsDao>()));
     di.register<ResetPasswordsController>(() => ResetPasswordsController(
