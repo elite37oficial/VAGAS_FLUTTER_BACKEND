@@ -69,7 +69,7 @@ class JobsController extends Controller {
         case "title":
           if (queryParams.keys.first != key) where = "$where and ";
           where = where == null
-              ? "t1.$key like '$value%'"
+              ? "t1.$key like '%$value%'"
               : "$where t1.$key like '$value%'";
           break;
 
