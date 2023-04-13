@@ -20,7 +20,10 @@ class ResetPasswordsController extends Controller {
   ResetPasswordsController(this._usersService, this._resetPasswordsService);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares, bool isSecurity = false}) {
+  Handler getHandler(
+      {List<Middleware>? middlewares,
+      bool isSecurity = false,
+      isJsonMimeType = true}) {
     var router = Router();
     router.post('/redefinir-senha-email', (Request request) async {
       final body = await request.readAsString();
@@ -49,6 +52,7 @@ class ResetPasswordsController extends Controller {
       router: router,
       isSecurity: isSecurity,
       middlewares: middlewares,
+      isJsonMimeType: isJsonMimeType,
     );
   }
 
