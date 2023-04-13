@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:linux_system_info/linux_system_info.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
+import 'package:yaml/yaml.dart';
 
 class PingController {
   Handler get handler {
     var router = Router();
+    const String buildNumber = '0.0.1';
 
     router.get('/ping', (Request request) async {
       final now = DateTime.now();
@@ -21,9 +23,9 @@ class PingController {
         var freeMem = MemInfo().mem_free_mb;
 
         result =
-            '$now CPU Usage:$cpuUsageMoment Memory Free:$freeMem/$totalMem';
+            '$now - Version:$buildNumber CPU Usage:$cpuUsageMoment Memory Free:$freeMem/$totalMem';
       } else {
-        result = now.toString();
+        result = '$now - Version:$buildNumber';
       }
 
       return Response.ok(result);

@@ -1,6 +1,6 @@
 name: vagas_flutter_backend
 description: A sample command-line application.
-version: 1.0.0
+version: 1.0.1
 # homepage: https://www.example.com
 
 environment:
@@ -23,3 +23,4 @@ dependencies:
   uuid: ^3.0.7
   linux_system_info: ^0.0.7
   shelf_swagger_ui: ^1.0.0+2
+
