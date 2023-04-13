@@ -207,6 +207,8 @@ paths:
       tags:
       - "users"
       summary: "get User by Id"
+      security:
+        - bearerAuth: [bearerAuth] 
       parameters:
         - in: path
           name: id

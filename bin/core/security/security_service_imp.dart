@@ -78,6 +78,9 @@ class SecurityServiceImp implements SecurityService<JWT> {
       requestHandler: (request) async {
         var pathFromUrl = request.url.path;
         print('pathFromUrl: $pathFromUrl');
+        if (pathFromUrl.contains('users/id/')) {
+          pathFromUrl = 'users/id';
+        }
         if (pathFromUrl.contains('jobs/id/')) {
           pathFromUrl = 'jobs/id';
         }
@@ -93,6 +96,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
           case 'post-login':
           case 'get-jobs':
           case 'get-jobs/id':
+          case 'post-reset-password-email':
           case 'post-jobs-report':
           case 'get-companies-image':
           case 'get-ping':

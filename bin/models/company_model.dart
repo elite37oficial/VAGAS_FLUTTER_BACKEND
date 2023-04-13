@@ -2,7 +2,6 @@ class CompanyModel {
   String? id;
   String? name;
   String? location;
-  String? photoUrl;
   String? description;
   String? status;
   String? createdBy;
@@ -14,7 +13,6 @@ class CompanyModel {
     this.id,
     this.name,
     this.location,
-    this.photoUrl,
     this.description,
     this.status,
     this.createdBy,
@@ -34,9 +32,6 @@ class CompanyModel {
     }
     if (location != null) {
       result.addAll({'location': location});
-    }
-    if (photoUrl != null) {
-      result.addAll({'photoUrl': photoUrl});
     }
     if (description != null) {
       result.addAll({'description': description});
@@ -65,7 +60,6 @@ class CompanyModel {
       id: map['id'],
       name: map['name'],
       location: map['location'],
-      photoUrl: map['photoUrl'],
       description: map['description'],
       createdBy: map['created_by'],
       createdDate: map['created_date'],

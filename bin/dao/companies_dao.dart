@@ -13,13 +13,12 @@ class CompaniesDAO implements DAO<CompanyModel> {
   Future<bool> create(CompanyModel value) async {
     final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
-        'INSERT INTO companies (id, name, location,status, photo_url, description, created_by, created_date) values (?,?,?,?,?,?,?);',
+        'INSERT INTO companies (id, name, location,status, description, created_by, created_date) values (?,?,?,?,?,?);',
         [
           _uuid.v1(),
           value.name,
           value.location,
           value.status,
-          value.photoUrl,
           value.description,
           value.createdBy,
           now
@@ -40,7 +39,7 @@ class CompaniesDAO implements DAO<CompanyModel> {
   Future<List<CompanyModel?>> findByQuery({String? queryParam}) async {
     if (queryParam?.isNotEmpty ?? false) {
       var result = await _dbConfiguration.execQuery(
-          "Select t1.id, t1.name, t1.photo_url, t1.location, t1.description from companies as t1 where $queryParam;");
+          "Select t1.id, t1.name, t1.location, t1.description from companies as t1 where $queryParam;");
       return result
           .map((r) => CompanyModel.fromMap(r.fields))
           .toList()
@@ -48,7 +47,7 @@ class CompaniesDAO implements DAO<CompanyModel> {
     }
 
     var result = await _dbConfiguration.execQuery(
-        "Select t1.id, t1.name, t1.photo_url, t1.location, t1.description from companies as t1 where t1.status = 'active';");
+        "Select t1.id, t1.name, t1.location, t1.description from companies as t1 where t1.status = 'active';");
     return result
         .map((r) => CompanyModel.fromMap(r.fields))
         .toList()
@@ -58,7 +57,7 @@ class CompaniesDAO implements DAO<CompanyModel> {
   @override
   Future<CompanyModel?> findOne(String id) async {
     var result = await _dbConfiguration.execQuery(
-        'SELECT t1.id, t1.name, t1.location, t1.photo_url, t1.description, t1.created_by, t1.created_date, t1.updated_by, t1.updated_date FROM companies AS t1 where t1.id = ?;',
+        'SELECT t1.id, t1.name, t1.location, t1.description, t1.created_by, t1.created_date, t1.updated_by, t1.updated_date FROM companies AS t1 where t1.id = ?;',
         [id]);
 
     return result.isEmpty ? null : CompanyModel.fromMap(result.first.fields);
@@ -68,11 +67,10 @@ class CompaniesDAO implements DAO<CompanyModel> {
   Future<bool> update(CompanyModel value) async {
     final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
-      'UPDATE companies set name = ?, location = ?, photo_url = ?, description = ?, updated_by = ?, updated_date = ? where id = ?',
+      'UPDATE companies set name = ?, location = ?, description = ?, updated_by = ?, updated_date = ? where id = ?',
       [
         value.name,
         value.location,
-        value.photoUrl,
         value.description,
         value.createdBy,
         now,
