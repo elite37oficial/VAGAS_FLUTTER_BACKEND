@@ -58,7 +58,12 @@ paths:
           name: seniority
           schema:
             type: string
-            description: The seniority requested by the job. Ex. junior
+            description: The seniority requested by the job. Ex. junior.
+        - in: query
+          name: title
+          schema:
+            type: string
+            description: The title of the Job.
         - in: query
           name: company_id
           schema:
@@ -68,12 +73,12 @@ paths:
           name: modality
           schema:
             type: string
-            description: The modality of a job that contains the value. Ex. remoto, presencial
+            description: The modality of a job that contains the value. Ex. remoto, presencial.
         - in: query
           name: regime
           schema:
             type: string
-            description: The regime of a job that contains the value. Ex. PJ, CLT
+            description: The regime of a job that contains the value. Ex. PJ, CLT.
       summary: "get all jobs"
       responses:
         "200":
@@ -93,7 +98,7 @@ paths:
       - "jobs"
       security:
         - bearerAuth: [bearerAuth] 
-      summary: "Create a job"
+      summary: "create a job"
       requestBody:
         required: true
         content:
@@ -118,7 +123,7 @@ paths:
       - "jobs"
       security:
         - bearerAuth: [bearerAuth] 
-      summary: "Update a job"
+      summary: "update a job"
       requestBody:
         required: true
         content:
@@ -164,7 +169,7 @@ paths:
     post:
       tags:
       - "jobs"
-      summary: "Report a Job"
+      summary: "report a Job"
       requestBody:
         required: true
         content:
@@ -231,7 +236,7 @@ paths:
     get:
       tags:
       - "users"
-      summary: "Access all Users"
+      summary: "get all Users"
       responses:
         "200":
           description: "successful operation"
@@ -316,7 +321,7 @@ paths:
       - "companies"
       security:
         - bearerAuth: [bearerAuth] 
-      summary: "Create a company"
+      summary: "create a company"
       requestBody:
         required: true
         content:
@@ -337,7 +342,7 @@ paths:
       - "companies"
       security:
         - bearerAuth: [bearerAuth] 
-      summary: "Update a company"
+      summary: "update a company"
       requestBody:
         required: true
         content:
