@@ -7,7 +7,6 @@ import 'package:shelf/shelf.dart';
 
 import 'package:shelf_router/shelf_router.dart';
 
-import '../core/security/security_service.dart';
 import '../models/reset_password_model.dart';
 import '../models/user_model.dart';
 import '../services/reset_passwords_service.dart';
@@ -17,10 +16,8 @@ import 'controller.dart';
 class ResetPasswordsController extends Controller {
   final UsersService _usersService;
   final ResetPasswordsService _resetPasswordsService;
-  final SecurityService _securityServiceImp;
 
-  ResetPasswordsController(this._usersService, this._resetPasswordsService,
-      this._securityServiceImp);
+  ResetPasswordsController(this._usersService, this._resetPasswordsService);
 
   @override
   Handler getHandler(
@@ -48,34 +45,6 @@ class ResetPasswordsController extends Controller {
         }
       } else {
         return Response.badRequest();
-      }
-    });
-
-    router.post('/reset-password', (Request request) async {
-      final body = await request.readAsString();
-      ResetPasswordModel resetPasswordModel =
-          ResetPasswordModel.fromJson(jsonDecode(body));
-
-      if (resetPasswordModel.password ==
-          resetPasswordModel.passwordConfirmation) {
-        final String? returnValidade =
-            await validadeResetPassword(resetPasswordModel);
-        if (returnValidade.toString().length == 36) {
-          resetPasswordModel.userId = returnValidade;
-          var result =
-              await _resetPasswordsService.updatePassword(resetPasswordModel);
-          if (result != null) {
-            final token = await gerarToken(resetPasswordModel.userId!);
-            return Response.ok(jsonEncode({'token': token}));
-          } else {
-            return Response.badRequest(body: "Senha igual a antiga");
-          }
-        } else {
-          return Response.badRequest(body: returnValidade);
-        }
-      } else {
-        return Response.badRequest(
-            body: "Senha e Confirmação de senha não são iguais");
       }
     });
 
@@ -115,29 +84,5 @@ class ResetPasswordsController extends Controller {
     }
 
     return statusCode;
-  }
-
-  Future<String?> validadeResetPassword(
-      ResetPasswordModel resetPasswordModel) async {
-    final resultBD =
-        await _resetPasswordsService.findOne(resetPasswordModel.token!);
-    if (resultBD != null) {
-      final DateTime dateValidate =
-          DateTime.parse(resultBD.date.toString()).add(Duration(minutes: 30));
-      if (resetPasswordModel.date!.isBefore(dateValidate)) {
-        return resultBD.userId;
-      } else {
-        return "Token expirado";
-      }
-    } else {
-      return "Não existe esse token";
-    }
-  }
-
-  Future<String?> gerarToken(String id) async {
-    final UserModel? user = await _usersService.findOne(id);
-    final String? profileId = user?.profileId;
-    final String token = await _securityServiceImp.generateJWT(id, profileId!);
-    return token;
   }
 }

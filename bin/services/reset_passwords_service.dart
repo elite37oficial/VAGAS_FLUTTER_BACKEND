@@ -9,12 +9,4 @@ class ResetPasswordsService {
   Future<String?> save(ResetPasswordModel value) async {
     return await _dao.create(value);
   }
-
-  Future<ResetPasswordModel?> findOne(String token) async {
-    return await _dao.findOne(token);
-  }
-
-  Future<ResetPasswordModel?> updatePassword(ResetPasswordModel value) async {
-    return await _dao.updatePassword(value);
-  }
 }
