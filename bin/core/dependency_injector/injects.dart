@@ -75,7 +75,9 @@ class Injects {
     di.register<ResetPasswordsService>(
         () => ResetPasswordsService(di.get<ResetPasswordsDao>()));
     di.register<ResetPasswordsController>(() => ResetPasswordsController(
-        di.get<UsersService>(), di.get<ResetPasswordsService>()));
+        di.get<UsersService>(),
+        di.get<ResetPasswordsService>(),
+        di.get<SecurityService>()));
 
     return di;
   }
