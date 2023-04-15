@@ -3,6 +3,7 @@ import 'package:uuid/uuid.dart';
 
 import '../database/db_configuration.dart';
 import '../models/user_model.dart';
+import '../to/status_to.dart';
 import 'dao.dart';
 
 class UserDAO implements DAO<UserModel> {
@@ -111,13 +112,13 @@ class UserDAO implements DAO<UserModel> {
   }
 
   @override
-  Future<List<String>> getStatus() async {
+  Future<List<StatusTO>> getStatus() async {
     final result =
-        await _dbConfiguration.execQuery('Select name from users_status;');
-    final List<String> statusList = result
-        .map((r) => (r.fields['name']).toString().toLowerCase())
+        await _dbConfiguration.execQuery('Select * from users_status;');
+    final List<StatusTO> statusList = result
+        .map((r) => (StatusTO.fromJson(r.fields)))
         .toList()
-        .cast<String>();
+        .cast<StatusTO>();
 
     return statusList;
   }

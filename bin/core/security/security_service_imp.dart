@@ -109,16 +109,19 @@ class SecurityServiceImp implements SecurityService<JWT> {
             break;
         }
 
+        final String permissionByRoute = '${method.toLowerCase()}-$pathFromUrl';
+        print(permissionByRoute);
+
         if (request.context['jwt'] == null) {
           return Response.forbidden('Not Authorized');
         }
 
         JWT? jwt = request.context['jwt'] as JWT;
-        var profileId = jwt.payload['roles'];
+        final String profileId = jwt.payload['roles'];
 
-        //
-        final String permissionByRoute = '${method.toLowerCase()}-$pathFromUrl';
-        print(permissionByRoute);
+        if (profileId.toLowerCase() == 'admin') {
+          return null;
+        }
 
         final List<String> permissions =
             await _permissionService.getPermissions(profileId);

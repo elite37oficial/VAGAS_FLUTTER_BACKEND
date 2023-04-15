@@ -2,6 +2,7 @@ import 'package:uuid/uuid.dart';
 
 import '../database/db_configuration.dart';
 import '../models/company_model.dart';
+import '../to/status_to.dart';
 import 'dao.dart';
 
 class CompaniesDAO implements DAO<CompanyModel> {
@@ -47,7 +48,7 @@ class CompaniesDAO implements DAO<CompanyModel> {
     }
 
     var result = await _dbConfiguration.execQuery(
-        "Select t1.id, t1.name, t1.location, t1.description from companies as t1 where t1.status = 'active';");
+        "Select t1.id, t1.name, t1.location, t1.description from companies as t1 where t1.status = '1';");
     return result
         .map((r) => CompanyModel.fromMap(r.fields))
         .toList()
@@ -93,13 +94,13 @@ class CompaniesDAO implements DAO<CompanyModel> {
   }
 
   @override
-  Future<List<String>> getStatus() async {
+  Future<List<StatusTO>> getStatus() async {
     final result =
-        await _dbConfiguration.execQuery('Select name from companies_status;');
-    final List<String> statusList = result
-        .map((r) => (r.fields['name']).toString().toLowerCase())
+        await _dbConfiguration.execQuery('Select * from companies_status;');
+    final List<StatusTO> statusList = result
+        .map((r) => (StatusTO.fromJson(r.fields)))
         .toList()
-        .cast<String>();
+        .cast<StatusTO>();
 
     return statusList;
   }

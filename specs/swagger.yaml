@@ -157,7 +157,7 @@ paths:
             schema:
               $ref: "#/components/schemas/JobsStatusModel"  
       responses:
-        "200":
+        "201":
           description: "successful operation"
         "400":
           $ref: '#/components/responses/BadRequest'
@@ -394,7 +394,7 @@ paths:
             schema:
               $ref: "#/components/schemas/CompanyEntity"
       responses:
-        "200":
+        "201":
           description: "successful operation"
         "400":
           $ref: '#/components/responses/BadRequest'
@@ -418,7 +418,7 @@ paths:
             schema:
               $ref: "#/components/schemas/CompaniesStatusModel"
       responses:
-        "200":
+        "201":
           description: "successful operation"
         "400":
           $ref: '#/components/responses/BadRequest'

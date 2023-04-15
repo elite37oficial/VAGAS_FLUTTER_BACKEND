@@ -4,6 +4,7 @@ import '../database/db_configuration.dart';
 import '../models/job_details.dart';
 import '../models/job_model.dart';
 import '../models/job_simple.dart';
+import '../to/status_to.dart';
 import 'dao.dart';
 
 class JobDAO implements DAO<JobModel> {
@@ -50,7 +51,7 @@ class JobDAO implements DAO<JobModel> {
   @override
   Future<JobModel?> findOne(String id) async {
     var result = await _dbConfiguration.execQuery(
-        "SELECT t1.id, t1.title, t1.city, t1.state,t1.status, t1.regime, t1.modality, t1.description, t1.whatsapp, t1.salary, t1.email, t1.seniority, t1.link, t1.created_by, t2.description AS description_company, t2.name as name_company, t2.id as company_id FROM jobs AS t1 INNER JOIN companies AS t2 ON t2.id = t1.company_id where t1.id = ?;",
+        "SELECT t1.id, t1.title, t1.city, t1.state, t1.regime, t1.modality, t1.description, t1.whatsapp, t1.salary, t1.email, t1.seniority, t1.link, t1.created_by, t2.description AS description_company, t2.name as name_company, t2.id as company_id, t3.name as status FROM jobs AS t1 INNER JOIN companies AS t2 ON t2.id = t1.company_id inner join jobs_status as t3 on t1.status = t3.id where t1.id = ?;",
         [id]);
 
     return result.isEmpty ? null : JobDetails.fromJson(result.first.fields);
@@ -98,14 +99,14 @@ class JobDAO implements DAO<JobModel> {
   Future<List<JobModel?>> findByQuery({String? queryParam}) async {
     if (queryParam?.isNotEmpty ?? false) {
       var result = await _dbConfiguration.execQuery(
-          "Select t1.id, t1.title, t1.city, t1.modality, t2.id as company_id, t2.name as name_company from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where $queryParam and t1.status = 'active';");
+          "Select t1.id, t1.title, t1.city, t1.modality, t2.id as company_id, t2.name as name_company from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where $queryParam and t1.status = '1';");
       return result
           .map((r) => JobSimple.fromJson(r.fields))
           .toList()
           .cast<JobSimple>();
     }
     var result = await _dbConfiguration.execQuery(
-        "Select t1.id, t1.title, t1.city, t1.regime, t1.modality, t2.name as name_company, t2.id as company_id from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where t1.status = 'active';");
+        "Select t1.id, t1.title, t1.city, t1.regime, t1.modality, t2.name as name_company, t2.id as company_id from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where t1.status = '1';");
     return result
         .map((r) => JobSimple.fromJson(r.fields))
         .toList()
@@ -113,14 +114,14 @@ class JobDAO implements DAO<JobModel> {
   }
 
   @override
-  Future<List<String>> getStatus() async {
+  Future<List<StatusTO>> getStatus() async {
     final result =
-        await _dbConfiguration.execQuery('Select name from jobs_status;');
-    final List<String> statusList = result
-        .map((r) => (r.fields['name']).toString().toLowerCase())
+        await _dbConfiguration.execQuery('Select * from jobs_status;');
+    final List<StatusTO> statusToList = result
+        .map((r) => StatusTO.fromJson(r.fields))
         .toList()
-        .cast<String>();
+        .cast<StatusTO>();
 
-    return statusList;
+    return statusToList;
   }
 }

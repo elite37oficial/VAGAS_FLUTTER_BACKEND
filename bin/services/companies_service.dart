@@ -1,5 +1,6 @@
 import '../dao/companies_dao.dart';
 import '../models/company_model.dart';
+import '../to/status_to.dart';
 import 'generic_service.dart';
 
 class CompaniesService implements GenericService<CompanyModel> {
@@ -34,7 +35,7 @@ class CompaniesService implements GenericService<CompanyModel> {
   }
 
   @override
-  Future<List<String>> getStatus() async {
+  Future<List<StatusTO>> getStatus() async {
     return await _companiesDAO.getStatus();
   }
 }

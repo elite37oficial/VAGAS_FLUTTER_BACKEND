@@ -1,17 +1,12 @@
 import '../dao/dao.dart';
 import '../models/job_model.dart';
+import '../to/status_to.dart';
 import 'generic_service.dart';
 
 class JobsService implements GenericService<JobModel> {
   final DAO<JobModel> _dao;
 
   JobsService(this._dao);
-
-  // @override
-  // Future<bool> delete(String id) async {
-  //   var result = await _dao.delete(id);
-  //   return result;
-  // }
 
   @override
   Future<List<JobModel>> findAll() async {
@@ -41,7 +36,7 @@ class JobsService implements GenericService<JobModel> {
   }
 
   @override
-  Future<List<String>> getStatus() async {
+  Future<List<StatusTO>> getStatus() async {
     return await _dao.getStatus();
   }
 }

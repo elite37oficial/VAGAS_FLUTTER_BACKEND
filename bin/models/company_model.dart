@@ -3,7 +3,7 @@ class CompanyModel {
   String? name;
   String? location;
   String? description;
-  String? status;
+  int? status;
   String? createdBy;
   DateTime? createdDate;
   String? updatedBy;
@@ -69,7 +69,4 @@ class CompanyModel {
   }
 
   Map toJson() => toMap();
-
-  // factory CompanyModel.fromJson(Map map) =>
-  //     CompanyModel.fromMap(map);
 }

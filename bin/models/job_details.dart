@@ -14,7 +14,7 @@ class JobDetails extends JobModel {
   final String? regime;
   final String? whatsapp;
   final String? email;
-  final String? status;
+  final String? statusJob;
   final String? seniority;
   final String? descriptionCompany;
   final String? createdBy;
@@ -24,7 +24,7 @@ class JobDetails extends JobModel {
       id: map['id'],
       companyId: map['company_id'],
       nameCompany: map['name_company'],
-      status: map['status'],
+      statusJob: map['status'],
       title: map['title'],
       description: map['description'],
       regime: map['regime'],
@@ -47,7 +47,7 @@ class JobDetails extends JobModel {
       'id': id,
       'nameCompany': nameCompany,
       'companyId': companyId,
-      'status': status,
+      'status': statusJob,
       'title': title,
       'description': description,
       'regime': regime,
@@ -68,7 +68,7 @@ class JobDetails extends JobModel {
     required this.id,
     required this.nameCompany,
     required this.companyId,
-    this.status,
+    this.statusJob,
     required this.title,
     required this.description,
     required this.salary,
