@@ -1,13 +1,18 @@
 import 'dart:convert';
 
 class StatusTO {
-  final String id;
-  final String status;
+  final String? resourceId;
+  final String? status;
+  int? id;
 
-  StatusTO({required this.id, required this.status});
+  StatusTO({this.id, this.resourceId, this.status});
 
   factory StatusTO.fromRequest(String body) {
     final Map map = jsonDecode(body);
-    return StatusTO(id: map['id'], status: map['status']);
+    return StatusTO(resourceId: map['id'], status: map['status']);
+  }
+
+  factory StatusTO.fromJson(Map map) {
+    return StatusTO(id: map['id'], status: map['name']);
   }
 }
