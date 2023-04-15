@@ -7,6 +7,7 @@ import 'package:shelf_router/shelf_router.dart';
 import '../models/company_model.dart';
 import '../services/companies_service.dart';
 import '../to/status_to.dart';
+import '../utils/list_extension.dart';
 import 'controller.dart';
 
 class CompaniesSecurityController extends Controller {
@@ -23,7 +24,7 @@ class CompaniesSecurityController extends Controller {
     router.get('/companies', (Request request) async {
       final userID = _getUserIdFromJWT(request);
       final List<CompanyModel?> result = await _companiesService.findByQuery(
-          queryParam: "t1.created_by = '$userID' and t1.status = 'active'");
+          queryParam: "t1.created_by = '$userID' and t1.status = '1'");
       return Response.ok(jsonEncode(result));
     });
 
@@ -32,7 +33,7 @@ class CompaniesSecurityController extends Controller {
       final CompanyModel companyModel = CompanyModel.fromMap(jsonDecode(body));
       final String userIdFromJWT = _getUserIdFromJWT(request);
       companyModel.createdBy = userIdFromJWT;
-      companyModel.status = 'active';
+      companyModel.status = 1;
       final result = await _companiesService.save(companyModel);
       return result ? Response(201) : Response(404);
     });
@@ -68,21 +69,27 @@ class CompaniesSecurityController extends Controller {
     router.put('/companies-status', (Request request) async {
       final String body = await request.readAsString();
       final StatusTO statusTO = StatusTO.fromRequest(body);
+      if (statusTO.resourceId == null || statusTO.status == null) {
+        return Response.badRequest();
+      }
+
       CompanyModel companyModel = CompanyModel();
 
-      companyModel.status = statusTO.status.toLowerCase();
-      companyModel.id = statusTO.id;
+      companyModel.id = statusTO.resourceId;
+      // statusTO.status?.toLowerCase();
 
-      if (companyModel.id == null || companyModel.status == null) {
+      final List<StatusTO> statusListFromDB =
+          await _companiesService.getStatus();
+      final List<String?> listOfStatus =
+          statusListFromDB.map((e) => e.status?.toLowerCase()).toList();
+      companyModel.status = statusListFromDB
+          .firstWhereOrNull(
+              (e) => e.status?.toLowerCase() == statusTO.status?.toLowerCase())
+          ?.id;
+
+      if (!listOfStatus.contains(statusTO.status?.toLowerCase())) {
         return Response.badRequest();
       }
-
-      final List<String> listOfStatus = await _companiesService.getStatus();
-
-      if (!listOfStatus.contains(companyModel.status?.toLowerCase())) {
-        return Response.badRequest();
-      }
-
       final CompanyModel? companyModelFromDB =
           await _companiesService.findOne(companyModel.id!);
 

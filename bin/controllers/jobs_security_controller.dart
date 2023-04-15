@@ -7,6 +7,7 @@ import 'package:shelf_router/shelf_router.dart';
 import '../models/job_model.dart';
 import '../services/jobs_service.dart';
 import '../to/status_to.dart';
+import '../utils/list_extension.dart';
 import 'controller.dart';
 
 class JobsSecurityController extends Controller {
@@ -50,19 +51,27 @@ class JobsSecurityController extends Controller {
     router.put('/jobs-status', (Request request) async {
       final String body = await request.readAsString();
       final StatusTO statusTO = StatusTO.fromRequest(body);
+
+      if (statusTO.resourceId == null || statusTO.status == null) {
+        return Response.badRequest();
+      }
       JobModel jobModel = JobModel();
-      jobModel.status = statusTO.status;
-      jobModel.id = statusTO.id;
+      // jobModel.status = statusTO.status;
+      jobModel.id = statusTO.resourceId;
 
-      if (jobModel.id == null || jobModel.status == null) {
+      final List<StatusTO> statusListFromDb = await _jobsService.getStatus();
+      final List<String?> listOfStatus = statusListFromDb
+          .map((statusTo) => statusTo.status?.toLowerCase())
+          .toList();
+
+      if (!listOfStatus.contains(statusTO.status?.toLowerCase())) {
         return Response.badRequest();
       }
 
-      final List<String> listOfStatus = await _jobsService.getStatus();
-
-      if (!listOfStatus.contains(jobModel.status?.toLowerCase())) {
-        return Response.badRequest();
-      }
+      jobModel.status = statusListFromDb
+          .firstWhereOrNull((element) =>
+              element.status?.toLowerCase() == statusTO.status?.toLowerCase())
+          ?.id;
 
       final JobModel? jobFromDB = await _jobsService.findOne(jobModel.id!);
 
@@ -89,7 +98,7 @@ class JobsSecurityController extends Controller {
       JobModel jobmodel = JobModel.fromJson(jsonDecode(body));
       final String userIdFromJWT = _getUserIdFromJWT(request);
       jobmodel.createdBy = userIdFromJWT;
-      jobmodel.status = 'active';
+      jobmodel.status = 1;
       var result = await _jobsService.save(jobmodel);
       return result ? Response(201) : Response(404);
     });
