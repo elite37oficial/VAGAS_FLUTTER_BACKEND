@@ -5,7 +5,7 @@ class JobSimple extends JobModel {
   final String id;
   final String title;
   final String companyId;
-  // final String photoUrl;
+  final String? regime;
   final String companyName;
   final String city;
   final String modality;
@@ -15,7 +15,7 @@ class JobSimple extends JobModel {
     required this.companyName,
     required this.id,
     required this.title,
-    // required this.photoUrl,
+    required this.regime,
     required this.city,
     required this.modality,
   });
@@ -28,7 +28,7 @@ class JobSimple extends JobModel {
     result.addAll({'title': title});
     result.addAll({'companyName': companyName});
     result.addAll({'companyId': companyId});
-    // result.addAll({'photoUrl': photoUrl});
+    result.addAll({'regime': regime});
     result.addAll({'city': city});
     result.addAll({'modality': modality});
 
@@ -37,18 +37,18 @@ class JobSimple extends JobModel {
 
   factory JobSimple.fromJson(Map<String, dynamic> map) {
     return JobSimple(
-      id: map['id'] ?? '',
-      title: map['title'] ?? '',
+      id: map['id'],
+      title: map['title'],
       companyId: map['company_id'],
-      companyName: map['name_company'] ?? '',
-      // photoUrl: map['photo_url'] ?? '',
-      city: map['city'] ?? '',
-      modality: map['modality'] ?? '',
+      companyName: map['name_company'],
+      regime: map['regime'],
+      city: map['city'],
+      modality: map['modality'],
     );
   }
 
   @override
   String toString() {
-    return 'JobSimple(id: $id, title: $title,companyName: $companyName, city: $city, modality: $modality)';
+    return 'JobSimple(id: $id, title: $title,companyName: $companyName,regime: $regime, city: $city, modality: $modality)';
   }
 }
