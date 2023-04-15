@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:linux_system_info/linux_system_info.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
-import 'package:yaml/yaml.dart';
 
 class PingController {
   Handler get handler {
