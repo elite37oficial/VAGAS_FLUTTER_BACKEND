@@ -234,6 +234,48 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalError'
+  /reset-password-email:
+    post:
+      tags:
+      - "users"
+      summary: "request email to reset user's password"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPasswordModel"
+      responses:
+        "200":
+          description: "Password reset email sent."
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalError'
+  /reset-password:
+    post:
+      tags:
+      - "users"
+      summary: "reset user's password"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPasswordModel"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tokenization"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "500":
+          $ref: '#/components/responses/InternalError'
   /users:
     get:
       tags:
@@ -478,7 +520,7 @@ components:
     Tokenization:
       type: "object"
       properties:
-        accessToken:
+        token:
           type: string
     JobsStatusModel:
       type: "object"
@@ -543,6 +585,20 @@ components:
           type: string
         status:
           type: string
+    ResetPasswordModel:
+      type: "object"
+      properties:
+        token:
+          type: string
+        userId:
+          type: string
+        date:
+          type: string
+          format: date-time
+        password:
+          type: string
+        passwordConfirmation:
+          type: string
     JobSimple:
       type: "object"
       properties:
@@ -551,6 +607,8 @@ components:
         companyId:
           type: string
         title:
+          type: string
+        regime:
           type: string
         companyName:
           type: string
