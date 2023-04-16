@@ -67,8 +67,14 @@ class JobsController extends Controller {
         case "seniority":
         case "company_id":
         case "title":
-        case "company_name":
+        case "name":
           if (queryParams.keys.first != key) where = "$where and ";
+          if (key.contains('name')) {
+            where = where == null
+                ? "t2.$key like '%$value%'"
+                : "$where t2.$key like '$value%'";
+            break;
+          }
           where = where == null
               ? "t1.$key like '%$value%'"
               : "$where t1.$key like '$value%'";
