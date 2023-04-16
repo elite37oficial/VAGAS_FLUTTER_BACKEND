@@ -99,14 +99,14 @@ class JobDAO implements DAO<JobModel> {
   Future<List<JobModel?>> findByQuery({String? queryParam}) async {
     if (queryParam?.isNotEmpty ?? false) {
       var result = await _dbConfiguration.execQuery(
-          "Select t1.id, t1.title, t1.city, t1.modality, t2.id as company_id, t2.name as name_company from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where $queryParam and t1.status = '1';");
+          "Select t1.id, t1.title, t1.city, t1.modality, t2.id as company_id, t2.name as company_name from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where $queryParam and t1.status = '1';");
       return result
           .map((r) => JobSimple.fromJson(r.fields))
           .toList()
           .cast<JobSimple>();
     }
     var result = await _dbConfiguration.execQuery(
-        "Select t1.id, t1.title, t1.city, t1.regime, t1.modality, t2.name as name_company, t2.id as company_id from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where t1.status = '1';");
+        "Select t1.id, t1.title, t1.city, t1.regime, t1.modality, t2.name as company_name, t2.id as company_id from jobs as t1 inner join companies as t2 on t2.id = t1.company_id where t1.status = '1';");
     return result
         .map((r) => JobSimple.fromJson(r.fields))
         .toList()

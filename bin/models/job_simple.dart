@@ -40,7 +40,7 @@ class JobSimple extends JobModel {
       id: map['id'],
       title: map['title'],
       companyId: map['company_id'],
-      companyName: map['name_company'],
+      companyName: map['company_name'],
       regime: map['regime'],
       city: map['city'],
       modality: map['modality'],
