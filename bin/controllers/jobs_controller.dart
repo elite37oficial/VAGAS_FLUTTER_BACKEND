@@ -69,6 +69,23 @@ class JobsController extends Controller {
         case "title":
         case "name":
           if (queryParams.keys.first != key) where = "$where and ";
+          if (value.contains(',')) {
+            String newValues = '';
+
+            var listOfValue = value.split(',');
+            for (var value in listOfValue) {
+              if (value == listOfValue.last) {
+                newValues += "'%$value%'";
+
+                break;
+              }
+              newValues += "'%$value%' or t1.$key like  ";
+            }
+            where = where == null
+                ? "t1.$key like $newValues"
+                : "$where t1.$key like $newValues";
+            break;
+          }
           if (key.contains('name')) {
             where = where == null
                 ? "t2.$key like '%$value%'"
