@@ -109,7 +109,10 @@ class SecurityServiceImp implements SecurityService<JWT> {
             break;
         }
 
-        final String permissionByRoute = '${method.toLowerCase()}-$pathFromUrl';
+        String permissionByRoute = '${method.toLowerCase()}-$pathFromUrl';
+        if (permissionByRoute.contains('get-companies/id')) {
+          permissionByRoute = 'get-companies/id';
+        }
         print(permissionByRoute);
 
         if (request.context['jwt'] == null) {
@@ -122,6 +125,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
         if (profileId.toLowerCase() == 'admin') {
           return null;
         }
+
         final List<String> permissions =
             await _permissionService.getPermissions(profileId);
         permissions.forEach(print);
