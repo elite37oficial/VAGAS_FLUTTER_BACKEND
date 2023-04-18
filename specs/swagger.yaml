@@ -582,6 +582,7 @@ components:
       properties:
         email:
           type: string
+          format: email
         password:
           type: string
     JobReportModel:
@@ -589,6 +590,7 @@ components:
       properties:
         jobId:
           type: string
+          format: uuid
         description:
           type: string
     CompanyImageModel:
@@ -596,6 +598,7 @@ components:
       properties:
         companyId:
           type: string
+          format: uuid
         image64:
           type: string
     UserEntity:
@@ -617,8 +620,6 @@ components:
           type: string
         password:
           type: string
-        status:
-          type: string
     UserModel:
       type: "object"
       properties:
@@ -631,11 +632,11 @@ components:
           type: string
         phone:
           type: string
+          format: phone
         email:
           type: string
+          format: email
         password:
-          type: string
-        status:
           type: string
     ResetPasswordModel:
       type: "object"
@@ -733,8 +734,10 @@ components:
           type: string
         whatsapp:
           type: string
+          format: phone
         email:
           type: string
+          format: email
     CompanyEntity:
       type: "object"
       properties:
@@ -749,6 +752,9 @@ components:
           type: string
         status:
           type: string
+          enum:
+            - "active"
+            - "inactive"
     CompanyModel:
       type: "object"
       properties:
@@ -760,3 +766,6 @@ components:
           type: string
         status:
           type: string
+          enum:
+            - "active"
+            - "inactive"
