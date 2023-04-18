@@ -32,6 +32,6 @@ class MySqlDbConfiguration implements DBConfiguration {
   execQuery(String sql, [List? params]) async {
     var connection = await this.connection;
     print(sql);
-    return connection.query(sql, params);
+    return await connection.query(sql, params);
   }
 }
