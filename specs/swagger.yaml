@@ -114,14 +114,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/JobEntity"  
+              $ref: "#/components/schemas/JobModel"  
       responses:
-        "200":
-          description: "successful operation"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/JobEntity"
+        "201":
+          description: created successful
         "403":
           $ref: '#/components/responses/Unauthorized'
         "404":
@@ -315,7 +311,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserEntity"
+              $ref: "#/components/schemas/UserModel"
       responses:
         "201":
           description: "created"
@@ -350,6 +346,33 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         "500":
           $ref: '#/components/responses/InternalError'
+  /companies/id/{company_id}:
+    get:
+      tags:
+      - "companies"
+      security:
+        - bearerAuth: [bearerAuth]
+      summary: "get company by id"
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: string
+          description: The company's ID.
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompanyEntity"
+        "403":
+          $ref: '#/components/responses/Unauthorized'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalError'
   /companies:
     get:
       tags:
@@ -381,7 +404,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CompanyEntity"           
+              $ref: "#/components/schemas/CompanyModel"           
       responses:
         "201":
           description: "created"
@@ -580,9 +603,26 @@ components:
       properties:
         id:
           type: string
-          nullable: true
           format: uuid
         profileID:
+          type: string
+          enum:
+            - "recrutador"
+            - "admin"
+        name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        status:
+          type: string
+    UserModel:
+      type: "object"
+      properties:
+        profile_id:
           type: string
           enum:
             - "recrutador"
@@ -616,8 +656,10 @@ components:
       properties:
         id:
           type: string
+          format: uuid
         companyId:
           type: string
+          format: uuid
         title:
           type: string
         regime:
@@ -633,10 +675,10 @@ components:
       properties:
         id:
           type: string
-          nullable: true
           format: uuid
         companyId:
           type: string
+          format: uuid
         title:
           type: string
         description:
@@ -662,13 +704,54 @@ components:
           type: string
         email:
           type: string
+    JobModel:
+      type: "object"
+      properties:
+        company_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        company_description:
+          type: string
+        seniority:
+          type: string
+        regime:
+          type: string
+        salary:
+          type: number
+          format: double
+        state:
+          type: string
+        modality:
+          type: string
+        city:
+          type: string
+        link:
+          type: string
+        whatsapp:
+          type: string
+        email:
+          type: string
     CompanyEntity:
       type: "object"
       properties:
         id:
           type: string
-          nullable: true
           format: uuid
+        name:
+          type: string
+        location:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+    CompanyModel:
+      type: "object"
+      properties:
         name:
           type: string
         location:
