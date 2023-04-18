@@ -41,6 +41,7 @@ class UserModel {
       profileId: map['profile_id'],
       name: map['name'],
       phone: map['phone'],
+      password: map['password'],
       email: map['email'],
       status: map['status'],
       createdBy: map['created_by'],
