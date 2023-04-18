@@ -70,16 +70,16 @@ class JobsController extends Controller {
         case "name":
           if (queryParams.keys.first != key) where = "$where and ";
           if (value.contains(',')) {
-            String newValues = '';
-
+            late String newValues = '';
             var listOfValue = value.split(',');
             for (var value in listOfValue) {
-              if (value == listOfValue.last) {
+              value = value.trim();
+              if (value.trim() == listOfValue.last.trim()) {
                 newValues += "'%$value%'";
 
                 break;
               }
-              newValues += "'%$value%' or t1.$key like  ";
+              newValues += "'%$value%' or t1.$key like ";
             }
             where = where == null
                 ? "t1.$key like $newValues"
