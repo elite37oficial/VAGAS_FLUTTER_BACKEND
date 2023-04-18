@@ -55,6 +55,11 @@ paths:
             type: string
             description: The city of a job that contains the value. Ex. São Paulo.
         - in: query
+          name: search
+          schema:
+            type: string
+            description: General search.
+        - in: query
           name: name
           schema:
             type: string

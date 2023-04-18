@@ -68,33 +68,39 @@ class JobsController extends Controller {
         case "company_id":
         case "title":
         case "name":
+        case "search":
           if (queryParams.keys.first != key) where = "$where and ";
-          if (value.contains(',')) {
-            late String newValues = '';
-            var listOfValue = value.split(',');
-            for (var value in listOfValue) {
-              value = value.trim();
-              if (value.trim() == listOfValue.last.trim()) {
-                newValues += "'%$value%'";
+          if (key == 'search') {
+            where =
+                "city like '%$value%' or modality like '%$value%' or regime like '%$value%' or seniority like '%$value%' or title like '%$value%' or t2.name like '%$value%'";
+          } else {
+            if (value.contains(',')) {
+              late String newValues = '';
+              var listOfValue = value.split(',');
+              for (var value in listOfValue) {
+                value = value.trim();
+                if (value.trim() == listOfValue.last.trim()) {
+                  newValues += "'%$value%')";
 
-                break;
+                  break;
+                }
+                newValues += "'%$value%' or t1.$key like ";
               }
-              newValues += "'%$value%' or t1.$key like ";
+              where = where == null
+                  ? "(t1.$key like $newValues"
+                  : "$where (t1.$key like $newValues";
+              break;
+            }
+            if (key.contains('name')) {
+              where = where == null
+                  ? "t2.$key like '%$value%'"
+                  : "$where t2.$key like '$value%'";
+              break;
             }
             where = where == null
-                ? "t1.$key like $newValues"
-                : "$where t1.$key like $newValues";
-            break;
+                ? "t1.$key like '%$value%'"
+                : "$where t1.$key like '$value%'";
           }
-          if (key.contains('name')) {
-            where = where == null
-                ? "t2.$key like '%$value%'"
-                : "$where t2.$key like '$value%'";
-            break;
-          }
-          where = where == null
-              ? "t1.$key like '%$value%'"
-              : "$where t1.$key like '$value%'";
           break;
 
         default:
