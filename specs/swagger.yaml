@@ -30,7 +30,7 @@ paths:
           required: true
           schema:
             type: string
-          description: The user ID
+          description: The job's ID.
       responses:
         "200":
           description: "successful operation"
@@ -580,6 +580,8 @@ components:
       properties:
         id:
           type: string
+          nullable: true
+          format: uuid
         profileID:
           type: string
           enum:
@@ -631,6 +633,8 @@ components:
       properties:
         id:
           type: string
+          nullable: true
+          format: uuid
         companyId:
           type: string
         title:
@@ -663,6 +667,8 @@ components:
       properties:
         id:
           type: string
+          nullable: true
+          format: uuid
         name:
           type: string
         location:

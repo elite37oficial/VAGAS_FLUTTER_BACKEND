@@ -122,7 +122,6 @@ class SecurityServiceImp implements SecurityService<JWT> {
         if (profileId.toLowerCase() == 'admin') {
           return null;
         }
-
         final List<String> permissions =
             await _permissionService.getPermissions(profileId);
         permissions.forEach(print);

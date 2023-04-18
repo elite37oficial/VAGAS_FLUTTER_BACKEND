@@ -76,7 +76,6 @@ class CompaniesSecurityController extends Controller {
       CompanyModel companyModel = CompanyModel();
 
       companyModel.id = statusTO.resourceId;
-      // statusTO.status?.toLowerCase();
 
       final List<StatusTO> statusListFromDB =
           await _companiesService.getStatus();
