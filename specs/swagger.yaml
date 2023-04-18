@@ -183,7 +183,7 @@ paths:
             schema:
               $ref: "#/components/schemas/JobReportModel"  
       responses:
-        "200":
+        "201":
           description: "created"
         "404":
           $ref: '#/components/responses/NotFound'
