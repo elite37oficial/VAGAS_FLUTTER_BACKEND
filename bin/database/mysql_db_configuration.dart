@@ -11,6 +11,10 @@ class MySqlDbConfiguration implements DBConfiguration {
   Future<MySqlConnection> get connection async {
     _mySqlConnection ??= await createConection();
 
+    if (_mySqlConnection == null) {
+      throw Exception('[ERROR/DB] =>Failed to crate connection.');
+    }
+
     return _mySqlConnection!;
   }
 
@@ -22,7 +26,7 @@ class MySqlDbConfiguration implements DBConfiguration {
       port: int.parse(env['db_port'].toString()),
       password: env['db_pass'],
       user: env['db_user'],
-      timeout: Duration(seconds: 60),
+      // timeout: Duration(seconds: 60),
     );
 
     return await MySqlConnection.connect(configuration);
@@ -32,6 +36,8 @@ class MySqlDbConfiguration implements DBConfiguration {
   execQuery(String sql, [List? params]) async {
     var connection = await this.connection;
     print(sql);
-    return await connection.query(sql, params);
+    final result = await connection.query(sql, params);
+    _mySqlConnection = await connection.close();
+    return result;
   }
 }

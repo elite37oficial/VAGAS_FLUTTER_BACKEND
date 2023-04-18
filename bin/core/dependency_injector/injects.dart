@@ -65,7 +65,8 @@ class Injects {
     di.register<LoginController>(() =>
         LoginController(di.get<AuthService>(), di.get<SecurityService>()));
     di.register<PingController>(() => PingController());
-    di.register<JobDAO>(() => JobDAO(di.get(), di.get<Uuid>()));
+    di.register<JobDAO>(
+        () => JobDAO(di.get<DBConfiguration>(), di.get<Uuid>()));
     di.register<JobsService>(() => JobsService(di.get<JobDAO>()));
     di.register<JobsController>(() => JobsController(di.get<JobsService>()));
     di.register<JobsSecurityController>(
