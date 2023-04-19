@@ -630,11 +630,6 @@ components:
     UserModel:
       type: "object"
       properties:
-        profile_id:
-          type: string
-          enum:
-            - "recrutador"
-            - "admin"
         name:
           type: string
         phone:

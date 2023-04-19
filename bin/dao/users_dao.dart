@@ -16,6 +16,7 @@ class UserDAO implements DAO<UserModel> {
   Future<bool> create(UserModel value) async {
     final DateTime now = DateTime.now().toUtc();
     value.status = 'active';
+    value.profileId = 'Recrutador';
     if (value.password != null) {
       final String password = value.password!;
       final String pass = Password.hash(password, PBKDF2());
