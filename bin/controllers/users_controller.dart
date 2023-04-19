@@ -22,6 +22,13 @@ class UsersController extends Controller {
     router.post('/users', (Request request) async {
       var body = await request.readAsString();
       UserModel userModel = UserModel.fromJson(jsonDecode(body));
+      if (userModel.email == null) {
+        return Response.badRequest(body: 'O campo email é obrigatório');
+      }
+      final userFromDB = await _usersService.findByEmail(userModel.email!);
+      if (userFromDB != null) {
+        return Response.badRequest(body: 'Email já está em uso');
+      }
       var result = await _usersService.save(userModel);
       return result ? Response(201) : Response.badRequest();
     });
