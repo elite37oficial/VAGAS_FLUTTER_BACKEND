@@ -66,6 +66,7 @@ class JobsController extends Controller {
         case "regime":
         case "seniority":
         case "company_id":
+        case "created_by":
         case "title":
         case "name":
         case "search":
