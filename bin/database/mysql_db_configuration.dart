@@ -1,21 +1,25 @@
 import 'package:dotenv/dotenv.dart';
 import 'package:mysql1/mysql1.dart';
 
+import '../core/dependency_injector/dependency_injector.dart';
 import 'db_configuration.dart';
 
 class MySqlDbConfiguration implements DBConfiguration {
-  MySqlConnection? _mySqlConnection;
-  var env = DotEnv(includePlatformEnvironment: true)..load();
+  MySqlConnection? mySqlConnection;
+  MySqlDbConfiguration({
+    this.mySqlConnection,
+  });
+  final DotEnv env = DependencyInjector().get<DotEnv>();
 
   @override
   Future<MySqlConnection> get connection async {
-    _mySqlConnection ??= await createConection();
+    mySqlConnection ??= await createConection();
 
-    if (_mySqlConnection == null) {
+    if (mySqlConnection == null) {
       throw Exception('[ERROR/DB] =>Failed to crate connection.');
     }
 
-    return _mySqlConnection!;
+    return mySqlConnection!;
   }
 
   @override
@@ -26,7 +30,6 @@ class MySqlDbConfiguration implements DBConfiguration {
       port: int.parse(env['db_port'].toString()),
       password: env['db_pass'],
       user: env['db_user'],
-      // timeout: Duration(seconds: 60),
     );
 
     return await MySqlConnection.connect(configuration);
@@ -37,7 +40,7 @@ class MySqlDbConfiguration implements DBConfiguration {
     var connection = await this.connection;
     print(sql);
     final result = await connection.query(sql, params);
-    _mySqlConnection = await connection.close();
+    mySqlConnection = await connection.close();
     return result;
   }
 }
