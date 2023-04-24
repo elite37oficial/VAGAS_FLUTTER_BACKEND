@@ -23,4 +23,5 @@ dependencies:
   uuid: ^3.0.7
   linux_system_info: ^0.0.7
   shelf_swagger_ui: ^1.0.0+2
+  mocktail: ^0.3.0
 
