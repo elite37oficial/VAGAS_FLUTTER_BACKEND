@@ -60,6 +60,16 @@ paths:
             type: string
             description: General search.
         - in: query
+          name: page
+          schema:
+            type: string
+            description: Choose the pagination of the search.Ex page=1 return itens starts from the 1° position, page=2 returns itens starts from the 11° position. If not pass this arguments set to 1.
+        - in: query
+          name: limit
+          schema:
+            type: string
+            description: Set the maximum quantity of itens from a page.
+        - in: query
           name: name
           schema:
             type: string
@@ -665,6 +675,18 @@ components:
           format: uuid
         title:
           type: string
+        state:
+          type: string
+        status:
+          type: string
+          enum:
+          - "paused"
+          - "active"
+          - "canceled"
+          - "completed"
+        createdBy:
+          type: string
+          format: uuid
         regime:
           type: string
         companyName:
