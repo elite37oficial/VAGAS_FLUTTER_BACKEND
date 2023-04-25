@@ -59,9 +59,14 @@ class JobsController extends Controller {
 
   String? _validateQueryParams(Map<String, String> queryParams) {
     String? where;
+    int page = 1;
+    String? pagination;
     queryParams.forEach((key, value) {
       switch (key) {
         case "city":
+        case "page":
+        case "status":
+        case "limit":
         case "modality":
         case "regime":
         case "seniority":
@@ -70,10 +75,13 @@ class JobsController extends Controller {
         case "title":
         case "name":
         case "search":
-          if (queryParams.keys.first != key) where = "$where and ";
+          if (queryParams.keys.first != key &&
+              (key != 'limit' && key != 'page')) {
+            where = "${where ?? ''} and ";
+          }
           if (key == 'search') {
             where =
-                "city like '%$value%' or modality like '%$value%' or regime like '%$value%' or seniority like '%$value%' or title like '%$value%' or t2.name like '%$value%'";
+                "where city like '%$value%' or modality like '%$value%' or regime like '%$value%' or seniority like '%$value%' or title like '%$value%' or t2.name like '%$value%'";
           } else {
             if (value.contains(',')) {
               late String newValues = '';
@@ -82,25 +90,40 @@ class JobsController extends Controller {
                 value = value.trim();
                 if (value.trim() == listOfValue.last.trim()) {
                   newValues += "'%$value%')";
-
                   break;
                 }
                 newValues += "'%$value%' or t1.$key like ";
               }
               where = where == null
-                  ? "(t1.$key like $newValues"
+                  ? "where (t1.$key like $newValues"
                   : "$where (t1.$key like $newValues";
               break;
             }
+            if (key == 'status') {
+              int valueOfStatus = int.tryParse(value) ?? 1;
+              value = valueOfStatus.toString();
+            }
             if (key.contains('name')) {
               where = where == null
-                  ? "t2.$key like '%$value%'"
-                  : "$where t2.$key like '$value%'";
+                  ? "where t2.$key like '%$value%'"
+                  : "$where t2.$key like '%$value%'";
               break;
             }
+            if (key == 'page') {
+              page = int.tryParse(value) ?? 0;
+              if (page < 0) page *= -1;
+              break;
+            } else if (key == 'limit') {
+              int limit = int.tryParse(value) ?? 10;
+              if (limit < 0) limit *= -1;
+              value = limit.toString();
+              pagination = "limit $value offset ${(page - 1) * 10}";
+              break;
+            }
+
             where = where == null
-                ? "t1.$key like '%$value%'"
-                : "$where t1.$key like '$value%'";
+                ? "where t1.$key like '%$value%'"
+                : "$where t1.$key like '%$value%'";
           }
           break;
 
@@ -109,6 +132,12 @@ class JobsController extends Controller {
           break;
       }
     });
-    return where;
+
+    if (where!.trim().endsWith('and')) {
+      int index = where!.lastIndexOf('and');
+      where = where!.replaceRange(index, null, '');
+    }
+
+    return "$where ${pagination ?? ''}";
   }
 }

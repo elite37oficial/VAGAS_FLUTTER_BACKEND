@@ -7,30 +7,43 @@ class JobSimple extends JobModel {
   final String companyId;
   final String? regime;
   final String companyName;
+  final String state;
   final String city;
   final String modality;
+  final String jobStatus;
+  final DateTime? createdDate;
+  final String createdBy;
 
-  JobSimple({
-    required this.companyId,
-    required this.companyName,
-    required this.id,
-    required this.title,
-    required this.regime,
-    required this.city,
-    required this.modality,
-  });
+  JobSimple(
+      {required this.companyId,
+      required this.companyName,
+      required this.id,
+      required this.title,
+      required this.state,
+      required this.regime,
+      required this.city,
+      required this.modality,
+      required this.jobStatus,
+      this.createdDate,
+      required this.createdBy});
 
   @override
   Map<String, dynamic> toJson() {
     final result = <String, dynamic>{};
-
+    result.addAll({'status': jobStatus});
+    result.addAll({'created_by': createdBy});
     result.addAll({'id': id});
+    result.addAll({'state': state});
     result.addAll({'title': title});
     result.addAll({'companyName': companyName});
     result.addAll({'companyId': companyId});
     result.addAll({'regime': regime});
     result.addAll({'city': city});
     result.addAll({'modality': modality});
+    result.addAll({
+      if (createdDate != null)
+        'createdDate': createdDate?.millisecondsSinceEpoch,
+    });
 
     return result;
   }
@@ -43,12 +56,16 @@ class JobSimple extends JobModel {
       companyName: map['company_name'],
       regime: map['regime'],
       city: map['city'],
+      state: map['state'],
       modality: map['modality'],
+      jobStatus: map['status'],
+      createdBy: map['created_by'],
+      createdDate: map['created_date'],
     );
   }
 
   @override
   String toString() {
-    return 'JobSimple(id: $id, title: $title,companyName: $companyName,regime: $regime, city: $city, modality: $modality)';
+    return 'JobSimple(id: $id, title: $title, companyName: $companyName, status: $status,createdDate: $createdDate, createdBy: $createdBy, regime: $regime, city: $city, state: $state, modality: $modality)';
   }
 }

@@ -50,6 +50,27 @@ paths:
       - "jobs"
       parameters:
         - in: query
+          name: page
+          schema:
+            type: string
+            description: Choose the pagination of the search.Ex page=1 return itens starts from the 1° position, page=2 returns itens starts from the 11° position. If not pass this arguments set to 1.
+        - in: query
+          name: limit
+          schema:
+            type: string
+            description: Set the maximum quantity of itens from a page.
+        - in: query
+          name: status
+          schema:
+            type: integer
+            enum: [0, 1, 2, 3]
+          description: |
+              The status of the resource.
+              - 0: "canceled"
+              - 1: "active"
+              - 2: "paused"
+              - 3: "completed"
+        - in: query
           name: city
           schema:
             type: string
@@ -665,6 +686,20 @@ components:
           format: uuid
         title:
           type: string
+        state:
+          type: string
+        status:
+          type: string
+          enum:
+          - "paused"
+          - "active"
+          - "canceled"
+          - "completed"
+        createdBy:
+          type: string
+          format: uuid
+        createdDate:
+          type: integer
         regime:
           type: string
         companyName:
