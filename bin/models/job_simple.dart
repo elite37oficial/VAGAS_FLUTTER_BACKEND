@@ -11,6 +11,7 @@ class JobSimple extends JobModel {
   final String city;
   final String modality;
   final String jobStatus;
+  final DateTime? createdDate;
   final String createdBy;
 
   JobSimple(
@@ -23,6 +24,7 @@ class JobSimple extends JobModel {
       required this.city,
       required this.modality,
       required this.jobStatus,
+      this.createdDate,
       required this.createdBy});
 
   @override
@@ -38,6 +40,10 @@ class JobSimple extends JobModel {
     result.addAll({'regime': regime});
     result.addAll({'city': city});
     result.addAll({'modality': modality});
+    result.addAll({
+      if (createdDate != null)
+        'createdDate': createdDate?.millisecondsSinceEpoch,
+    });
 
     return result;
   }
@@ -54,11 +60,12 @@ class JobSimple extends JobModel {
       modality: map['modality'],
       jobStatus: map['status'],
       createdBy: map['created_by'],
+      createdDate: map['created_date'],
     );
   }
 
   @override
   String toString() {
-    return 'JobSimple(id: $id, title: $title, companyName: $companyName, status: $status, createdBy: $createdBy, regime: $regime, city: $city, state: $state, modality: $modality)';
+    return 'JobSimple(id: $id, title: $title, companyName: $companyName, status: $status,createdDate: $createdDate, createdBy: $createdBy, regime: $regime, city: $city, state: $state, modality: $modality)';
   }
 }

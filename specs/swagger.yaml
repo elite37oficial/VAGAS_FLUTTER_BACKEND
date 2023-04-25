@@ -50,16 +50,6 @@ paths:
       - "jobs"
       parameters:
         - in: query
-          name: city
-          schema:
-            type: string
-            description: The city of a job that contains the value. Ex. São Paulo.
-        - in: query
-          name: search
-          schema:
-            type: string
-            description: General search.
-        - in: query
           name: page
           schema:
             type: string
@@ -69,6 +59,27 @@ paths:
           schema:
             type: string
             description: Set the maximum quantity of itens from a page.
+        - in: query
+          name: status
+          schema:
+            type: integer
+            enum: [0, 1, 2, 3]
+          description: |
+              The status of the resource.
+              - 0: "canceled"
+              - 1: "active"
+              - 2: "paused"
+              - 3: "completed"
+        - in: query
+          name: city
+          schema:
+            type: string
+            description: The city of a job that contains the value. Ex. São Paulo.
+        - in: query
+          name: search
+          schema:
+            type: string
+            description: General search.
         - in: query
           name: name
           schema:
@@ -687,6 +698,8 @@ components:
         createdBy:
           type: string
           format: uuid
+        createdDate:
+          type: integer
         regime:
           type: string
         companyName:
