@@ -519,15 +519,22 @@ paths:
           name: companyId
           schema:
             type: string
-            description: The city of a job that contains the value. Ex. São Paulo
+            format: uuid
+          description: The company's ID.
       responses:
         "200":
           description: "successful operation"
           content:
-            image/*:
+            image/png:
               schema:
                 type: string
                 format: binary
+                description: "PNG image"
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+                description: "JPEG image"
         "400":
           $ref: '#/components/responses/BadRequest'
         "404":
