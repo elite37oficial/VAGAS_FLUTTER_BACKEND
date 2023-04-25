@@ -99,6 +99,10 @@ class JobsController extends Controller {
                   : "$where (t1.$key like $newValues";
               break;
             }
+            if (key == 'status') {
+              int valueOfStatus = int.tryParse(value) ?? 1;
+              value = valueOfStatus.toString();
+            }
             if (key.contains('name')) {
               where = where == null
                   ? "where t2.$key like '%$value%'"
