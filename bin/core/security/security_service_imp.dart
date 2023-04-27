@@ -96,6 +96,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
           case 'post-login':
           case 'get-jobs':
           case 'get-jobs/id':
+          case 'post-users':
           case 'post-reset-password-email':
           case 'post-reset-password':
           case 'post-jobs-report':
@@ -109,7 +110,10 @@ class SecurityServiceImp implements SecurityService<JWT> {
             break;
         }
 
-        final String permissionByRoute = '${method.toLowerCase()}-$pathFromUrl';
+        String permissionByRoute = '${method.toLowerCase()}-$pathFromUrl';
+        if (permissionByRoute.contains('get-companies/id')) {
+          permissionByRoute = 'get-companies/id';
+        }
         print(permissionByRoute);
 
         if (request.context['jwt'] == null) {

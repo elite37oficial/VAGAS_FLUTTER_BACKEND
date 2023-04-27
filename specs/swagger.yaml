@@ -30,7 +30,7 @@ paths:
           required: true
           schema:
             type: string
-          description: The user ID
+          description: The job's ID.
       responses:
         "200":
           description: "successful operation"
@@ -50,15 +50,47 @@ paths:
       - "jobs"
       parameters:
         - in: query
+          name: page
+          schema:
+            type: string
+            description: Choose the pagination of the search.Ex page=1 return itens starts from the 1° position, page=2 returns itens starts from the 11° position. If not pass this arguments set to 1.
+        - in: query
+          name: limit
+          schema:
+            type: string
+            description: Set the maximum quantity of itens from a page.
+        - in: query
+          name: status
+          schema:
+            type: integer
+            enum: [0, 1, 2, 3]
+          description: |
+              The status of the resource.
+              - 0: "canceled"
+              - 1: "active"
+              - 2: "paused"
+              - 3: "completed"
+        - in: query
           name: city
           schema:
             type: string
             description: The city of a job that contains the value. Ex. São Paulo.
         - in: query
+          name: search
+          schema:
+            type: string
+            description: General search.
+        - in: query
           name: name
           schema:
             type: string
             description: The name of the company that offers the job.
+        - in: query
+          name: created_by
+          schema:
+            type: string
+            format: uuid
+            description: The ID (uuid) from user that create a job.
         - in: query
           name: seniority
           schema:
@@ -109,14 +141,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/JobEntity"  
+              $ref: "#/components/schemas/JobModel"  
       responses:
-        "200":
-          description: "successful operation"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/JobEntity"
+        "201":
+          description: created successful
         "403":
           $ref: '#/components/responses/Unauthorized'
         "404":
@@ -182,7 +210,7 @@ paths:
             schema:
               $ref: "#/components/schemas/JobReportModel"  
       responses:
-        "200":
+        "201":
           description: "created"
         "404":
           $ref: '#/components/responses/NotFound'
@@ -310,7 +338,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserEntity"
+              $ref: "#/components/schemas/UserModel"
       responses:
         "201":
           description: "created"
@@ -345,6 +373,33 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         "500":
           $ref: '#/components/responses/InternalError'
+  /companies/id/{company_id}:
+    get:
+      tags:
+      - "companies"
+      security:
+        - bearerAuth: [bearerAuth]
+      summary: "get company by id"
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: string
+          description: The company's ID.
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompanyEntity"
+        "403":
+          $ref: '#/components/responses/Unauthorized'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalError'
   /companies:
     get:
       tags:
@@ -376,7 +431,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CompanyEntity"           
+              $ref: "#/components/schemas/CompanyModel"           
       responses:
         "201":
           description: "created"
@@ -464,15 +519,22 @@ paths:
           name: companyId
           schema:
             type: string
-            description: The city of a job that contains the value. Ex. São Paulo
+            format: uuid
+          description: The company's ID.
       responses:
         "200":
           description: "successful operation"
           content:
-            image/*:
+            image/png:
               schema:
                 type: string
                 format: binary
+                description: "PNG image"
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+                description: "JPEG image"
         "400":
           $ref: '#/components/responses/BadRequest'
         "404":
@@ -554,6 +616,7 @@ components:
       properties:
         email:
           type: string
+          format: email
         password:
           type: string
     JobReportModel:
@@ -561,6 +624,7 @@ components:
       properties:
         jobId:
           type: string
+          format: uuid
         description:
           type: string
     CompanyImageModel:
@@ -568,6 +632,7 @@ components:
       properties:
         companyId:
           type: string
+          format: uuid
         image64:
           type: string
     UserEntity:
@@ -575,6 +640,7 @@ components:
       properties:
         id:
           type: string
+          format: uuid
         profileID:
           type: string
           enum:
@@ -586,9 +652,21 @@ components:
           type: string
         email:
           type: string
+          format: email
         password:
           type: string
-        status:
+    UserModel:
+      type: "object"
+      properties:
+        name:
+          type: string
+        phone:
+          type: string
+          format: phone
+        email:
+          type: string
+          format: email
+        password:
           type: string
     ResetPasswordModel:
       type: "object"
@@ -609,10 +687,26 @@ components:
       properties:
         id:
           type: string
+          format: uuid
         companyId:
           type: string
+          format: uuid
         title:
           type: string
+        state:
+          type: string
+        status:
+          type: string
+          enum:
+          - "paused"
+          - "active"
+          - "canceled"
+          - "completed"
+        createdBy:
+          type: string
+          format: uuid
+        createdDate:
+          type: integer
         regime:
           type: string
         companyName:
@@ -626,8 +720,10 @@ components:
       properties:
         id:
           type: string
+          format: uuid
         companyId:
           type: string
+          format: uuid
         title:
           type: string
         description:
@@ -653,11 +749,45 @@ components:
           type: string
         email:
           type: string
+    JobModel:
+      type: "object"
+      properties:
+        company_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        company_description:
+          type: string
+        seniority:
+          type: string
+        regime:
+          type: string
+        salary:
+          type: number
+          format: double
+        state:
+          type: string
+        modality:
+          type: string
+        city:
+          type: string
+        link:
+          type: string
+        whatsapp:
+          type: string
+          format: phone
+        email:
+          type: string
+          format: email
     CompanyEntity:
       type: "object"
       properties:
         id:
           type: string
+          format: uuid
         name:
           type: string
         location:
@@ -666,3 +796,20 @@ components:
           type: string
         status:
           type: string
+          enum:
+            - "active"
+            - "inactive"
+    CompanyModel:
+      type: "object"
+      properties:
+        name:
+          type: string
+        location:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+            - "active"
+            - "inactive"

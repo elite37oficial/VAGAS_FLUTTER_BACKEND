@@ -62,9 +62,9 @@ class CompanyModel {
       location: map['location'],
       description: map['description'],
       createdBy: map['created_by'],
-      createdDate: map['created_date'],
+      createdDate: map['created_date'].toLocal(),
       updatedBy: map['updated_by'],
-      updatedDate: map['updated_date'],
+      updatedDate: (map['updated_date']).toLocal(),
     );
   }
 

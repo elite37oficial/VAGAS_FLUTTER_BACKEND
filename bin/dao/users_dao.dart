@@ -15,6 +15,8 @@ class UserDAO implements DAO<UserModel> {
   @override
   Future<bool> create(UserModel value) async {
     final DateTime now = DateTime.now().toUtc();
+    value.status = 'active';
+    value.profileId = 'Recrutador';
     if (value.password != null) {
       final String password = value.password!;
       final String pass = Password.hash(password, PBKDF2());
@@ -83,12 +85,14 @@ class UserDAO implements DAO<UserModel> {
 
   Future<UserModel?> findByEmail(String email) async {
     var result = await _dbConfiguration.execQuery(
-        'Select id, password, profile_id, email, name from users where email = ?;',
-        [email]);
+      'Select id, password, profile_id, email, name from users where email = ?;',
+      [email],
+    );
 
-    return result.affectedRows == 0
-        ? null
-        : UserModel.fromRequest(result.first.fields);
+    if (result.isEmpty) {
+      return null;
+    }
+    return UserModel.fromRequest(result.first.fields);
   }
 
   @override

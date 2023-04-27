@@ -24,8 +24,25 @@ class CompaniesSecurityController extends Controller {
     router.get('/companies', (Request request) async {
       final userID = _getUserIdFromJWT(request);
       final List<CompanyModel?> result = await _companiesService.findByQuery(
-          queryParam: "t1.created_by = '$userID' and t1.status = '1'");
+          queryParam: "t1.created_by = '$userID'");
       return Response.ok(jsonEncode(result));
+    });
+
+    router.get('/companies/id/<companyID>',
+        (Request request, String companyID) async {
+      if (companyID.isEmpty) {
+        return Response.badRequest();
+      }
+      RegExp uuidRegex = RegExp(
+          '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-1[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\$');
+
+      if (uuidRegex.hasMatch(companyID)) {
+        var result = await _companiesService.findOne(companyID);
+        return result != null
+            ? Response.ok(jsonEncode(result))
+            : Response.notFound('Empresa não encontrada na base de dados.');
+      }
+      return Response.badRequest();
     });
 
     router.post('/companies', (Request request) async {
@@ -76,7 +93,6 @@ class CompaniesSecurityController extends Controller {
       CompanyModel companyModel = CompanyModel();
 
       companyModel.id = statusTO.resourceId;
-      // statusTO.status?.toLowerCase();
 
       final List<StatusTO> statusListFromDB =
           await _companiesService.getStatus();
