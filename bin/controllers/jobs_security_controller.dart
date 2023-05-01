@@ -53,44 +53,56 @@ class JobsSecurityController extends Controller {
       final StatusTO statusTO = StatusTO.fromRequest(body);
 
       if (statusTO.resourceId == null || statusTO.status == null) {
-        return Response.badRequest();
+        return Response.badRequest(
+          body: 'O id da vaga e o status são obrigatórios',
+        );
       }
       JobModel jobModel = JobModel();
       // jobModel.status = statusTO.status;
       jobModel.id = statusTO.resourceId;
 
       final List<StatusTO> statusListFromDb = await _jobsService.getStatus();
-      final List<String?> listOfStatus = statusListFromDb
-          .map((statusTo) => statusTo.status?.toLowerCase())
-          .toList();
+      // final List<String?> listOfStatus = statusListFromDb
+      //     .map((statusTo) => statusTo.status?.toLowerCase())
+      //     .toList();
 
-      if (!listOfStatus.contains(statusTO.status?.toLowerCase())) {
-        return Response.badRequest();
+      final List<int?> listOfStatus =
+          statusListFromDb.map((statusTo) => statusTo.id).toList();
+
+      if (!listOfStatus.contains(statusTO.status)) {
+        return Response.badRequest(body: 'O status informado não é válido.');
       }
 
       jobModel.status = statusListFromDb
-          .firstWhereOrNull((element) =>
-              element.status?.toLowerCase() == statusTO.status?.toLowerCase())
+          .firstWhereOrNull((element) => element.id == statusTO.status)
           ?.id;
 
       final JobModel? jobFromDB = await _jobsService.findOne(jobModel.id!);
 
       if (jobFromDB == null) {
-        return Response.notFound('Not Found.');
+        return Response.notFound(
+          'O id infomado não corresponde a uma vaga na base de dados.',
+        );
       }
 
       jobModel.createdBy = jobFromDB.createdBy;
 
       final bool valid = await _validateAuth(jobModel, request);
+
       if (!valid) {
-        return Response.forbidden('Not Authorized.');
+        return Response.forbidden(
+          'Você não tem permissão para modificar este recurso.',
+        );
       }
+
       final userID = _getUserIdFromJWT(request);
       jobModel.changedBy = userID;
 
       bool result = await _jobsService.updateStatus(jobModel);
 
-      return result ? Response(201) : Response(500);
+      return result
+          ? Response(201, body: 'Status atualizado com sucesso!')
+          : Response(500);
     });
 
     router.post('/jobs', (Request request) async {
