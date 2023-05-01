@@ -31,7 +31,7 @@ class CompaniesSecurityController extends Controller {
     router.get('/companies/id/<companyID>',
         (Request request, String companyID) async {
       if (companyID.isEmpty) {
-        return Response.badRequest();
+        return Response.badRequest(body: 'O campo id é obrigatório');
       }
       RegExp uuidRegex = RegExp(
           '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-1[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\$');
@@ -87,42 +87,49 @@ class CompaniesSecurityController extends Controller {
       final String body = await request.readAsString();
       final StatusTO statusTO = StatusTO.fromRequest(body);
       if (statusTO.resourceId == null || statusTO.status == null) {
-        return Response.badRequest();
+        return Response.badRequest(
+            body: 'Os campos Id e status são obrigatórios');
       }
-
-      CompanyModel companyModel = CompanyModel();
-
-      companyModel.id = statusTO.resourceId;
 
       final List<StatusTO> statusListFromDB =
           await _companiesService.getStatus();
-      final List<String?> listOfStatus =
-          statusListFromDB.map((e) => e.status?.toLowerCase()).toList();
-      companyModel.status = statusListFromDB
-          .firstWhereOrNull(
-              (e) => e.status?.toLowerCase() == statusTO.status?.toLowerCase())
-          ?.id;
 
-      if (!listOfStatus.contains(statusTO.status?.toLowerCase())) {
-        return Response.badRequest();
+      // final List<String?> listOfStatus = statusListFromDB
+      //     .map((statusTo) => statusTo.name?.toLowerCase())
+      //     .toList();
+      final List<int?> listOfId =
+          statusListFromDB.map((statusTo) => statusTo.id).toList();
+
+      if (!listOfId.contains(statusTO.status)) {
+        return Response.badRequest(body: 'O status informado não é válido.');
       }
+
+      CompanyModel companyModel = CompanyModel()
+        ..id = statusTO.resourceId
+        ..status = statusListFromDB
+            .firstWhereOrNull((statusToFromDB) =>
+                statusToFromDB.id?.toString() == statusTO.status?.toString())
+            ?.id;
+
       final CompanyModel? companyModelFromDB =
           await _companiesService.findOne(companyModel.id!);
 
       if (companyModelFromDB == null) {
-        return Response.notFound('Not Found');
+        return Response.notFound(
+            'Não existe uma empresa com o Id informado na base de dados');
       }
       companyModel.createdBy = companyModelFromDB.createdBy;
 
       final JWT jwt = request.context['jwt'] as JWT;
       final String profileID = jwt.payload['roles'];
       bool valid = true;
-      if (!(profileID == "Admin")) {
+      if (!(profileID.toLowerCase() == "admin")) {
         valid = await _validateAuth(companyModel, request);
       }
 
       if (!valid) {
-        return Response.forbidden('Not Authorized.');
+        return Response.forbidden(
+            'Voce não tem permissão para editar esse recurso.');
       }
 
       final String userIdFromJWT = _getUserIdFromJWT(request);
