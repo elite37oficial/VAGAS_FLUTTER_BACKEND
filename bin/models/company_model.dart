@@ -61,10 +61,13 @@ class CompanyModel {
       name: map['name'],
       location: map['location'],
       description: map['description'],
+      status: map['status'] != null ? (map['status']) : null,
       createdBy: map['created_by'],
-      createdDate: map['created_date'].toLocal(),
+      createdDate:
+          map['created_date'] != null ? (map['created_date']).toLocal() : null,
       updatedBy: map['updated_by'],
-      updatedDate: (map['updated_date']).toLocal(),
+      updatedDate:
+          map['updated_date'] != null ? (map['updated_date']).toLocal() : null,
     );
   }
 
