@@ -14,7 +14,7 @@ class CompaniesDAO implements DAO<CompanyModel> {
   Future<bool> create(CompanyModel value) async {
     final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
-        'INSERT INTO companies (id, name, location,status, description, created_by, created_date) values (?,?,?,?,?,?);',
+        'INSERT INTO companies (id, name, location, status, description, created_by, created_date) values (?,?,?,?,?,?,?);',
         [
           _uuid.v1(),
           value.name,
@@ -58,8 +58,9 @@ class CompaniesDAO implements DAO<CompanyModel> {
   @override
   Future<CompanyModel?> findOne(String id) async {
     var result = await _dbConfiguration.execQuery(
-        'SELECT t1.id, t1.name, t1.location, t1.description, t1.created_by, t1.created_date, t1.updated_by, t1.updated_date FROM companies AS t1 where t1.id = ?;',
-        [id]);
+      'SELECT t1.id, t1.name, t1.location, t1.description, t1.created_by, t1.created_date, t1.updated_by, t1.updated_date, t2.id as status FROM companies AS t1 inner join companies_status as t2 where (t1.status = t2.id) and (t1.id = ?);',
+      [id],
+    );
 
     return result.isEmpty ? null : CompanyModel.fromMap(result.first.fields);
   }
