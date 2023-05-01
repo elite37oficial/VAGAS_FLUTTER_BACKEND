@@ -595,22 +595,26 @@ components:
         id:
           type: string
         status:
-          type: string
-          enum:
-          - "active"
-          - "canceled"
-          - "paused"
-          - "closed"
+          type: integer
+          enum: [0, 1, 2, 3]
+          description: |
+              The status of the resource.
+              - 0: "canceled"
+              - 1: "active"
+              - 2: "paused"
+              - 3: "completed"
     CompaniesStatusModel:
       type: "object"
       properties:
         id:
           type: string
         status:
-          type: string
-          enum:
-          - "active"
-          - "inactive"
+          type: integer
+          enum: [0, 1]
+          description: |
+              The status of the resource.
+              - 0: "inactive"
+              - 1: "active"
     AuthModel:
       type: "object"
       properties:
@@ -795,10 +799,12 @@ components:
         description:
           type: string
         status:
-          type: string
-          enum:
-            - "active"
-            - "inactive"
+          type: integer
+          enum: [0, 1]
+          description: |
+              The status of the resource.
+              - 0: "inactive"
+              - 1: "active"
     CompanyModel:
       type: "object"
       properties:
@@ -808,8 +814,3 @@ components:
           type: string
         description:
           type: string
-        status:
-          type: string
-          enum:
-            - "active"
-            - "inactive"
