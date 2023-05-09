@@ -3,7 +3,7 @@ class JobModel {
   final String? companyId;
   final String? title;
   final String? description;
-  final double? salary;
+  final num? salary;
   final String? modality;
   final String? seniority;
   final String? city;

@@ -6,7 +6,7 @@ class JobDetails extends JobModel {
   final String? nameCompany;
   final String? title;
   final String? description;
-  final double? salary;
+  final num? salary;
   final String? modality;
   final String? city;
   final String? state;
