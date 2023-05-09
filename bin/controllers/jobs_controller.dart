@@ -27,10 +27,30 @@ class JobsController extends Controller {
           return Response.badRequest();
         }
         var result = await _service.findByQuery(queryParam: queryParams);
-        return Response.ok(jsonEncode(result));
+        final String limit = request.url.queryParameters['limit'] ?? '';
+        print('limit: $limit');
+        final int totalPages = limit.isEmpty
+            ? (result.length / 10).ceil()
+            : (result.length / int.parse(limit)).ceil();
+
+        print('totalContent: ${result.length}');
+        final response = {
+          "totalPages": totalPages.toString(),
+          "totalContents": result.length.toString(),
+          "data": result
+        };
+        return Response.ok(jsonEncode(response));
       }
       var result = await _service.findByQuery();
-      return Response.ok(jsonEncode(result));
+      final int totalPages = (result.length / 10).ceil();
+      print('totalContent: ${result.length}');
+
+      final response = {
+        "totalPages": totalPages.toString(),
+        "totalContents": result.length.toString(),
+        "data": result
+      };
+      return Response.ok(jsonEncode(response));
     });
 
     router.get('/jobs/id/<id>', (Request request, String id) async {
@@ -133,11 +153,13 @@ class JobsController extends Controller {
       }
     });
 
-    if (where!.trim().endsWith('and')) {
-      int index = where!.lastIndexOf('and');
-      where = where!.replaceRange(index, null, '');
+    if (where != null) {
+      if (where!.trim().endsWith('and')) {
+        int index = where!.lastIndexOf('and');
+        where = where!.replaceRange(index, null, '');
+      }
+      return "$where ${pagination ?? ''}";
     }
-
-    return "$where ${pagination ?? ''}";
+    return pagination;
   }
 }
