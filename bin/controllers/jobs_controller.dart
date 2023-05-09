@@ -21,19 +21,27 @@ class JobsController extends Controller {
 
     router.get('/jobs', (Request request) async {
       final bool hasQuery = request.url.hasQuery;
+      int totalPages = 0;
+      int totalItens = 0;
+      var result = [];
       if (hasQuery) {
         final queryParams = _validateQueryParams(request.url.queryParameters);
         if (queryParams == null) {
           return Response.badRequest();
         }
-        var result = await _service.findByQuery(queryParam: queryParams);
-        final int totalItens = await _service.getTotalPage(queryParams);
+        result = await _service.findByQuery(queryParam: queryParams);
+        totalItens = await _service.getTotalPage(queryParams);
         final String limit = request.url.queryParameters['limit'] ?? '';
 
-        final int totalPages = limit.isEmpty
+        totalPages = limit.isEmpty
             ? (totalItens / 10).ceil()
             : (totalItens / int.parse(limit)).ceil();
+      } else {
+        result = await _service.findByQuery();
+      }
 
+      if (request.url.queryParameters.containsKey('page') ||
+          request.url.queryParameters.containsKey('limit')) {
         final response = {
           "actualPage": request.url.queryParameters['page'] ?? '1',
           "totalPages": totalPages.toString(),
@@ -41,16 +49,9 @@ class JobsController extends Controller {
           "data": result
         };
         return Response.ok(jsonEncode(response));
+      } else {
+        return Response.ok(jsonEncode(result));
       }
-      var result = await _service.findByQuery();
-      final int totalPages = (result.length / 10).ceil();
-
-      final response = {
-        "totalPages": totalPages.toString(),
-        "totalContents": result.length.toString(),
-        "data": result
-      };
-      return Response.ok(jsonEncode(response));
     });
 
     router.get('/jobs/id/<id>', (Request request, String id) async {
