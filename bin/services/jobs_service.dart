@@ -39,4 +39,9 @@ class JobsService implements GenericService<JobModel> {
   Future<List<StatusTO>> getStatus() async {
     return await _dao.getStatus();
   }
+
+  @override
+  Future<int> getTotalPage(String? queryParam) async {
+    return await _dao.getTotalPage(queryParam);
+  }
 }

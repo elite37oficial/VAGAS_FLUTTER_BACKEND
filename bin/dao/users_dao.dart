@@ -126,4 +126,10 @@ class UserDAO implements DAO<UserModel> {
 
     return statusList;
   }
+
+  @override
+  Future<int> getTotalPage(String? queryParam) {
+    // TODO: implement getTotalPage
+    throw UnimplementedError();
+  }
 }

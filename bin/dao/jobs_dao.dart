@@ -1,3 +1,4 @@
+import 'package:mysql1/mysql1.dart';
 import 'package:uuid/uuid.dart';
 import '../database/db_configuration.dart';
 import '../models/job_details.dart';
@@ -122,5 +123,24 @@ class JobDAO implements DAO<JobModel> {
         .cast<StatusTO>();
 
     return statusToList;
+  }
+
+  @override
+  Future<int> getTotalPage(String? queryParam) async {
+    String query = '';
+    if (queryParam != null) {
+      if (queryParam.contains('limit')) {
+        int index = queryParam.lastIndexOf('limit');
+        query = queryParam.replaceRange(index, null, '');
+      }
+
+      if (query.trim().startsWith('and')) {
+        query = query.replaceFirst('and', 'where').trim();
+      }
+    }
+    var result = await _dbConfiguration.execQuery(
+        "Select count(*) as total_Jobs from jobs as t1 $query;") as Results;
+    List<int> list = result.map<int>((e) => e.fields.values.first).toList();
+    return list.first;
   }
 }

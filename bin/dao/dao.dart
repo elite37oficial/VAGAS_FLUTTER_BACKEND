@@ -8,4 +8,5 @@ abstract class DAO<T> {
   Future<bool> create(T value);
   Future<bool> updateStatus(T value);
   Future<List<StatusTO>> getStatus();
+  Future<int> getTotalPage(String? queryParam);
 }
