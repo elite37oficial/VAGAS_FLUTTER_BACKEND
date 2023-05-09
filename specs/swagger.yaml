@@ -594,6 +594,7 @@ components:
       properties:
         id:
           type: string
+          format: uuid
         status:
           type: integer
           enum: [0, 1, 2, 3]
@@ -608,6 +609,7 @@ components:
       properties:
         id:
           type: string
+          format: uuid
         status:
           type: integer
           enum: [0, 1]
@@ -677,8 +679,10 @@ components:
       properties:
         token:
           type: string
+          format: uuid
         userId:
           type: string
+          format: uuid
         date:
           type: string
           format: date-time
