@@ -7,4 +7,5 @@ abstract class GenericService<T> {
   Future<bool> save(T value);
   Future<bool> updateStatus(T value);
   Future<List<StatusTO>> getStatus();
+  Future<int> getTotalPage(String? queryParam);
 }

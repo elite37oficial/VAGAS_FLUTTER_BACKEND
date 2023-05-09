@@ -21,16 +21,37 @@ class JobsController extends Controller {
 
     router.get('/jobs', (Request request) async {
       final bool hasQuery = request.url.hasQuery;
+      int totalPages = 0;
+      int totalItens = 0;
+      var result = [];
       if (hasQuery) {
         final queryParams = _validateQueryParams(request.url.queryParameters);
         if (queryParams == null) {
           return Response.badRequest();
         }
-        var result = await _service.findByQuery(queryParam: queryParams);
+        result = await _service.findByQuery(queryParam: queryParams);
+        totalItens = await _service.getTotalPage(queryParams);
+        final String limit = request.url.queryParameters['limit'] ?? '';
+
+        totalPages = limit.isEmpty
+            ? (totalItens / 10).ceil()
+            : (totalItens / int.parse(limit)).ceil();
+      } else {
+        result = await _service.findByQuery();
+      }
+
+      if (request.url.queryParameters.containsKey('page') ||
+          request.url.queryParameters.containsKey('limit')) {
+        final response = {
+          "actualPage": request.url.queryParameters['page'] ?? '1',
+          "totalPages": totalPages.toString(),
+          "totalContents": totalItens.toString(),
+          "data": result
+        };
+        return Response.ok(jsonEncode(response));
+      } else {
         return Response.ok(jsonEncode(result));
       }
-      var result = await _service.findByQuery();
-      return Response.ok(jsonEncode(result));
     });
 
     router.get('/jobs/id/<id>', (Request request, String id) async {
@@ -60,6 +81,7 @@ class JobsController extends Controller {
   String? _validateQueryParams(Map<String, String> queryParams) {
     String? where;
     int page = 1;
+    int limit = 10;
     String? pagination;
     queryParams.forEach((key, value) {
       switch (key) {
@@ -114,10 +136,9 @@ class JobsController extends Controller {
               if (page < 0) page *= -1;
               break;
             } else if (key == 'limit') {
-              int limit = int.tryParse(value) ?? 10;
+              limit = int.tryParse(value) ?? limit;
               if (limit < 0) limit *= -1;
               value = limit.toString();
-              pagination = "limit $value offset ${(page - 1) * 10}";
               break;
             }
 
@@ -133,11 +154,15 @@ class JobsController extends Controller {
       }
     });
 
-    if (where!.trim().endsWith('and')) {
-      int index = where!.lastIndexOf('and');
-      where = where!.replaceRange(index, null, '');
-    }
+    pagination = "limit $limit offset ${(page - 1) * limit}";
+    if (where != null) {
+      if (where!.trim().endsWith('and')) {
+        int index = where!.lastIndexOf('and');
+        where = where!.replaceRange(index, null, '');
+      }
 
-    return "$where ${pagination ?? ''}";
+      return "$where $pagination";
+    }
+    return pagination;
   }
 }

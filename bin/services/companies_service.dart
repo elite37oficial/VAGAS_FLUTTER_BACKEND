@@ -38,4 +38,10 @@ class CompaniesService implements GenericService<CompanyModel> {
   Future<List<StatusTO>> getStatus() async {
     return await _companiesDAO.getStatus();
   }
+
+  @override
+  Future<int> getTotalPage(String? queryParam) {
+    // TODO: implement getTotalPage
+    throw UnimplementedError();
+  }
 }

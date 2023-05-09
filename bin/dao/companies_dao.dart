@@ -105,4 +105,10 @@ class CompaniesDAO implements DAO<CompanyModel> {
 
     return statusList;
   }
+
+  @override
+  Future<int> getTotalPage(String? queryParam) {
+    // TODO: implement getTotalPage
+    throw UnimplementedError();
+  }
 }
