@@ -357,6 +357,8 @@ paths:
     put:
       tags:
       - "users"
+      security:
+        - bearerAuth: [bearerAuth]
       summary: "update a user"
       requestBody:
         required: true
@@ -452,7 +454,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CompanyEntity"
+              $ref: "#/components/schemas/CompanyModel"
       responses:
         "201":
           description: "successful operation"
@@ -664,6 +666,9 @@ components:
     UserModel:
       type: "object"
       properties:
+        id:
+          type: string
+          format: uuid
         name:
           type: string
         phone:
@@ -672,20 +677,18 @@ components:
         email:
           type: string
           format: email
-        password:
-          type: string
     ResetPasswordModel:
+      type: "object"
+      properties:
+        email:
+          type: string
+          format: email
+    ResetPasswordEntity:
       type: "object"
       properties:
         token:
           type: string
           format: uuid
-        userId:
-          type: string
-          format: uuid
-        date:
-          type: string
-          format: date-time
         password:
           type: string
         passwordConfirmation:
