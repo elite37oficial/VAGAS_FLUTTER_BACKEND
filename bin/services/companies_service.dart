@@ -23,7 +23,7 @@ class CompaniesService implements GenericService<CompanyModel> {
   }
 
   @override
-  Future<bool> save(CompanyModel value) {
+  Future<String> save(CompanyModel value) {
     return value.id == null
         ? _companiesDAO.create(value)
         : _companiesDAO.update(value);

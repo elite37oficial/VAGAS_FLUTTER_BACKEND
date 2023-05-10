@@ -1,3 +1,4 @@
+import 'package:mysql1/mysql1.dart';
 import 'package:uuid/uuid.dart';
 
 import '../database/db_configuration.dart';
@@ -11,12 +12,13 @@ class CompaniesDAO implements DAO<CompanyModel> {
   CompaniesDAO(this._dbConfiguration, this._uuid);
 
   @override
-  Future<bool> create(CompanyModel value) async {
+  Future<String> create(CompanyModel value) async {
     final DateTime now = DateTime.now().toUtc();
+    final String id = _uuid.v1();
     var result = await _dbConfiguration.execQuery(
         'INSERT INTO companies (id, name, location, status, description, created_by, created_date) values (?,?,?,?,?,?,?);',
         [
-          _uuid.v1(),
+          id,
           value.name,
           value.location,
           value.status,
@@ -24,7 +26,11 @@ class CompaniesDAO implements DAO<CompanyModel> {
           value.createdBy,
           now
         ]);
-    return result.affectedRows > 0;
+    if (result.affectedRows > 0) {
+      return id;
+    } else {
+      return '';
+    }
   }
 
   @override
@@ -66,7 +72,7 @@ class CompaniesDAO implements DAO<CompanyModel> {
   }
 
   @override
-  Future<bool> update(CompanyModel value) async {
+  Future<String> update(CompanyModel value) async {
     final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
       'UPDATE companies set name = ?, location = ?, description = ?, updated_by = ?, updated_date = ? where id = ?',
@@ -80,7 +86,11 @@ class CompaniesDAO implements DAO<CompanyModel> {
       ],
     );
 
-    return result.affectedRows > 0;
+    if (result.affectedRows > 0) {
+      return value.id!;
+    } else {
+      return '';
+    }
   }
 
   @override
