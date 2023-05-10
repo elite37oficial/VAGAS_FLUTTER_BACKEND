@@ -14,12 +14,13 @@ class JobDAO implements DAO<JobModel> {
   JobDAO(this._dbConfiguration, this.uuid);
 
   @override
-  Future<bool> create(JobModel value) async {
+  Future<String> create(JobModel value) async {
     final DateTime now = DateTime.now().toUtc();
+    final String id = uuid.v1();
     var result = await _dbConfiguration.execQuery(
         'INSERT INTO jobs (id, company_id, title, status, description, salary, modality, seniority, regime, link, whatsapp, email, city, state, created_by, created_date) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?); ',
         [
-          uuid.v1(),
+          id,
           value.companyId,
           value.title,
           value.status,
@@ -36,7 +37,11 @@ class JobDAO implements DAO<JobModel> {
           value.createdBy,
           now
         ]);
-    return result.affectedRows > 0;
+    if (result.affectedRows > 0) {
+      return id;
+    } else {
+      return '';
+    }
   }
 
   @override
@@ -58,7 +63,7 @@ class JobDAO implements DAO<JobModel> {
   }
 
   @override
-  Future<bool> update(JobModel value) async {
+  Future<String> update(JobModel value) async {
     final DateTime now = DateTime.now().toUtc();
     var result = await _dbConfiguration.execQuery(
       'UPDATE jobs set company_id = ?, title = ?, description = ?, salary = ?, modality = ?,seniority = ?, regime = ?, link = ?, whatsapp = ?, email = ?, city = ?, state = ?, updated_by = ?, updated_date = ? where id = ?',
@@ -81,7 +86,11 @@ class JobDAO implements DAO<JobModel> {
       ],
     );
 
-    return result.affectedRows > 0;
+    if (result.affectedRows > 0) {
+      return value.id!;
+    } else {
+      return '';
+    }
   }
 
   @override

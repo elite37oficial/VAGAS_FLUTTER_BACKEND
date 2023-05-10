@@ -11,7 +11,7 @@ class UsersService {
     return result;
   }
 
-  Future<bool> save(UserModel value) async {
+  Future<String> save(UserModel value) async {
     return value.id != null
         ? await userDAO.update(value)
         : await userDAO.create(value);

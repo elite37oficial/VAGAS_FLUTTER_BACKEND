@@ -44,8 +44,8 @@ class JobsSecurityController extends Controller {
       final userID = _getUserIdFromJWT(request);
       jobModel.changedBy = userID;
 
-      final bool result = await _jobsService.save(jobModel);
-      return result ? Response(201) : Response(500);
+      final String result = await _jobsService.save(jobModel);
+      return result.isNotEmpty ? Response(201) : Response(500);
     });
 
     router.put('/jobs-status', (Request request) async {
@@ -112,7 +112,7 @@ class JobsSecurityController extends Controller {
       jobmodel.createdBy = userIdFromJWT;
       jobmodel.status = 1;
       var result = await _jobsService.save(jobmodel);
-      return result ? Response(201) : Response(404);
+      return result.isNotEmpty ? Response(201, body: result) : Response(404);
     });
     return createHandler(
       router: router,

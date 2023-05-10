@@ -69,7 +69,7 @@ class UsersSecurityController extends Controller {
       }
 
       var result = await _usersService.save(userModel);
-      return result ? Response(201) : Response(500);
+      return result.isNotEmpty ? Response(201) : Response(500);
     });
 
     return createHandler(

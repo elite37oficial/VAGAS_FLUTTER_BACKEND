@@ -24,7 +24,7 @@ class JobsService implements GenericService<JobModel> {
   }
 
   @override
-  Future<bool> save(JobModel value) async {
+  Future<String> save(JobModel value) async {
     return value.id != null
         ? await _dao.update(value)
         : await _dao.create(value);
