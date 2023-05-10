@@ -365,7 +365,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserEntity"
+              $ref: "#/components/schemas/UserModel"
       responses:
         "200":
           description: "successful operation"
@@ -674,9 +674,6 @@ components:
         phone:
           type: string
           format: phone
-        email:
-          type: string
-          format: email
     ResetPasswordModel:
       type: "object"
       properties:
