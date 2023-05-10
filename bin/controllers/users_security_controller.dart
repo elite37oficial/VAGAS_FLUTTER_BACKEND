@@ -64,6 +64,7 @@ class UsersSecurityController extends Controller {
 
       final bool isValid = await _validateAuth(request);
 
+      userModel.changedBy = _getUserIdFromJWT(request);
       if (!isValid) {
         return Response.forbidden('Not Authorized');
       }
