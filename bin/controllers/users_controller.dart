@@ -30,7 +30,9 @@ class UsersController extends Controller {
         return Response.badRequest(body: 'Email já está em uso');
       }
       var result = await _usersService.save(userModel);
-      return result ? Response(201) : Response.badRequest();
+      return result.isNotEmpty
+          ? Response(201, body: result)
+          : Response.badRequest();
     });
 
     return createHandler(

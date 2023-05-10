@@ -13,7 +13,7 @@ class UserDAO implements DAO<UserModel> {
   UserDAO(this._dbConfiguration, this.uuid);
 
   @override
-  Future<bool> create(UserModel value) async {
+  Future<String> create(UserModel value) async {
     final DateTime now = DateTime.now().toUtc();
     value.status = 'active';
     value.profileId = 'Recrutador';
@@ -34,9 +34,13 @@ class UserDAO implements DAO<UserModel> {
             id,
             now
           ]);
-      return result.affectedRows > 0;
+      if (result.affectedRows > 0) {
+        return id;
+      } else {
+        return '';
+      }
     } else {
-      return false;
+      return '';
     }
   }
 
@@ -63,7 +67,7 @@ class UserDAO implements DAO<UserModel> {
   }
 
   @override
-  Future<bool> update(UserModel value) async {
+  Future<String> update(UserModel value) async {
     final DateTime now = DateTime.now().toUtc();
     final String password = value.password ?? "";
     final String pass = Password.hash(password, PBKDF2());
@@ -80,7 +84,11 @@ class UserDAO implements DAO<UserModel> {
           value.id
         ]);
 
-    return result.affectedRows > 0;
+    if (result.affectedRows > 0) {
+      return value.id!;
+    } else {
+      return '';
+    }
   }
 
   Future<UserModel?> findByEmail(String email) async {
