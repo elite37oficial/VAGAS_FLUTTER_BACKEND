@@ -33,7 +33,7 @@ paths:
           description: The job's ID.
       responses:
         "200":
-          description: "successful operation"
+          description: "Return without pagination"
           content:
             application/json:
               schema:
@@ -141,10 +141,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/JobModel"  
+              $ref: "#/components/schemas/JobModel"
       responses:
         "201":
-          description: created successful
+          description: "created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobPostModel"
         "403":
           $ref: '#/components/responses/Unauthorized'
         "404":
@@ -277,7 +281,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ResetPasswordModel"
+              $ref: "#/components/schemas/ResetPasswordEmailModel"
       responses:
         "200":
           description: "Password reset email sent."
@@ -295,7 +299,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ResetPasswordModel"
+              $ref: "#/components/schemas/ResetPasswordEntity"
       responses:
         "200":
           description: "successful operation"
@@ -345,9 +349,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/UserEntity"
+                $ref: "#/components/schemas/UserEntity"
         "400":
           $ref: '#/components/responses/BadRequest'
         "404":
@@ -365,7 +367,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserModel"
+              $ref: "#/components/schemas/UserPutModel"
       responses:
         "200":
           description: "successful operation"
@@ -455,7 +457,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CompanyModel"
+              $ref: "#/components/schemas/CompanyPutModel"
       responses:
         "201":
           description: "successful operation"
@@ -668,9 +670,21 @@ components:
         email:
           type: string
           format: email
+    UserModel:
+      type: "object"
+      properties:
+        name:
+          type: string
+        phone:
+          type: string
+          format: phone
+        email:
+          type : string
+          format: email
         password:
           type: string
-    UserModel:
+          description: A senha deve conter pelo menos 8 caracteres
+    UserPutModel:
       type: "object"
       properties:
         id:
@@ -681,7 +695,7 @@ components:
         phone:
           type: string
           format: phone
-    ResetPasswordModel:
+    ResetPasswordEmailModel:
       type: "object"
       properties:
         email:
@@ -743,8 +757,6 @@ components:
           type: string
         description:
           type: string
-        companyDescription:
-          type: string
         seniority:
           type: string
         regime:
@@ -764,6 +776,12 @@ components:
           type: string
         email:
           type: string
+    JobPostModel:
+      type: "object"
+      properties:
+        id:
+          type: string
+          format: uuid
     JobModel:
       type: "object"
       properties:
@@ -773,8 +791,6 @@ components:
         title:
           type: string
         description:
-          type: string
-        company_description:
           type: string
         seniority:
           type: string
@@ -819,6 +835,18 @@ components:
     CompanyModel:
       type: "object"
       properties:
+        name:
+          type: string
+        location:
+          type: string
+        description:
+          type: string
+    CompanyPutModel:
+      type: "object"
+      properties:
+        id:
+          type: string
+          format: uuid
         name:
           type: string
         location:
