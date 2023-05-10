@@ -436,7 +436,8 @@ paths:
               $ref: "#/components/schemas/CompanyModel"           
       responses:
         "201":
-          description: "created"
+          $ref: '#/components/responses/CompanyResponse'
+          # description: "created"
         "400":
           $ref: '#/components/responses/BadRequest'
         "403":
@@ -575,6 +576,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEntity'
+    CompanyResponse:
+      description: companyId
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CompanyResponse'
   schemas:
     ErrorEntity:
       type: "object"
@@ -818,3 +825,9 @@ components:
           type: string
         description:
           type: string
+    CompanyResponse:
+      type: "object"
+      properties:
+        id:
+          type: string
+          format: uuid
