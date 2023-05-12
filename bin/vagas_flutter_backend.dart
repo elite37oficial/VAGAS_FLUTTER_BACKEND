@@ -1,5 +1,6 @@
 import 'package:shelf_swagger_ui/shelf_swagger_ui.dart';
 
+import 'controllers/cafe_controller.dart';
 import 'controllers/companies_images_controller.dart';
 import 'controllers/companies_security_controller.dart';
 import 'controllers/jobs_controller.dart';
@@ -30,6 +31,7 @@ void main() async {
   final cascade = Cascade()
       .add(di.get<LoginController>().getHandler())
       .add(di.get<PingController>().handler)
+      .add(di.get<CafeController>().handler)
       .add(di.get<JobsController>().getHandler())
       .add(di.get<UsersController>().getHandler())
       .add(di.get<ResetPasswordsController>().getHandler())

@@ -1,6 +1,7 @@
 import 'package:dotenv/dotenv.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../controllers/cafe_controller.dart';
 import '../../controllers/companies_images_controller.dart';
 import '../../controllers/companies_security_controller.dart';
 import '../../controllers/jobs_controller.dart';
@@ -65,6 +66,7 @@ class Injects {
     di.register<LoginController>(() =>
         LoginController(di.get<AuthService>(), di.get<SecurityService>()));
     di.register<PingController>(() => PingController());
+    di.register<CafeController>(() => CafeController());
     di.register<JobDAO>(
         () => JobDAO(di.get<DBConfiguration>(), di.get<Uuid>()));
     di.register<JobsService>(() => JobsService(di.get<JobDAO>()));
