@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
@@ -64,7 +63,7 @@ class UsersSecurityController extends Controller {
 
       final bool isValid = await _validateAuth(request);
 
-      userModel.changedBy = _getUserIdFromJWT(request);
+      userModel.changedBy = getUserIdFromJWT(request);
       if (!isValid) {
         return Response.forbidden('Not Authorized');
       }
@@ -82,18 +81,12 @@ class UsersSecurityController extends Controller {
   }
 
   Future<bool> _validateAuth(Request request) async {
-    final String userIdFromJWT = _getUserIdFromJWT(request);
+    final String userIdFromJWT = getUserIdFromJWT(request);
     var result = await _usersService.findOne(userIdFromJWT);
     var idUser = result?.id;
     if (userIdFromJWT != idUser) {
       return false;
     }
     return true;
-  }
-
-  String _getUserIdFromJWT(Request request) {
-    final JWT jwt = request.context['jwt'] as JWT;
-    final userID = jwt.payload['userID'];
-    return userID;
   }
 }

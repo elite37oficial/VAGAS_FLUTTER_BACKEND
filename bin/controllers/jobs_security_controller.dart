@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
@@ -36,12 +35,12 @@ class JobsSecurityController extends Controller {
         return Response(400);
       }
 
-      final bool isValid = await _validateAuth(job, request);
+      final bool isValid = await validateAuth(job.createdBy, request);
 
       if (!isValid) {
         return Response.forbidden('Not Authorized.');
       }
-      final userID = _getUserIdFromJWT(request);
+      final userID = getUserIdFromJWT(request);
       jobModel.changedBy = userID;
 
       final String result = await _jobsService.save(jobModel);
@@ -87,7 +86,7 @@ class JobsSecurityController extends Controller {
 
       jobModel.createdBy = jobFromDB.createdBy;
 
-      final bool valid = await _validateAuth(jobModel, request);
+      final bool valid = await validateAuth(jobModel.createdBy, request);
 
       if (!valid) {
         return Response.forbidden(
@@ -95,7 +94,7 @@ class JobsSecurityController extends Controller {
         );
       }
 
-      final userID = _getUserIdFromJWT(request);
+      final userID = getUserIdFromJWT(request);
       jobModel.changedBy = userID;
 
       bool result = await _jobsService.updateStatus(jobModel);
@@ -108,7 +107,7 @@ class JobsSecurityController extends Controller {
     router.post('/jobs', (Request request) async {
       var body = await request.readAsString();
       JobModel jobmodel = JobModel.fromJson(jsonDecode(body));
-      final String userIdFromJWT = _getUserIdFromJWT(request);
+      final String userIdFromJWT = getUserIdFromJWT(request);
       jobmodel.createdBy = userIdFromJWT;
       jobmodel.status = 1;
       var result = await _jobsService.save(jobmodel);
@@ -122,21 +121,5 @@ class JobsSecurityController extends Controller {
       middlewares: middlewares,
       isJsonMimeType: isJsonMimeType,
     );
-  }
-
-  Future<bool> _validateAuth(JobModel job, Request request) async {
-    final String createdBy = job.createdBy!;
-    final String userIdFromJWT = _getUserIdFromJWT(request);
-
-    if (userIdFromJWT != createdBy) {
-      return false;
-    }
-    return true;
-  }
-
-  String _getUserIdFromJWT(Request request) {
-    final JWT jwt = request.context['jwt'] as JWT;
-    final userID = jwt.payload['userID'];
-    return userID;
   }
 }
