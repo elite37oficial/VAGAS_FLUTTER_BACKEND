@@ -39,11 +39,14 @@ class CompaniesImageController extends Controller {
 
       try {
         final file = File('${directory.path}/${map['companyId']}.$extension');
-        if (!file.existsSync()) {
-          file.writeAsBytesSync(bytes);
-          return Response(201);
+        bool existFyle = false;
+        if (file.existsSync()) {
+          existFyle = true;
         }
-        return Response.notFound('arquivo já existe!');
+        file.writeAsBytesSync(bytes);
+        return existFyle
+            ? Response(201, body: 'Imagem alterada com sucesso!')
+            : Response(201, body: 'Imagem salva com sucesso!');
       } catch (e) {
         print(e.toString());
         return Response.internalServerError();
