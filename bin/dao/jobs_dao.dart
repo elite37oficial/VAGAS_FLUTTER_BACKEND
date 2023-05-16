@@ -137,18 +137,24 @@ class JobDAO implements DAO<JobModel> {
   @override
   Future<int> getTotalPage(String? queryParam) async {
     String query = '';
-    if (queryParam != null) {
-      if (queryParam.contains('limit')) {
-        int index = queryParam.lastIndexOf('limit');
-        query = queryParam.replaceRange(index, null, '');
-      }
+    Results result;
+    if (queryParam?.isNotEmpty ?? false) {
+      if (queryParam != null) {
+        if (queryParam.contains('limit')) {
+          int index = queryParam.lastIndexOf('limit');
+          query = queryParam.replaceRange(index, null, '');
+        }
 
-      if (query.trim().startsWith('and')) {
-        query = query.replaceFirst('and', 'where').trim();
+        if (query.trim().startsWith('and')) {
+          query = query.replaceFirst('and', 'where').trim();
+        }
       }
+      result = await _dbConfiguration.execQuery(
+          "Select count(*) as total_Jobs from jobs as t1 $query;") as Results;
+    } else {
+      result = await _dbConfiguration.execQuery(
+          "Select count(*) as total_Jobs from jobs as t1") as Results;
     }
-    var result = await _dbConfiguration.execQuery(
-        "Select count(*) as total_Jobs from jobs as t1 $query;") as Results;
     List<int> list = result.map<int>((e) => e.fields.values.first).toList();
     return list.first;
   }

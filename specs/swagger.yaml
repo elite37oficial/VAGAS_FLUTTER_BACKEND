@@ -50,16 +50,6 @@ paths:
       - "jobs"
       parameters:
         - in: query
-          name: page
-          schema:
-            type: string
-            description: Choose the pagination of the search.Ex page=1 return itens starts from the 1° position, page=2 returns itens starts from the 11° position. If not pass this arguments set to 1.
-        - in: query
-          name: limit
-          schema:
-            type: string
-            description: Set the maximum quantity of itens from a page.
-        - in: query
           name: status
           schema:
             type: integer
@@ -220,6 +210,93 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalError'
+  /jobs/v2:
+    get:
+      tags:
+      - "jobs"
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: string
+            description: Choose the pagination of the search.Ex page=1 return itens starts from the 1° position, page=2 returns itens starts from the 11° position. If not pass this arguments set to 1.
+        - in: query
+          name: limit
+          schema:
+            type: string
+            description: Set the maximum quantity of itens from a page.
+        - in: query
+          name: status
+          schema:
+            type: integer
+            enum: [0, 1, 2, 3]
+          description: |
+              The status of the resource.
+              - 0: "canceled"
+              - 1: "active"
+              - 2: "paused"
+              - 3: "completed"
+        - in: query
+          name: city
+          schema:
+            type: string
+            description: The city of a job that contains the value. Ex. São Paulo.
+        - in: query
+          name: search
+          schema:
+            type: string
+            description: General search.
+        - in: query
+          name: name
+          schema:
+            type: string
+            description: The name of the company that offers the job.
+        - in: query
+          name: created_by
+          schema:
+            type: string
+            format: uuid
+            description: The ID (uuid) from user that create a job.
+        - in: query
+          name: seniority
+          schema:
+            type: string
+            description: The seniority requested by the job. Ex. junior.
+        - in: query
+          name: title
+          schema:
+            type: string
+            description: The title of the Job.
+        - in: query
+          name: company_id
+          schema:
+            type: string
+            description: The Id of Company that offers the job.
+        - in: query
+          name: modality
+          schema:
+            type: string
+            description: The modality of a job that contains the value. Ex. remoto, presencial.
+        - in: query
+          name: regime
+          schema:
+            type: string
+            description: The regime of a job that contains the value. Ex. PJ, CLT.
+      summary: "get all jobs version 2"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/JobSimpleV2"
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalError'
+          
   /login:
     post:
       tags:
@@ -744,6 +821,19 @@ components:
           type: string
         modality:
           type: string
+    JobSimpleV2:
+      type: "object"
+      properties:
+        actualPage:
+          type: string
+        totalPages:
+          type: string
+        totalContents:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/JobSimple"
     JobEntity:
       type: "object"
       properties:
