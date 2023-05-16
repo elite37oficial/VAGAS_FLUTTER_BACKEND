@@ -31,7 +31,7 @@ class UsersController extends Controller {
       }
       var result = await _usersService.save(userModel);
       return result.isNotEmpty
-          ? Response(201, body: result)
+          ? Response(201, body: jsonEncode({'id': result}))
           : Response.badRequest();
     });
 

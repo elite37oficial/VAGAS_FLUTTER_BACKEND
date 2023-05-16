@@ -52,7 +52,9 @@ class CompaniesSecurityController extends Controller {
       companyModel.createdBy = userIdFromJWT;
       companyModel.status = 1;
       final result = await _companiesService.save(companyModel);
-      return result.isNotEmpty ? Response(201, body: result) : Response(404);
+      return result.isNotEmpty
+          ? Response(201, body: jsonEncode({'id': result}))
+          : Response(404);
     });
 
     router.put('/companies', (Request request) async {

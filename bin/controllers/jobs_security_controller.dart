@@ -112,7 +112,9 @@ class JobsSecurityController extends Controller {
       jobmodel.createdBy = userIdFromJWT;
       jobmodel.status = 1;
       var result = await _jobsService.save(jobmodel);
-      return result.isNotEmpty ? Response(201, body: result) : Response(404);
+      return result.isNotEmpty
+          ? Response(201, body: jsonEncode({'id': result}))
+          : Response(404);
     });
     return createHandler(
       router: router,
