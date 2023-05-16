@@ -22,7 +22,7 @@ class CompaniesSecurityController extends Controller {
     Router router = Router();
 
     router.get('/companies', (Request request) async {
-      final userID = _getUserIdFromJWT(request);
+      final userID = getUserIdFromJWT(request);
       final List<CompanyModel?> result = await _companiesService.findByQuery(
           queryParam: "t1.created_by = '$userID'");
       return Response.ok(jsonEncode(result));
@@ -48,7 +48,7 @@ class CompaniesSecurityController extends Controller {
     router.post('/companies', (Request request) async {
       final String body = await request.readAsString();
       final CompanyModel companyModel = CompanyModel.fromMap(jsonDecode(body));
-      final String userIdFromJWT = _getUserIdFromJWT(request);
+      final String userIdFromJWT = getUserIdFromJWT(request);
       companyModel.createdBy = userIdFromJWT;
       companyModel.status = 1;
       final result = await _companiesService.save(companyModel);
@@ -72,13 +72,13 @@ class CompaniesSecurityController extends Controller {
         return Response(400);
       }
 
-      final bool isValid = await _validateAuth(companyFromDb, request);
+      final bool isValid = await validateAuth(companyFromDb.createdBy, request);
 
       if (!isValid) {
         return Response.forbidden('Not Authorized.');
       }
 
-      final userID = _getUserIdFromJWT(request);
+      final userID = getUserIdFromJWT(request);
       companyModel.updatedBy = userID;
 
       final String result = await _companiesService.save(companyModel);
@@ -126,7 +126,7 @@ class CompaniesSecurityController extends Controller {
       final String profileID = jwt.payload['roles'];
       bool valid = true;
       if (!(profileID.toLowerCase() == "admin")) {
-        valid = await _validateAuth(companyModel, request);
+        valid = await validateAuth(companyModel.createdBy, request);
       }
 
       if (!valid) {
@@ -134,7 +134,7 @@ class CompaniesSecurityController extends Controller {
             'Voce não tem permissão para editar esse recurso.');
       }
 
-      final String userIdFromJWT = _getUserIdFromJWT(request);
+      final String userIdFromJWT = getUserIdFromJWT(request);
       companyModel.updatedBy = userIdFromJWT;
       bool result = await _companiesService.updateStatus(companyModel);
 
@@ -147,20 +147,5 @@ class CompaniesSecurityController extends Controller {
       isSecurity: isSecurity,
       isJsonMimeType: isJsonMimeType,
     );
-  }
-
-  Future<bool> _validateAuth(CompanyModel companyModel, Request request) async {
-    final String createdBy = companyModel.createdBy!;
-    final String userIdFromJWT = _getUserIdFromJWT(request);
-    if (userIdFromJWT != createdBy) {
-      return false;
-    }
-    return true;
-  }
-
-  String _getUserIdFromJWT(Request request) {
-    final JWT jwt = request.context['jwt'] as JWT;
-    final userID = jwt.payload['userID'];
-    return userID;
   }
 }

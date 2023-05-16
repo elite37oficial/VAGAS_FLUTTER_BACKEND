@@ -750,7 +750,7 @@ components:
         id:
           type: string
           format: uuid
-        companyId:
+        company_id:
           type: string
           format: uuid
         title:
