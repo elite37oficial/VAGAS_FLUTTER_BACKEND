@@ -56,14 +56,14 @@ class CompaniesImageController extends Controller {
     router.get('/companies-image/id/<companyID>',
         (Request request, String? companyID) async {
       if (companyID == null) {
-        return Response.badRequest();
+        return Response.badRequest(body: 'Id não pode ser nulo');
       }
       RegExp uuidRegex = RegExp(
           '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-1[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\$');
       final bool isValid = uuidRegex.hasMatch(companyID);
 
       if (!isValid) {
-        return Response.badRequest();
+        return Response.badRequest(body: 'O Id não é válido');
       }
 
       // Directory diretorioAtual = Directory('uploads');

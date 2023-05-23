@@ -26,13 +26,13 @@ class JobsSecurityController extends Controller {
       final JobModel jobModel = JobModel.fromJson(jsonDecode(body));
 
       if (jobModel.id == null) {
-        return Response.badRequest();
+        return Response.badRequest(body: 'Id da vaga não pode ser nulo');
       }
 
       JobModel? job = await _jobsService.findOne(jobModel.id!);
 
       if (job == null) {
-        return Response(400);
+        return Response(400, body: 'Vaga não existe na base de dados');
       }
 
       final bool isValid = await validateAuth(job.createdBy, request);
