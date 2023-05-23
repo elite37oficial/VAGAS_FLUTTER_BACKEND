@@ -71,10 +71,10 @@ class UserModel {
       'status': status,
       if (createdBy != null) 'createdBy': createdBy,
       if (createdDate != null)
-        'createdDate': createdDate?.millisecondsSinceEpoch,
+        'createdDate': createdDate?.toLocal().millisecondsSinceEpoch,
       if (changedBy != null) 'changedBy': changedBy,
       if (changedDate != null)
-        'changedDate': changedDate?.millisecondsSinceEpoch,
+        'changedDate': changedDate?.toLocal().millisecondsSinceEpoch,
     };
   }
 

@@ -43,13 +43,15 @@ class CompanyModel {
       result.addAll({'createdBy': createdBy});
     }
     if (createdDate != null) {
-      result.addAll({'createdDate': createdDate!.millisecondsSinceEpoch});
+      result.addAll(
+          {'createdDate': createdDate!.toLocal().millisecondsSinceEpoch});
     }
     if (updatedBy != null) {
       result.addAll({'updatedBy': updatedBy});
     }
     if (updatedDate != null) {
-      result.addAll({'updatedDate': updatedDate!.millisecondsSinceEpoch});
+      result.addAll(
+          {'updatedDate': updatedDate!.toLocal().millisecondsSinceEpoch});
     }
 
     return result;

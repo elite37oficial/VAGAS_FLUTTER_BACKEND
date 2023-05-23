@@ -42,7 +42,7 @@ class JobSimple extends JobModel {
     result.addAll({'modality': modality});
     result.addAll({
       if (createdDate != null)
-        'createdDate': createdDate?.millisecondsSinceEpoch,
+        'createdDate': createdDate?.toLocal().millisecondsSinceEpoch,
     });
 
     return result;

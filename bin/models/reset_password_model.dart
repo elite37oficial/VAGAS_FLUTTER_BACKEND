@@ -36,7 +36,7 @@ class ResetPasswordModel {
       'password': password,
       'passwordConfirmation': passwordConfirmation,
       'passwordOld': passwordOld,
-      if (date != null) 'date': date?.millisecondsSinceEpoch
+      if (date != null) 'date': date?.toLocal().millisecondsSinceEpoch
     };
   }
 
