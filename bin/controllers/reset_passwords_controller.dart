@@ -41,7 +41,8 @@ class ResetPasswordsController extends Controller {
         if (result != null) {
           final bool resultEmail = await envioDeEmail(user, result);
           if (resultEmail) {
-            return Response.ok("Password reset email sent.");
+            return Response.ok(
+                jsonEncode({'msg': "Password reset email sent."}));
           } else {
             return Response.badRequest();
           }
@@ -68,14 +69,16 @@ class ResetPasswordsController extends Controller {
             final token = await gerarToken(resetPasswordModel.userId!);
             return Response.ok(jsonEncode({'token': token}));
           } else {
-            return Response.badRequest(body: "Senha igual a antiga");
+            return Response.badRequest(
+                body: jsonEncode({'msg': "Senha igual a antiga"}));
           }
         } else {
-          return Response.badRequest(body: returnValidade);
+          return Response.badRequest(body: jsonEncode({'msg': returnValidade}));
         }
       } else {
         return Response.badRequest(
-            body: "Senha e Confirmação de senha não são iguais");
+            body: jsonEncode(
+                {'msg': "Senha e Confirmação de senha não são iguais"}));
       }
     });
 
@@ -102,7 +105,7 @@ class ResetPasswordsController extends Controller {
       ..recipients.add(user.email)
       ..subject = 'Vagas Elite37 | Redefinição de senha'
       ..html =
-          "<p>Olá, ${user.name}</p>\n<p>Recebemos uma solicitação para restaurar sua senha de acesso em nosso site.</p><p>Se você reconhece essa ação, clique no botão abaixo para prosseguir:</p><p><a href='appvagas.elite37.com.br/resetsenha?token=$token'>Redefinir Senha</a></p><p>Atenciosamente,</p><p>Elite37</p>";
+          "<p>Olá, ${user.name}</p>\n<p>Recebemos uma solicitação para restaurar sua senha de acesso em nosso site.</p><p>Se você reconhece essa ação, clique no botão abaixo para prosseguir:</p><p><a href='appvagas.elite37.com.br/auth/resetPassword?token=$token'>Redefinir Senha</a></p><p>Atenciosamente,</p><p>Elite37</p>";
 
     bool statusCode;
     try {
