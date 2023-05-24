@@ -40,7 +40,8 @@ class JobDAO implements DAO<JobModel> {
 
   @override
   Future<List<JobModel>> findAll() async {
-    var result = await _dbConfiguration.execQuery('SELECT * FROM jobs');
+    var result = await _dbConfiguration
+        .execQuery('SELECT * FROM jobs ORDER BY created_date desc');
     return result
         .map((r) => JobModel.fromJson(r.fields))
         .toList()
@@ -50,7 +51,7 @@ class JobDAO implements DAO<JobModel> {
   @override
   Future<JobModel?> findOne(String id) async {
     var result = await _dbConfiguration.execQuery(
-        "SELECT t1.id, t1.title, t1.city, t1.state, t1.regime, t1.modality, t1.description, t1.whatsapp, t1.salary, t1.email, t1.seniority, t1.link, t1.created_by, t2.description AS description_company, t2.name as name_company, t2.id as company_id, t3.name as status FROM jobs AS t1 INNER JOIN companies AS t2 ON t2.id = t1.company_id inner join jobs_status as t3 on t1.status = t3.id where t1.id = ?;",
+        "SELECT t1.id, t1.title, t1.city, t1.state, t1.regime, t1.modality, t1.description, t1.whatsapp, t1.salary, t1.email, t1.seniority, t1.link, t1.created_by, t2.description AS description_company, t2.name as name_company, t2.id as company_id, t3.name as status FROM jobs AS t1 INNER JOIN companies AS t2 ON t2.id = t1.company_id inner join jobs_status as t3 on t1.status = t3.id where t1.id = ? ORDER BY t1.created_date desc;",
         [id]);
 
     return result.isEmpty ? null : JobDetails.fromJson(result.first.fields);
@@ -98,14 +99,14 @@ class JobDAO implements DAO<JobModel> {
   Future<List<JobModel?>> findByQuery({String? queryParam}) async {
     if (queryParam?.isNotEmpty ?? false) {
       var result = await _dbConfiguration.execQuery(
-          "Select t1.id, t1.title, t1.city, t1.regime, t1.state, t1.created_date, t1.created_by, t3.name as status, t1.modality, t2.id as company_id, t2.name as company_name from jobs as t1 inner join companies as t2 on t2.id = t1.company_id inner join jobs_status as t3 on t1.status = t3.id $queryParam ;");
+          "Select t1.id, t1.title, t1.city, t1.regime, t1.state, t1.created_date, t1.created_by, t3.name as status, t1.modality, t2.id as company_id, t2.name as company_name from jobs as t1 inner join companies as t2 on t2.id = t1.company_id inner join jobs_status as t3 on t1.status = t3.id $queryParam ORDER BY t1.created_date desc;");
       return result
           .map((r) => JobSimple.fromJson(r.fields))
           .toList()
           .cast<JobSimple>();
     }
     var result = await _dbConfiguration.execQuery(
-        "Select t1.id, t1.title, t1.city, t1.regime, t1.state, t1.created_date, t1.created_by, t3.name as status, t1.modality, t2.name as company_name, t2.id as company_id from jobs as t1 inner join companies as t2 on t2.id = t1.company_id inner join jobs_status as t3 on t1.status = t3.id where t1.status='1';");
+        "Select t1.id, t1.title, t1.city, t1.regime, t1.state, t1.created_date, t1.created_by, t3.name as status, t1.modality, t2.name as company_name, t2.id as company_id from jobs as t1 inner join companies as t2 on t2.id = t1.company_id inner join jobs_status as t3 on t1.status = t3.id where t1.status='1' ORDER BY t1.created_date desc;");
     return result
         .map((r) => JobSimple.fromJson(r.fields))
         .toList()
