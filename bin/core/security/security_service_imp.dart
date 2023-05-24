@@ -95,7 +95,6 @@ class SecurityServiceImp implements SecurityService<JWT> {
         switch (validate) {
           case 'post-login':
           case 'get-jobs':
-          case 'put-jobs':
           case 'get-jobs/id':
           case 'post-users':
           case 'post-reset-password-email':
