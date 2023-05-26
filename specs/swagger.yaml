@@ -408,6 +408,17 @@ paths:
     get:
       tags:
       - "companies"
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: string
+            description: Choose the pagination of the search.Ex page=1 return itens starts from the 1° position, page=2 returns itens starts from the 11° position. If not pass this arguments set to 1.
+        - in: query
+          name: limit
+          schema:
+            type: string
+            description: Set the maximum quantity of itens from a page.
       security:
         - bearerAuth: [bearerAuth]
       summary: "get all companies"
@@ -419,7 +430,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/CompanyEntity"
+                  $ref: "#/components/schemas/CompanyModelPaginacao"
         "404":
           $ref: '#/components/responses/NotFound'
         "500":
@@ -832,6 +843,19 @@ components:
               The status of the resource.
               - 0: "inactive"
               - 1: "active"
+    CompanyModelPaginacao:
+      type: "object"
+      properties:
+        actualPage:
+          type: string
+        totalPages:
+          type: string
+        totalContents:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/CompanyEntity"
     CompanyModel:
       type: "object"
       properties:

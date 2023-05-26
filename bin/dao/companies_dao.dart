@@ -1,3 +1,4 @@
+import 'package:mysql1/mysql1.dart';
 import 'package:uuid/uuid.dart';
 
 import '../database/db_configuration.dart';
@@ -45,7 +46,7 @@ class CompaniesDAO implements DAO<CompanyModel> {
   Future<List<CompanyModel?>> findByQuery({String? queryParam}) async {
     if (queryParam?.isNotEmpty ?? false) {
       var result = await _dbConfiguration.execQuery(
-          "Select t1.id, t1.name, t1.location, t1.description from companies as t1 where $queryParam;");
+          "Select t1.id, t1.name, t1.location, t1.description from companies as t1 $queryParam;");
       return result
           .map((r) => CompanyModel.fromMap(r.fields))
           .toList()
@@ -116,8 +117,11 @@ class CompaniesDAO implements DAO<CompanyModel> {
   }
 
   @override
-  Future<int> getTotalPage(String? queryParam) {
-    // TODO: implement getTotalPage
-    throw UnimplementedError();
+  Future<int> getTotalPage(String? queryParam) async {
+    var result = await _dbConfiguration.execQuery(
+            "Select count(*) as total_companies from companies as t1 $queryParam;")
+        as Results;
+    List<int> list = result.map<int>((e) => e.fields.values.first).toList();
+    return list.first;
   }
 }
