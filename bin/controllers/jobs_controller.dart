@@ -21,8 +21,6 @@ class JobsController extends Controller {
 
     router.get('/jobs', (Request request) async {
       final bool hasQuery = request.url.hasQuery;
-      int totalPages = 0;
-      int totalItens = 0;
       var result = [];
       if (hasQuery) {
         final queryParams = _validateQueryParams(request.url.queryParameters);
@@ -30,28 +28,41 @@ class JobsController extends Controller {
           return Response.badRequest();
         }
         result = await _service.findByQuery(queryParam: queryParams);
-        totalItens = await _service.getTotalPage(queryParams);
-        final String limit = request.url.queryParameters['limit'] ?? '';
-
-        totalPages = limit.isEmpty
-            ? (totalItens / 10).ceil()
-            : (totalItens / int.parse(limit)).ceil();
       } else {
         result = await _service.findByQuery();
       }
+      return Response.ok(jsonEncode(result));
+    });
 
-      if (request.url.queryParameters.containsKey('page') ||
-          request.url.queryParameters.containsKey('limit')) {
-        final response = {
-          "actualPage": request.url.queryParameters['page'] ?? '1',
-          "totalPages": totalPages.toString(),
-          "totalContents": totalItens.toString(),
-          "data": result
-        };
-        return Response.ok(jsonEncode(response));
+    router.get('/jobs/v2', (Request request) async {
+      final bool hasQuery = request.url.hasQuery;
+      int totalPages = 0;
+      int totalItens = 0;
+      String limit = '';
+      String? queryParams;
+      var result = [];
+      if (hasQuery) {
+        queryParams = _validateQueryParams(request.url.queryParameters);
+        if (queryParams == null) {
+          return Response.badRequest();
+        }
+        result = await _service.findByQuery(queryParam: queryParams);
+
+        limit = request.url.queryParameters['limit'] ?? '';
       } else {
-        return Response.ok(jsonEncode(result));
+        result = await _service.findByQuery();
       }
+      totalItens = await _service.getTotalPage(queryParams);
+      totalPages = limit.isEmpty
+          ? (totalItens / 10).ceil()
+          : (totalItens / int.parse(limit)).ceil();
+      final response = {
+        "actualPage": request.url.queryParameters['page'] ?? '1',
+        "totalPages": totalPages.toString(),
+        "totalContents": totalItens.toString(),
+        "data": result
+      };
+      return Response.ok(jsonEncode(response));
     });
 
     router.get('/jobs/id/<id>', (Request request, String id) async {
