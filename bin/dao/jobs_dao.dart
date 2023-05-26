@@ -150,7 +150,8 @@ class JobDAO implements DAO<JobModel> {
         }
       }
       result = await _dbConfiguration.execQuery(
-          "Select count(*) as total_Jobs from jobs as t1 $query;") as Results;
+              "Select count(*) as total_Jobs from jobs as t1 inner join companies as t2 on t2.id = t1.company_id $query;")
+          as Results;
     } else {
       result = await _dbConfiguration.execQuery(
           "Select count(*) as total_Jobs from jobs as t1") as Results;
