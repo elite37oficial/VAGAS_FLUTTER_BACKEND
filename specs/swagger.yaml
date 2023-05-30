@@ -282,7 +282,7 @@ paths:
           schema:
             type: string
             description: The regime of a job that contains the value. Ex. PJ, CLT.
-      summary: "get all jobs version 2"
+      summary: "get all jobs version 2 with pagination"
       responses:
         "200":
           description: "successful operation"
@@ -481,6 +481,26 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalError'
+  /companies-list:
+    get:
+      tags:
+      - "companies"
+      security:
+        - bearerAuth: [bearerAuth]
+      summary: "get all companies"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CompanyEntity"
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalError'        
   /companies:
     get:
       tags:
@@ -498,7 +518,7 @@ paths:
             description: Set the maximum quantity of itens from a page.
       security:
         - bearerAuth: [bearerAuth]
-      summary: "get all companies"
+      summary: "get all companies with pagination"
       responses:
         "200":
           description: "successful operation"
