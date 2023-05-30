@@ -44,7 +44,8 @@ class CompaniesSecurityController extends Controller {
       final userID = getUserIdFromJWT(request);
       var result = await _companiesService.findByQuery(
           queryParam: "where t1.created_by = '$userID'");
-      return Response.ok(jsonEncode(result));
+      return Response.ok(jsonEncode(result))
+          .change(headers: {'content-type': 'application/json'});
     });
 
     router.get('/companies/id/<companyID>',
