@@ -38,13 +38,13 @@ class SecurityServiceImp implements SecurityService<JWT> {
     }
     try {
       return JWT.verify(token, SecretKey(key));
-    } on JWTInvalidError {
+    } on JWTInvalidException {
       return null;
-    } on JWTExpiredError {
+    } on JWTExpiredException {
       return null;
-    } on JWTNotActiveError {
+    } on JWTNotActiveException {
       return null;
-    } on JWTUndefinedError {
+    } on JWTUndefinedException {
       return null;
     } catch (e) {
       return null;
