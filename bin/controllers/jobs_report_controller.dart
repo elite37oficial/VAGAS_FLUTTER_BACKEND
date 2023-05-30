@@ -29,7 +29,10 @@ class JobsReportController extends Controller {
       final bool isValidUuid = uuidRegex.hasMatch(map['jobId']);
 
       if (map['jobId'] == null || !isValidUuid || map['description'] == null) {
-        return Response.badRequest();
+        return Response.badRequest(
+            body: jsonEncode({
+          'message': 'Os parâmetros ID - válido e Descrição são obrigatórios'
+        }));
       }
 
       final JobsReportModel jobsReportModel = JobsReportModel.fromRequest(map);

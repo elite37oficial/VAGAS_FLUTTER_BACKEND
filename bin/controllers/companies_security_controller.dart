@@ -43,7 +43,8 @@ class CompaniesSecurityController extends Controller {
     router.get('/companies/id/<companyID>',
         (Request request, String companyID) async {
       if (companyID.isEmpty) {
-        return Response.badRequest(body: 'O campo id é obrigatório');
+        return Response.badRequest(
+            body: jsonEncode({'message': 'O campo id é obrigatório'}));
       }
       RegExp uuidRegex = RegExp(
           '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-1[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\$');
@@ -52,7 +53,8 @@ class CompaniesSecurityController extends Controller {
         var result = await _companiesService.findOne(companyID);
         return result != null
             ? Response.ok(jsonEncode(result))
-            : Response.notFound('Empresa não encontrada na base de dados.');
+            : Response.notFound(jsonEncode(
+                {'message': 'Empresa não encontrada na base de dados.'}));
       }
       return Response.badRequest();
     });
@@ -74,7 +76,8 @@ class CompaniesSecurityController extends Controller {
       final CompanyModel companyModel = CompanyModel.fromMap(jsonDecode(body));
 
       if (companyModel.id == null) {
-        return Response.badRequest();
+        return Response.badRequest(
+            body: {'message': 'O Id não pode ser nulo.'});
       }
 
       CompanyModel? companyFromDb =
@@ -87,7 +90,7 @@ class CompaniesSecurityController extends Controller {
       final bool isValid = await validateAuth(companyFromDb.createdBy, request);
 
       if (!isValid) {
-        return Response.forbidden('Not Authorized.');
+        return Response.forbidden(jsonEncode({'message': 'Not Authorized.'}));
       }
 
       final userID = getUserIdFromJWT(request);
@@ -102,7 +105,8 @@ class CompaniesSecurityController extends Controller {
       final StatusTO statusTO = StatusTO.fromRequest(body);
       if (statusTO.resourceId == null || statusTO.status == null) {
         return Response.badRequest(
-            body: 'Os campos Id e status são obrigatórios');
+            body: jsonEncode(
+                {'message': 'Os campos Id e status são obrigatórios'}));
       }
 
       final List<StatusTO> statusListFromDB =
@@ -115,7 +119,8 @@ class CompaniesSecurityController extends Controller {
           statusListFromDB.map((statusTo) => statusTo.id).toList();
 
       if (!listOfId.contains(statusTO.status)) {
-        return Response.badRequest(body: 'O status informado não é válido.');
+        return Response.badRequest(
+            body: jsonEncode({'message': 'O status informado não é válido.'}));
       }
 
       CompanyModel companyModel = CompanyModel()
@@ -130,7 +135,13 @@ class CompaniesSecurityController extends Controller {
 
       if (companyModelFromDB == null) {
         return Response.notFound(
-            'Não existe uma empresa com o Id informado na base de dados');
+          jsonEncode(
+            {
+              'message':
+                  'Não existe uma empresa com o Id informado na base de dados'
+            },
+          ),
+        );
       }
       companyModel.createdBy = companyModelFromDB.createdBy;
 
@@ -143,7 +154,10 @@ class CompaniesSecurityController extends Controller {
 
       if (!valid) {
         return Response.forbidden(
-            'Voce não tem permissão para editar esse recurso.');
+          jsonEncode(
+            {'message': 'Voce não tem permissão para editar esse recurso.'},
+          ),
+        );
       }
 
       final String userIdFromJWT = getUserIdFromJWT(request);

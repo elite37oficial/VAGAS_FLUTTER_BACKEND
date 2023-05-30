@@ -26,13 +26,15 @@ class JobsSecurityController extends Controller {
       final JobModel jobModel = JobModel.fromJson(jsonDecode(body));
 
       if (jobModel.id == null) {
-        return Response.badRequest(body: 'Id da vaga não pode ser nulo');
+        return Response.badRequest(
+            body: jsonEncode({'message': 'Id da vaga não pode ser nulo'}));
       }
 
       JobModel? job = await _jobsService.findOne(jobModel.id!);
 
       if (job == null) {
-        return Response(400, body: 'Vaga não existe na base de dados');
+        return Response(400,
+            body: jsonEncode({'Vaga não existe na base de dados'}));
       }
 
       final bool isValid = await validateAuth(job.createdBy, request);
@@ -53,7 +55,8 @@ class JobsSecurityController extends Controller {
 
       if (statusTO.resourceId == null || statusTO.status == null) {
         return Response.badRequest(
-          body: 'O id da vaga e o status são obrigatórios',
+          body: jsonEncode(
+              {'message': 'O id da vaga e o status são obrigatórios'}),
         );
       }
       JobModel jobModel = JobModel();
@@ -69,7 +72,8 @@ class JobsSecurityController extends Controller {
           statusListFromDb.map((statusTo) => statusTo.id).toList();
 
       if (!listOfStatus.contains(statusTO.status)) {
-        return Response.badRequest(body: 'O status informado não é válido.');
+        return Response.badRequest(
+            body: jsonEncode({'message': 'O status informado não é válido.'}));
       }
 
       jobModel.status = statusListFromDb
@@ -80,7 +84,12 @@ class JobsSecurityController extends Controller {
 
       if (jobFromDB == null) {
         return Response.notFound(
-          'O id infomado não corresponde a uma vaga na base de dados.',
+          jsonEncode(
+            {
+              'message':
+                  'O id infomado não corresponde a uma vaga na base de dados.'
+            },
+          ),
         );
       }
 
@@ -90,7 +99,9 @@ class JobsSecurityController extends Controller {
 
       if (!valid) {
         return Response.forbidden(
-          'Você não tem permissão para modificar este recurso.',
+          jsonEncode({
+            'message': 'Você não tem permissão para modificar este recurso.'
+          }),
         );
       }
 
@@ -100,7 +111,7 @@ class JobsSecurityController extends Controller {
       bool result = await _jobsService.updateStatus(jobModel);
 
       return result
-          ? Response(201, body: 'Status atualizado com sucesso!')
+          ? Response(201, body: jsonEncode({'Status atualizado com sucesso!'}))
           : Response(500);
     });
 

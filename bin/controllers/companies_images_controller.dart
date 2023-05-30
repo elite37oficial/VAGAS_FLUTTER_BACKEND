@@ -45,8 +45,10 @@ class CompaniesImageController extends Controller {
         }
         file.writeAsBytesSync(bytes);
         return existFyle
-            ? Response(201, body: 'Imagem alterada com sucesso!')
-            : Response(201, body: 'Imagem salva com sucesso!');
+            ? Response(201,
+                body: jsonEncode({'message': 'Imagem alterada com sucesso!'}))
+            : Response(201,
+                body: jsonEncode({'message': 'Imagem salva com sucesso!'}));
       } catch (e) {
         print(e.toString());
         return Response.internalServerError();
@@ -56,14 +58,16 @@ class CompaniesImageController extends Controller {
     router.get('/companies-image/id/<companyID>',
         (Request request, String? companyID) async {
       if (companyID == null) {
-        return Response.badRequest(body: 'Id não pode ser nulo');
+        return Response.badRequest(
+            body: jsonEncode({'message': 'Id não pode ser nulo'}));
       }
       RegExp uuidRegex = RegExp(
           '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-1[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\$');
       final bool isValid = uuidRegex.hasMatch(companyID);
 
       if (!isValid) {
-        return Response.badRequest(body: 'O Id não é válido');
+        return Response.badRequest(
+            body: jsonEncode({'message': 'O Id não é válido'}));
       }
 
       // Directory diretorioAtual = Directory('uploads');
@@ -83,7 +87,8 @@ class CompaniesImageController extends Controller {
             headers: {'content-type': 'image/$extension'});
       } else {
         //REVER metodo de retorno
-        return Response.badRequest();
+        return Response.notFound(
+            jsonEncode({'message': 'Imagem não encontrada na base de dados'}));
       }
     });
 

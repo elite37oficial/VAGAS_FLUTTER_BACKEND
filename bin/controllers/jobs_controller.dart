@@ -25,7 +25,11 @@ class JobsController extends Controller {
       if (hasQuery) {
         final queryParams = _validateQueryParams(request.url.queryParameters);
         if (queryParams == null) {
-          return Response.badRequest();
+          return Response.badRequest(
+            body: jsonEncode(
+              {'message': 'Ao menos um parâmetro de busca precisa ser enviado'},
+            ),
+          );
         }
         result = await _service.findByQuery(queryParam: queryParams);
       } else {
@@ -44,7 +48,11 @@ class JobsController extends Controller {
       if (hasQuery) {
         queryParams = _validateQueryParams(request.url.queryParameters);
         if (queryParams == null) {
-          return Response.badRequest();
+          return Response.badRequest(
+            body: jsonEncode(
+              {'message': 'Ao menos um parâmetro de busca precisa ser enviado'},
+            ),
+          );
         }
         result = await _service.findByQuery(queryParam: queryParams);
 
@@ -67,7 +75,8 @@ class JobsController extends Controller {
 
     router.get('/jobs/id/<id>', (Request request, String id) async {
       if (id.isEmpty) {
-        return Response.badRequest();
+        return Response.badRequest(
+            body: jsonEncode({'message': 'O campo Id não pode ser nullo'}));
       }
       RegExp uuidRegex = RegExp(
           '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-1[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\$');
@@ -76,9 +85,11 @@ class JobsController extends Controller {
         var result = await _service.findOne(id);
         return result != null
             ? Response.ok(jsonEncode(result))
-            : Response.notFound('Vaga não encontrada na base de dados.');
+            : Response.notFound(jsonEncode(
+                {'message': 'Vaga não encontrada na base de dados.'}));
       }
-      return Response.badRequest();
+      return Response.badRequest(
+          body: jsonEncode({'message': 'Este Id não é válido'}));
     });
 
     return createHandler(
