@@ -47,13 +47,6 @@ class CompaniesSecurityController extends Controller {
       return Response(200, body: jsonEncode({'data': result}));
     });
 
-    router.get('/companies-list2', (Request request) async {
-      final userID = getUserIdFromJWT(request);
-      var result = await _companiesService.findByQuery(
-          queryParam: "where t1.created_by = '$userID'");
-      return Response(200, body: jsonEncode({'data': result}));
-    });
-
     router.get('/companies/id/<companyID>',
         (Request request, String companyID) async {
       if (companyID.isEmpty) {
