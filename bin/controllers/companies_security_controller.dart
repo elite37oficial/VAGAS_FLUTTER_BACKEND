@@ -40,6 +40,13 @@ class CompaniesSecurityController extends Controller {
       return Response.ok(jsonEncode(response));
     });
 
+    router.get('/companies-list', (Request request) async {
+      final userID = getUserIdFromJWT(request);
+      var result = await _companiesService.findByQuery(
+          queryParam: "where t1.created_by = '$userID'");
+      return Response.ok(jsonEncode(result));
+    });
+
     router.get('/companies/id/<companyID>',
         (Request request, String companyID) async {
       if (companyID.isEmpty) {
