@@ -9,7 +9,7 @@ class MiddlewareInterception {
 
   Middleware get cors {
     final headersPermitidos = {
-      'Access-Control-Allow-Origin': 'https://*.elite37.com.br',
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
     };
