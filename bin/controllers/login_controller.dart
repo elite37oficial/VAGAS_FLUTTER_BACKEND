@@ -21,6 +21,15 @@ class LoginController extends Controller {
   }) {
     var router = Router();
 
+    router.options('/login', (Request request) {
+      final headersPermitidos = {
+        'Access-Control-Allow-Origin': 'https://*.elite37.com.br',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+      };
+      return Response(200, headers: headersPermitidos);
+    });
+
     router.post('/login', (Request request) async {
       final body = await request.readAsString();
       final AuthTO authTO = AuthTO.fromRequest(body);
