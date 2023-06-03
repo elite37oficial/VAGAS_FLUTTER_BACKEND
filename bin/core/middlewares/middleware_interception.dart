@@ -9,9 +9,11 @@ class MiddlewareInterception {
 
   Middleware get cors {
     final headersPermitidos = {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': 'https://*.elite37.com.br',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
     };
+
     Response? handlerOptions(Request request) {
       if (request.method == 'OPTIONS') {
         return Response(200, headers: headersPermitidos);
