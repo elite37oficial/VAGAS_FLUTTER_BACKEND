@@ -11,7 +11,7 @@ class MiddlewareInterception {
     final headersPermitidos = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+      'Access-Control-Allow-Headers': '*'
     };
 
     Response? handlerOptions(Request request) {
