@@ -20,9 +20,22 @@ class UsersSecurityController extends Controller {
 
     router.get('/users', (Request request) async {
       final bool isValid = await _validateAuth(request);
-      if (isValid) {
-        var result = await _usersService.findAll();
-        return Response.ok(jsonEncode(result));
+      final bool isValidAdmin = isAdminFromJWT(request);
+      if (isValid && isValidAdmin) {
+        String limit = request.url.queryParameters['limit'] ?? '10';
+        String page = request.url.queryParameters['page'] ?? '1';
+        var result = await _usersService.findByQuery(
+            queryParam:
+                "limit ${int.parse(limit)} offset ${(int.parse(page) - 1) * int.parse(limit)}");
+        int totalItens = await _usersService.getTotalPage('');
+        int totalPages = (totalItens / int.parse(limit)).ceil();
+        final response = {
+          "actualPage": request.url.queryParameters['page'] ?? '1',
+          "totalPages": totalPages.toString(),
+          "totalContents": totalItens.toString(),
+          "data": result
+        };
+        return Response.ok(jsonEncode(response));
       } else {
         return Response.unauthorized('Not Authorized.');
       }
