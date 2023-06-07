@@ -47,9 +47,9 @@ void main() async {
 
   final pipeline = Pipeline()
       .addMiddleware(logRequests())
+      .addMiddleware(di.get<MiddlewareInterception>().cors)
       .addMiddleware(securityService.authorization)
       .addMiddleware(securityService.verifyJwt)
-      .addMiddleware(di.get<MiddlewareInterception>().cors)
       .addHandler(cascade);
 
   await CustomServer().initilize(
