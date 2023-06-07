@@ -7,7 +7,7 @@ import 'package:shelf_router/shelf_router.dart';
 class PingController {
   Handler get handler {
     var router = Router();
-    const String buildNumber = '0.0.8';
+    const String buildNumber = '0.0.9';
 
     router.get('/ping', (Request request) async {
       final now = DateTime.now();

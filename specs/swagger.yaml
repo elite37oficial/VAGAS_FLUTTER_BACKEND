@@ -394,7 +394,20 @@ paths:
     get:
       tags:
       - "users"
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: string
+            description: Choose the pagination of the search.Ex page=1 return itens starts from the 1° position, page=2 returns itens starts from the 11° position. If not pass this arguments set to 1.
+        - in: query
+          name: limit
+          schema:
+            type: string
+            description: Set the maximum quantity of itens from a page.
       summary: "get all Users"
+      security:
+        - bearerAuth: [bearerAuth]
       responses:
         "200":
           description: "successful operation"
@@ -403,7 +416,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/UserEntity"
+                  $ref: "#/components/schemas/UserModelPaginacao"
         "403":
           $ref: '#/components/responses/Unauthorized'
         "404":
@@ -760,6 +773,19 @@ components:
           format: uuid
         image64:
           type: string
+    UserModelPaginacao:
+      type: "object"
+      properties:
+        actualPage:
+          type: string
+        totalPages:
+          type: string
+        totalContents:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserEntity"      
     UserEntity:
       type: "object"
       properties:

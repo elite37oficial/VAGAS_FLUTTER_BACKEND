@@ -29,4 +29,12 @@ class UsersService {
     final result = await userDAO.getPermissions(profileId);
     return result;
   }
+
+  Future<List<UserModel?>> findByQuery({String? queryParam}) async {
+    return await userDAO.findByQuery(queryParam: queryParam);
+  }
+
+  Future<int> getTotalPage(String? queryParam) async {
+    return await userDAO.getTotalPage(queryParam);
+  }
 }

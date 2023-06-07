@@ -1,3 +1,4 @@
+import 'package:mysql1/mysql1.dart';
 import 'package:password_dart/password_dart.dart';
 import 'package:uuid/uuid.dart';
 
@@ -55,8 +56,19 @@ class UserDAO implements DAO<UserModel> {
 
   @override
   Future<List<UserModel?>> findByQuery({String? queryParam}) async {
-    // TODO: implement findOne
-    throw UnimplementedError();
+    Results result;
+    if (queryParam?.isNotEmpty ?? false) {
+      result = await _dbConfiguration
+          .execQuery("Select * from users $queryParam;") as Results;
+    } else {
+      result =
+          await _dbConfiguration.execQuery('Select * from users') as Results;
+    }
+
+    return result
+        .map((r) => UserModel.fromJson(r.fields))
+        .toList()
+        .cast<UserModel>();
   }
 
   @override
@@ -125,8 +137,10 @@ class UserDAO implements DAO<UserModel> {
   }
 
   @override
-  Future<int> getTotalPage(String? queryParam) {
-    // TODO: implement getTotalPage
-    throw UnimplementedError();
+  Future<int> getTotalPage(String? queryParam) async {
+    var result = await _dbConfiguration.execQuery(
+        "Select count(*) as total_users from users $queryParam;") as Results;
+    List<int> list = result.map<int>((e) => e.fields.values.first).toList();
+    return list.first;
   }
 }
