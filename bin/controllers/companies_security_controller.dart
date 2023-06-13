@@ -23,13 +23,24 @@ class CompaniesSecurityController extends Controller {
 
     router.get('/companies', (Request request) async {
       final userID = getUserIdFromJWT(request);
+      final isAdmin = isAdminFromJWT(request);
       String limit = request.url.queryParameters['limit'] ?? '10';
       String page = request.url.queryParameters['page'] ?? '1';
-      var result = await _companiesService.findByQuery(
-          queryParam:
-              "where t1.created_by = '$userID' limit ${int.parse(limit)} offset ${(int.parse(page) - 1) * int.parse(limit)}");
-      int totalItens = await _companiesService
-          .getTotalPage("where t1.created_by = '$userID'");
+      var result = [];
+      int totalItens = 0;
+      if (isAdmin) {
+        result = await _companiesService.findByQuery(
+            queryParam:
+                "limit ${int.parse(limit)} offset ${(int.parse(page) - 1) * int.parse(limit)}");
+        totalItens = await _companiesService.getTotalPage("");
+      } else {
+        result = await _companiesService.findByQuery(
+            queryParam:
+                "where t1.created_by = '$userID' limit ${int.parse(limit)} offset ${(int.parse(page) - 1) * int.parse(limit)}");
+        totalItens = await _companiesService
+            .getTotalPage("where t1.created_by = '$userID'");
+      }
+
       int totalPages = (totalItens / int.parse(limit)).ceil();
       final response = {
         "actualPage": request.url.queryParameters['page'] ?? '1',
